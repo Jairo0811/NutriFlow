@@ -4,7 +4,7 @@ export type BiologicalSex = 'Female' | 'Male';
 export type ActivityLevel = 'Sedentary' | 'Light' | 'Moderate' | 'High';
 export type NutritionGoalType = 'LoseFat' | 'MaintainWeight' | 'GainMuscle';
 export type FoodPreferenceCode = 'protein' | 'carbohydrates' | 'fats' | 'dairy' | 'fruits';
-export type DietaryRestrictionCode = 'gluten' | 'shellfish';
+export type DietaryRestrictionCode = 'gluten' | 'wheat' | 'milk' | 'eggs' | 'fish' | 'shellfish' | 'peanuts' | 'tree_nuts' | 'soy' | 'sesame';
 
 export type NutritionProfile = {
   userId: string;
