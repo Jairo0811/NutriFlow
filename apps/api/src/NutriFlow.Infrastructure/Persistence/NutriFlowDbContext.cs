@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NutriFlow.Application.Abstractions;
+using NutriFlow.Domain.Foods;
 using NutriFlow.Domain.Identity;
 using NutriFlow.Domain.Nutrition;
 
@@ -12,6 +13,7 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
     public DbSet<NutritionProfile> NutritionProfiles => Set<NutritionProfile>();
+    public DbSet<Food> Foods => Set<Food>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,5 +56,23 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
         nutritionProfiles.Property(profile => profile.FoodPreferenceCodes).HasColumnType("text[]").IsRequired();
         nutritionProfiles.Property(profile => profile.DietaryRestrictionCodes).HasColumnType("text[]").IsRequired();
         nutritionProfiles.HasOne<User>().WithOne().HasForeignKey<NutritionProfile>(profile => profile.UserId).OnDelete(DeleteBehavior.Cascade);
+
+        var foods = modelBuilder.Entity<Food>();
+        foods.ToTable("Foods");
+        foods.HasKey(food => food.Id);
+        foods.Property(food => food.Name).HasMaxLength(120).IsRequired();
+        foods.Property(food => food.Brand).HasMaxLength(120);
+        foods.Property(food => food.Category).HasMaxLength(60).IsRequired();
+        foods.Property(food => food.ServingUnit).HasMaxLength(24).IsRequired();
+        foods.Property(food => food.ServingSize).HasPrecision(8, 2);
+        foods.Property(food => food.Calories).HasPrecision(8, 2);
+        foods.Property(food => food.ProteinGrams).HasPrecision(8, 2);
+        foods.Property(food => food.CarbohydrateGrams).HasPrecision(8, 2);
+        foods.Property(food => food.FatGrams).HasPrecision(8, 2);
+        foods.Property(food => food.Barcode).HasMaxLength(32);
+        foods.Property(food => food.Source).HasConversion<string>().HasMaxLength(16);
+        foods.HasIndex(food => food.Name);
+        foods.HasIndex(food => food.Category);
+        foods.HasIndex(food => food.Barcode).IsUnique();
     }
 }
