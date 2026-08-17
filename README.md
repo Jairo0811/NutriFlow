@@ -157,8 +157,8 @@ La secuencia comenzó en **Mayo - Agosto de 2024** con **Bases de Datos 1 (INF-1
 
 | Orden | Código | Asignatura | Proyecto | Período | Enfoque académico |
 |---:|---|---|---|---|---|
-| 1 | INF-164 | Bases de Datos 1 | **NutriFlow** | Mayo - Agosto 2024 | Fundamentos de datos, modelado y prototipado de una solución nutricional |
-| 2 | ISO-710 | Desarrollo de Software con Tecnología Propietaria 2 | [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary) | Mayo - Agosto 2026 | Construcción y evolución de una aplicación Android a partir de un prototipo con IA |
+| 1 | INF-164 | Bases de Datos 1 | **NutriFlow** | May - Ago 2024 | Fundamentos de datos, modelado y prototipado de una solución nutricional |
+| 2 | ISO-710 | Desarrollo de Software con Tecnología Propietaria 2 | [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary) | May - Ago 2026 | Construcción y evolución de una aplicación Android a partir de un prototipo con IA |
 
 Vistos en conjunto, ambos proyectos muestran una evolución desde fundamentos de datos y diseño conceptual hacia la construcción de software móvil moderno. Cada repositorio conserva su identidad académica original; la continuidad se fundamenta en el **mismo profesor**, no en una dependencia técnica entre las aplicaciones.
 
