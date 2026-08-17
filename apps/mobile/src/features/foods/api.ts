@@ -40,4 +40,6 @@ export const foodCatalogApi = {
     params.set('take', '50');
     return request<Food[]>(`/api/foods/?${params.toString()}`, accessToken);
   },
+  getByBarcode: (accessToken: string, barcode: string) =>
+    request<Food>(`/api/foods/barcode/${encodeURIComponent(barcode)}`, accessToken),
 };
