@@ -10,6 +10,7 @@ using NutriFlow.Application.Foods;
 using NutriFlow.Application.Identity;
 using NutriFlow.Application.Meals;
 using NutriFlow.Application.Nutrition;
+using NutriFlow.Application.Progress;
 using NutriFlow.Infrastructure;
 using NutriFlow.Infrastructure.Persistence;
 using NutriFlow.Infrastructure.Security;
@@ -27,6 +28,7 @@ builder.Services.AddScoped<INutritionCalculationService, NutritionCalculationSer
 builder.Services.AddScoped<IFoodCatalogService, FoodCatalogService>();
 builder.Services.AddScoped<IMealTrackingService, MealTrackingService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IProgressService, ProgressService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var jwt = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
@@ -79,12 +81,13 @@ app.MapNutritionCalculationEndpoints();
 app.MapFoodCatalogEndpoints();
 app.MapMealTrackingEndpoints();
 app.MapDashboardEndpoints();
+app.MapProgressEndpoints();
 
 app.MapGet("/", () => Results.Ok(new
 {
     name = "NutriFlow API",
     status = "running",
-    version = "0.7.0"
+    version = "0.9.0"
 }));
 
 app.Run();
