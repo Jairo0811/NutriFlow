@@ -9,6 +9,11 @@ public enum FoodSource
 
 public sealed class Food
 {
+    private static readonly HashSet<string> AllowedAllergenCodes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "gluten", "wheat", "milk", "eggs", "fish", "shellfish", "peanuts", "tree_nuts", "soy", "sesame"
+    };
+
     private Food() { }
 
     public Food(
@@ -23,7 +28,8 @@ public sealed class Food
         decimal fatGrams,
         FoodSource source = FoodSource.System,
         string? brand = null,
-        string? barcode = null)
+        string? barcode = null,
+        IEnumerable<string>? allergenCodes = null)
     {
         if (id == Guid.Empty) throw new ArgumentException("Food id is required.", nameof(id));
 
@@ -43,6 +49,7 @@ public sealed class Food
         ProteinGrams = proteinGrams;
         CarbohydrateGrams = carbohydrateGrams;
         FatGrams = fatGrams;
+        AllergenCodes = NormalizeAllergens(allergenCodes ?? []);
         Source = source;
         IsActive = true;
         CreatedAtUtc = DateTimeOffset.UtcNow;
@@ -60,6 +67,7 @@ public sealed class Food
     public decimal CarbohydrateGrams { get; private set; }
     public decimal FatGrams { get; private set; }
     public string? Barcode { get; private set; }
+    public string[] AllergenCodes { get; private set; } = [];
     public FoodSource Source { get; private set; }
     public bool IsActive { get; private set; }
     public DateTimeOffset CreatedAtUtc { get; private set; }
@@ -69,6 +77,14 @@ public sealed class Food
     {
         IsActive = false;
         UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
+
+    private static string[] NormalizeAllergens(IEnumerable<string> codes)
+    {
+        var normalized = codes.Where(code => !string.IsNullOrWhiteSpace(code)).Select(code => code.Trim().ToLowerInvariant()).Distinct().ToArray();
+        var invalid = normalized.FirstOrDefault(code => !AllowedAllergenCodes.Contains(code));
+        if (invalid is not null) throw new ArgumentException($"Unsupported allergen code: {invalid}.", nameof(codes));
+        return normalized;
     }
 
     private static string Required(string value, string parameter, int maxLength)
