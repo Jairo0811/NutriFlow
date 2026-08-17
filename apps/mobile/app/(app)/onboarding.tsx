@@ -54,8 +54,9 @@ export default function NutritionalOnboardingScreen() {
   const [dietaryRestrictions, setDietaryRestrictions] = useState<DietaryRestrictionCode[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const accessToken = session?.accessToken;
 
-  if (!session) return null;
+  if (!accessToken) return null;
 
   function togglePreference(value: FoodPreferenceCode) {
     setPreferences((current) => current.includes(value)
@@ -74,7 +75,7 @@ export default function NutritionalOnboardingScreen() {
     setSaving(true);
     try {
       if (step === 1) {
-        await onboardingApi.savePhysicalProfile(session.accessToken, {
+        await onboardingApi.savePhysicalProfile(accessToken, {
           dateOfBirth,
           biologicalSex: sex,
           heightFeet: Number(heightFeet),
@@ -83,18 +84,18 @@ export default function NutritionalOnboardingScreen() {
         });
         setStep(2);
       } else if (step === 2) {
-        await onboardingApi.saveActivity(session.accessToken, activity);
+        await onboardingApi.saveActivity(accessToken, activity);
         setStep(3);
       } else if (step === 3) {
         const target = goal === 'MaintainWeight' ? null : Number(targetWeight);
-        await onboardingApi.saveGoal(session.accessToken, goal, target);
+        await onboardingApi.saveGoal(accessToken, goal, target);
         setStep(4);
       } else if (step === 4) {
-        await onboardingApi.savePreferences(session.accessToken, preferences);
+        await onboardingApi.savePreferences(accessToken, preferences);
         setStep(5);
       } else if (step === 5) {
-        await onboardingApi.saveRestrictions(session.accessToken, dietaryRestrictions);
-        await onboardingApi.complete(session.accessToken);
+        await onboardingApi.saveRestrictions(accessToken, dietaryRestrictions);
+        await onboardingApi.complete(accessToken);
         router.replace('/');
       }
     } catch (cause) {
