@@ -109,6 +109,19 @@ Esas pantallas eran una **representación de funcionalidades propuestas**, no fu
 | Francisca Mariela Hernández Melo | A00113127 |
 | Francis Jairo Matías Rosario | A00115261 |
 
+## 🔗 Continuidad académica
+
+NutriFlow permite documentar una continuidad docente que se extiende durante varios años dentro de la trayectoria académica en UNAPEC.
+
+| Tipo de continuidad | Coincidencia | Proyecto relacionado |
+|---|---|---|
+| 👨‍🏫 Profesor recurrente | **Ing. Pedro José Ramirez Rodriguez** | [Digital Sanctuary](https://github.com/Jairo0811/DigitalSanctuary) — Desarrollo de Software con Tecnología Propietaria 2 (ISO-710) |
+| 🕰️ Continuidad temporal | **2024 → 2026** | El mismo profesor reaparece dos años después en otra etapa del plan de estudios |
+
+El vínculo conecta **Bases de Datos 1 (INF-164)**, cursada en **Mayo - Agosto de 2024**, con **Desarrollo de Software con Tecnología Propietaria 2 (ISO-710)**, cursada en **Mayo - Agosto de 2026**. Esto refleja continuidad académica con el mismo docente en áreas distintas: fundamentos de datos y desarrollo de software.
+
+> Entre los equipos documentados en estos proyectos no se registra, por ahora, un compañero recurrente que pueda verificarse de forma inequívoca mediante **nombre y matrícula**.
+
 ---
 
 ## 🧩 Funcionalidades representadas en los mockups originales
