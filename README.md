@@ -151,16 +151,24 @@ Para el desarrollo actual, Figma funciona como referencia primaria del diseño o
 
 ## 🧭 Continuidad académica
 
-**NutriFlow** representa el primer punto documentado de una continuidad académica con el profesor **Ing. Pedro José Ramirez Rodriguez** en la Universidad APEC (UNAPEC). La relación con [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary) es **formativa y cronológica**: son proyectos independientes desarrollados en asignaturas distintas, pero conectados por la presencia del mismo docente en dos etapas diferentes de la carrera.
+**NutriFlow** documenta su continuidad académica mediante relaciones verificables entre estudiantes y profesores. En la colección actual no se ha identificado un compañero recurrente del equipo original, pero sí existe una **continuidad docente** con [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary).
 
-La secuencia comenzó en **Mayo - Agosto de 2024** con **Bases de Datos 1 (INF-164)**, donde surgió el prototipo académico que dio origen a NutriFlow. Dos años después, en **Mayo - Agosto de 2026**, la continuidad docente reapareció en **Desarrollo de Software con Tecnología Propietaria 2 (ISO-710)** con Digital Sanctuary.
+### 👥 Continuidad por estudiante
 
-| Orden | Código | Asignatura | Proyecto | Período | Enfoque académico |
-|---:|---|---|---|---|---|
-| 1 | INF-164 | Bases de Datos 1 | **NutriFlow** | May - Ago 2024 | Fundamentos de datos, modelado y prototipado de una solución nutricional |
-| 2 | ISO-710 | Desarrollo de Software con Tecnología Propietaria 2 | [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary) | May - Ago 2026 | Construcción y evolución de una aplicación Android a partir de un prototipo con IA |
+Dentro de los proyectos académicos actualmente documentados en este portafolio no se ha verificado que **Luis Alberto Jimenez Perez (A00102205)**, **Charlie de Leon Duran (A00108707)** o **Francisca Mariela Hernández Melo (A00113127)** vuelvan a coincidir con Francis Jairo Matías Rosario en otro equipo por **mismo nombre completo y misma matrícula**.
 
-Vistos en conjunto, ambos proyectos muestran una evolución desde fundamentos de datos y diseño conceptual hacia la construcción de software móvil moderno. Cada repositorio conserva su identidad académica original; la continuidad se fundamenta en el **mismo profesor**, no en una dependencia técnica entre las aplicaciones.
+Por ello, NutriFlow no presenta una continuidad estudiantil directa con otro proyecto de la colección en este momento.
+
+### 👨‍🏫 Continuidad por profesor
+
+El profesor **Ing. Pedro José Ramirez Rodriguez** aparece en dos momentos diferentes de la trayectoria académica documentada en UNAPEC. La secuencia comienza en **Bases de Datos 1 (INF-164)** con NutriFlow y reaparece dos años después en **Desarrollo de Software con Tecnología Propietaria 2 (ISO-710)** con Digital Sanctuary.
+
+| Orden | Asignatura | Proyecto | Período | Profesor recurrente |
+|---:|---|---|---|---|
+| 1 | Bases de Datos 1 (INF-164) | **NutriFlow** | Mayo - Agosto 2024 | **Ing. Pedro José Ramirez Rodriguez** |
+| 2 | Desarrollo de Software con Tecnología Propietaria 2 (ISO-710) | [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary) | Mayo - Agosto 2026 | **Ing. Pedro José Ramirez Rodriguez** |
+
+La relación es **formativa y cronológica**: los proyectos son independientes y la continuidad se fundamenta en el mismo profesor en dos etapas diferentes de la carrera.
 
 ---
 
