@@ -9,6 +9,7 @@ const today = new Date().toISOString().slice(0, 10);
 
 export default function ProgressScreen() {
   const { session } = useAuth();
+  const accessToken = session?.accessToken;
   const [summary, setSummary] = useState<ProgressSummary | null>(null);
   const [weight, setWeight] = useState('');
   const [note, setNote] = useState('');
@@ -16,17 +17,18 @@ export default function ProgressScreen() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!session?.accessToken) return;
-    progressApi.get(session.accessToken)
+    if (!accessToken) return;
+    progressApi.get(accessToken)
       .then(setSummary)
       .catch((cause) => setError(cause instanceof Error ? cause.message : 'No fue posible cargar tu progreso.'));
-  }, [session?.accessToken]);
+  }, [accessToken]);
 
   const chartMax = useMemo(() => Math.max(...(summary?.entries.map((entry) => entry.weightPounds) ?? [1])), [summary]);
 
-  if (!session) return null;
+  if (!session || !accessToken) return null;
 
   async function saveWeight() {
+    if (!accessToken) return;
     const value = Number(weight);
     if (!Number.isFinite(value) || value < 60 || value > 800) {
       setError('Ingresa un peso entre 60 y 800 lb.');
@@ -36,13 +38,22 @@ export default function ProgressScreen() {
     setSaving(true);
     setError(null);
     try {
-      setSummary(await progressApi.logWeight(session.accessToken, today, value, note));
+      setSummary(await progressApi.logWeight(accessToken, today, value, note));
       setWeight('');
       setNote('');
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'No fue posible guardar el peso.');
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function removeWeight(date: string) {
+    if (!accessToken) return;
+    try {
+      setSummary(await progressApi.removeWeight(accessToken, date));
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'No fue posible eliminar el registro.');
     }
   }
 
@@ -68,19 +79,22 @@ export default function ProgressScreen() {
         {error && <Text style={styles.error}>{error}</Text>}
 
         <Text style={styles.sectionTitle}>Historial</Text>
-        {summary?.entries.map((entry) => (
-          <View key={entry.id} style={styles.entry}>
-            <View style={styles.flex}>
-              <Text style={styles.entryDate}>{entry.date}</Text>
-              <Text style={styles.entryWeight}>{entry.weightPounds} lb</Text>
-              {entry.note && <Text style={styles.entryNote}>{entry.note}</Text>}
-              <View style={[styles.bar, { width: `${Math.max(8, Math.round(entry.weightPounds / chartMax * 100))}%` }]} />
+        {summary?.entries.map((entry) => {
+          const width = `${Math.max(8, Math.round(entry.weightPounds / chartMax * 100))}%` as `${number}%`;
+          return (
+            <View key={entry.id} style={styles.entry}>
+              <View style={styles.flex}>
+                <Text style={styles.entryDate}>{entry.date}</Text>
+                <Text style={styles.entryWeight}>{entry.weightPounds} lb</Text>
+                {entry.note && <Text style={styles.entryNote}>{entry.note}</Text>}
+                <View style={[styles.bar, { width }]} />
+              </View>
+              <Pressable onPress={() => void removeWeight(entry.date)}>
+                <Text style={styles.remove}>Eliminar</Text>
+              </Pressable>
             </View>
-            <Pressable onPress={() => void progressApi.removeWeight(session.accessToken, entry.date).then(setSummary)}>
-              <Text style={styles.remove}>Eliminar</Text>
-            </Pressable>
-          </View>
-        ))}
+          );
+        })}
         {!summary?.entries.length && <Text style={styles.helper}>Aún no hay registros de peso.</Text>}
       </ScrollView>
     </SafeAreaView>
