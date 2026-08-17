@@ -33,7 +33,8 @@ public static class FoodCatalogEndpoints
         {
             var food = await service.CreateAsync(new CreateFoodCommand(
                 request.Name, request.Brand, request.Category, request.ServingSize, request.ServingUnit,
-                request.Calories, request.ProteinGrams, request.CarbohydrateGrams, request.FatGrams, request.Barcode), cancellationToken);
+                request.Calories, request.ProteinGrams, request.CarbohydrateGrams, request.FatGrams,
+                request.Barcode, request.AllergenCodes), cancellationToken);
             return Results.Created($"/api/foods/{food.Id}", food);
         }
         catch (ArgumentException exception)
@@ -56,5 +57,6 @@ public static class FoodCatalogEndpoints
         decimal ProteinGrams,
         decimal CarbohydrateGrams,
         decimal FatGrams,
-        string? Barcode);
+        string? Barcode,
+        IReadOnlyList<string>? AllergenCodes);
 }
