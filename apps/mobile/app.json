@@ -3,7 +3,7 @@
     "name": "NutriFlow",
     "slug": "nutriflow",
     "scheme": "nutriflow",
-    "version": "0.2.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
     "android": {
