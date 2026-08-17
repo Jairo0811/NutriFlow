@@ -12,6 +12,7 @@ export type Food = {
   carbohydrateGrams: number;
   fatGrams: number;
   barcode?: string | null;
+  allergenCodes: string[];
   source: 'System' | 'User' | 'External';
 };
 
@@ -40,4 +41,6 @@ export const foodCatalogApi = {
     params.set('take', '50');
     return request<Food[]>(`/api/foods/?${params.toString()}`, accessToken);
   },
+  getByBarcode: (accessToken: string, barcode: string) =>
+    request<Food>(`/api/foods/barcode/${encodeURIComponent(barcode)}`, accessToken),
 };

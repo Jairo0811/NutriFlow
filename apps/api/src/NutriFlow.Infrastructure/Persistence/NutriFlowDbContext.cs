@@ -4,6 +4,7 @@ using NutriFlow.Domain.Foods;
 using NutriFlow.Domain.Identity;
 using NutriFlow.Domain.Meals;
 using NutriFlow.Domain.Nutrition;
+using NutriFlow.Domain.Progress;
 
 namespace NutriFlow.Infrastructure.Persistence;
 
@@ -17,6 +18,7 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
     public DbSet<Food> Foods => Set<Food>();
     public DbSet<Meal> Meals => Set<Meal>();
     public DbSet<MealEntry> MealEntries => Set<MealEntry>();
+    public DbSet<WeightEntry> WeightEntries => Set<WeightEntry>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -73,6 +75,7 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
         foods.Property(food => food.CarbohydrateGrams).HasPrecision(8, 2);
         foods.Property(food => food.FatGrams).HasPrecision(8, 2);
         foods.Property(food => food.Barcode).HasMaxLength(32);
+        foods.Property(food => food.AllergenCodes).HasColumnType("text[]").IsRequired();
         foods.Property(food => food.Source).HasConversion<string>().HasMaxLength(16);
         foods.HasIndex(food => food.Name);
         foods.HasIndex(food => food.Category);
@@ -102,5 +105,13 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
         mealEntries.HasIndex(entry => entry.MealId);
         mealEntries.HasIndex(entry => entry.FoodId);
         mealEntries.HasOne<Food>().WithMany().HasForeignKey(entry => entry.FoodId).OnDelete(DeleteBehavior.Restrict);
+
+        var weightEntries = modelBuilder.Entity<WeightEntry>();
+        weightEntries.ToTable("WeightEntries");
+        weightEntries.HasKey(entry => entry.Id);
+        weightEntries.Property(entry => entry.WeightPounds).HasPrecision(6, 2);
+        weightEntries.Property(entry => entry.Note).HasMaxLength(240);
+        weightEntries.HasIndex(entry => new { entry.UserId, entry.Date }).IsUnique();
+        weightEntries.HasOne<User>().WithMany().HasForeignKey(entry => entry.UserId).OnDelete(DeleteBehavior.Cascade);
     }
 }
