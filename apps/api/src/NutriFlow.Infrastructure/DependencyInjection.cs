@@ -21,6 +21,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+        services.AddScoped<INutritionProfileRepository, NutritionProfileRepository>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<NutriFlowDbContext>());
 
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
@@ -40,12 +41,8 @@ public static class DependencyInjection
         options.SigningKey = section["SigningKey"] ?? string.Empty;
         options.AccessTokenMinutes = ReadPositiveInt(section["AccessTokenMinutes"], options.AccessTokenMinutes);
         options.RefreshTokenDays = ReadPositiveInt(section["RefreshTokenDays"], options.RefreshTokenDays);
-        options.PasswordResetTokenMinutes = ReadPositiveInt(
-            section["PasswordResetTokenMinutes"],
-            options.PasswordResetTokenMinutes);
-        options.GoogleClientIds = section
-            .GetSection("GoogleClientIds")
-            .GetChildren()
+        options.PasswordResetTokenMinutes = ReadPositiveInt(section["PasswordResetTokenMinutes"], options.PasswordResetTokenMinutes);
+        options.GoogleClientIds = section.GetSection("GoogleClientIds").GetChildren()
             .Select(child => child.Value)
             .Where(value => !string.IsNullOrWhiteSpace(value))
             .Select(value => value!)
