@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="branding/cover.png" alt="NutriFlow — Nutrición, hábitos y progreso" width="100%" />
+  <img src="branding/cover.png" alt="NutriFlow — Nutrición, hábitos y progreso" width="720" />
 </p>
 
 <p align="center">
