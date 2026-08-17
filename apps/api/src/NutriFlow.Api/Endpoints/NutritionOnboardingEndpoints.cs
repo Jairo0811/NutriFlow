@@ -16,6 +16,8 @@ public static class NutritionOnboardingEndpoints
         group.MapPut("/physical-profile", SavePhysicalProfileAsync);
         group.MapPut("/activity", SaveActivityAsync);
         group.MapPut("/goal", SaveGoalAsync);
+        group.MapPut("/preferences", SavePreferencesAsync);
+        group.MapPut("/restrictions", SaveRestrictionsAsync);
         group.MapPost("/complete", CompleteAsync);
 
         return endpoints;
@@ -31,8 +33,10 @@ public static class NutritionOnboardingEndpoints
         if (!TryGetUserId(principal, out var userId)) return Results.Unauthorized();
         try
         {
-            var profile = await service.SavePhysicalProfileAsync(userId,
-                new PhysicalProfileCommand(request.DateOfBirth, request.BiologicalSex, request.HeightFeet, request.HeightInches, request.CurrentWeightPounds), cancellationToken);
+            var profile = await service.SavePhysicalProfileAsync(
+                userId,
+                new PhysicalProfileCommand(request.DateOfBirth, request.BiologicalSex, request.HeightFeet, request.HeightInches, request.CurrentWeightPounds),
+                cancellationToken);
             return Results.Ok(profile);
         }
         catch (ArgumentException exception)
@@ -60,6 +64,32 @@ public static class NutritionOnboardingEndpoints
         }
     }
 
+    private static async Task<IResult> SavePreferencesAsync(CodesRequest request, ClaimsPrincipal principal, INutritionOnboardingService service, CancellationToken cancellationToken)
+    {
+        if (!TryGetUserId(principal, out var userId)) return Results.Unauthorized();
+        try
+        {
+            return Results.Ok(await service.SaveFoodPreferencesAsync(userId, request.Codes, cancellationToken));
+        }
+        catch (ArgumentException exception)
+        {
+            return Results.BadRequest(new { error = exception.Message });
+        }
+    }
+
+    private static async Task<IResult> SaveRestrictionsAsync(CodesRequest request, ClaimsPrincipal principal, INutritionOnboardingService service, CancellationToken cancellationToken)
+    {
+        if (!TryGetUserId(principal, out var userId)) return Results.Unauthorized();
+        try
+        {
+            return Results.Ok(await service.SaveDietaryRestrictionsAsync(userId, request.Codes, cancellationToken));
+        }
+        catch (ArgumentException exception)
+        {
+            return Results.BadRequest(new { error = exception.Message });
+        }
+    }
+
     private static async Task<IResult> CompleteAsync(ClaimsPrincipal principal, INutritionOnboardingService service, CancellationToken cancellationToken)
     {
         if (!TryGetUserId(principal, out var userId)) return Results.Unauthorized();
@@ -79,4 +109,5 @@ public static class NutritionOnboardingEndpoints
     private sealed record PhysicalProfileRequest(DateOnly DateOfBirth, BiologicalSex BiologicalSex, int HeightFeet, int HeightInches, decimal CurrentWeightPounds);
     private sealed record ActivityRequest(ActivityLevel ActivityLevel);
     private sealed record GoalRequest(NutritionGoalType GoalType, decimal? TargetWeightPounds);
+    private sealed record CodesRequest(string[] Codes);
 }
