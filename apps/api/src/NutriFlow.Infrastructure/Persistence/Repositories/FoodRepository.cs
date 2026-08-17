@@ -18,11 +18,12 @@ public sealed class FoodRepository(NutriFlowDbContext dbContext) : IFoodReposito
 
         if (!string.IsNullOrWhiteSpace(query))
         {
-            var pattern = $"%{query.Trim()}%";
+            var normalizedQuery = query.Trim();
+            var pattern = $"%{normalizedQuery}%";
             foods = foods.Where(food =>
                 EF.Functions.ILike(food.Name, pattern) ||
                 (food.Brand != null && EF.Functions.ILike(food.Brand, pattern)) ||
-                (food.Barcode != null && food.Barcode == query.Trim()));
+                (food.Barcode != null && food.Barcode == normalizedQuery));
         }
 
         return await foods
@@ -37,4 +38,7 @@ public sealed class FoodRepository(NutriFlowDbContext dbContext) : IFoodReposito
 
     public Task<Food?> GetByBarcodeAsync(string barcode, CancellationToken cancellationToken = default)
         => dbContext.Foods.AsNoTracking().SingleOrDefaultAsync(food => food.Barcode == barcode && food.IsActive, cancellationToken);
+
+    public async Task AddAsync(Food food, CancellationToken cancellationToken = default)
+        => await dbContext.Foods.AddAsync(food, cancellationToken);
 }
