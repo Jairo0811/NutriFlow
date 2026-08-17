@@ -4,11 +4,11 @@ public sealed class JwtOptions
 {
     public const string SectionName = "Jwt";
 
-    public string Issuer { get; init; } = "NutriFlow";
-    public string Audience { get; init; } = "NutriFlow.Mobile";
-    public string SigningKey { get; init; } = string.Empty;
-    public int AccessTokenMinutes { get; init; } = 15;
-    public int RefreshTokenDays { get; init; } = 30;
-    public int PasswordResetTokenMinutes { get; init; } = 30;
-    public string[] GoogleClientIds { get; init; } = [];
+    public string Issuer { get; set; } = "NutriFlow";
+    public string Audience { get; set; } = "NutriFlow.Mobile";
+    public string SigningKey { get; set; } = string.Empty;
+    public int AccessTokenMinutes { get; set; } = 15;
+    public int RefreshTokenDays { get; set; } = 30;
+    public int PasswordResetTokenMinutes { get; set; } = 30;
+    public string[] GoogleClientIds { get; set; } = [];
 }
