@@ -101,6 +101,7 @@ Esas pantallas eran una **representación de funcionalidades propuestas**, no fu
 | 🏫 Institución | Universidad APEC (UNAPEC) |
 | 📅 Período académico | Mayo - Agosto 2024 |
 | 📁 Entrega original | Prototipo mediante mockups |
+| 🎨 Prototipo | [Figma — Daiet](https://www.figma.com/proto/Ww6fj3ebznHPc88hr48FSg/Daiet?node-id=0-1&t=U2MHmy9fFjnzx23I-1) |
 | 💻 Aplicación funcional en 2024 | No |
 | 📱 Implementación actual | Aplicación móvil full-stack desarrollada desde cero |
 
@@ -112,6 +113,39 @@ Esas pantallas eran una **representación de funcionalidades propuestas**, no fu
 | Charlie de Leon Duran | A00108707 |
 | Francisca Mariela Hernández Melo | A00113127 |
 | Francis Jairo Matías Rosario | A00115261 |
+
+---
+
+## 🎨 Prototipo académico original en Figma
+
+Los **mockups y el prototipo interactivo originales de 2024** se conservan en Figma y constituyen la **fuente visual de referencia del proyecto académico**. El diseño documenta la navegación, jerarquía de pantallas, textos, componentes y concepto de experiencia de usuario que dieron origen a NutriFlow.
+
+<p align="center">
+  <a href="https://www.figma.com/proto/Ww6fj3ebznHPc88hr48FSg/Daiet?node-id=0-1&t=U2MHmy9fFjnzx23I-1">
+    <img src="https://img.shields.io/badge/Ver%20prototipo-Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt="Ver prototipo original en Figma">
+  </a>
+</p>
+
+Entre las pantallas identificadas en el prototipo se encuentran:
+
+| Pantalla original | Propósito conceptual |
+|---|---|
+| `Inicio` | Presentación y entrada al flujo |
+| `Log in` | Inicio de sesión |
+| `Sign in` | Creación de cuenta |
+| `Actividad física` | Datos físicos, demográficos y nivel de actividad |
+| `Alimentos` | Selección de preferencias alimentarias |
+| `Alimentos v2` | Concepto de escaneo de alimentos |
+| `Objetivo` | Perder grasa, mantener peso o aumentar masa muscular |
+| `Main Page` | Dashboard de calorías, macros y comidas |
+| `Alergias y preferencias` | Restricciones y alimentos no recomendados |
+| `Progreso` | Peso, objetivo y evolución semanal |
+
+> **Importante:** el archivo de Figma representa un **prototipo académico**, no una aplicación funcional. La implementación móvil actual no busca copiarlo literalmente: conserva su intención, flujo e identidad conceptual, mientras moderniza UI/UX, accesibilidad, arquitectura y comportamiento para convertirlo en un producto real.
+
+Para el desarrollo actual, Figma funciona como referencia primaria del diseño original; la nueva interfaz de NutriFlow se implementa con **React Native + Expo** siguiendo los estándares y decisiones técnicas de la versión 2026.
+
+---
 
 ## 🔗 Continuidad académica
 
@@ -392,11 +426,12 @@ NutriFlow/
 
 ## ✅ Estado actual
 
-La **Fase 1 — Authentication & Identity** está implementada en la rama de trabajo y validada por CI antes de su integración en `main`.
+La **Fase 1 — Authentication & Identity** está implementada, validada por CI e integrada en `main`.
 
 | Componente | Estado |
 |---|:---:|
 | Mockups académicos de referencia | ✅ |
+| Prototipo original en Figma documentado | ✅ |
 | Identidad visual NutriFlow | ✅ |
 | Foundation / monorepo | ✅ |
 | React Native + Expo | ✅ |
@@ -669,6 +704,7 @@ La nueva implementación de **NutriFlow** es desarrollada y mantenida por **Fran
 - **Período:** Mayo - Agosto 2024
 - **Profesor:** Ing. Pedro José Ramirez Rodriguez
 - **Entrega original:** prototipo mediante mockups
+- **Prototipo original:** [Figma — Daiet](https://www.figma.com/proto/Ww6fj3ebznHPc88hr48FSg/Daiet?node-id=0-1&t=U2MHmy9fFjnzx23I-1)
 - **Equipo original:** Luis Alberto Jimenez Perez, Charlie de Leon Duran, Francisca Mariela Hernández Melo y Francis Jairo Matías Rosario
 - **Implementación móvil actual y mantenimiento:** Francis Jairo Matías Rosario
 
