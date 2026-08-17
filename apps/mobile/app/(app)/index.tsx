@@ -14,10 +14,10 @@ export default function AuthenticatedHomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 2</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 3</Text>
         <Text style={styles.title}>Hola, {session?.displayName ?? 'NutriFlow'}</Text>
         <Text style={styles.subtitle}>
-          Tu identidad ya está protegida. El siguiente paso es crear tu perfil nutricional personalizado.
+          Tu perfil puede convertirse ahora en objetivos diarios de energía y macronutrientes mediante el Nutrition Engine.
         </Text>
 
         <View style={styles.card}>
@@ -25,8 +25,12 @@ export default function AuthenticatedHomeScreen() {
           <Text style={styles.cardValue}>{session?.email ?? 'Cargando...'}</Text>
         </View>
 
-        <Pressable onPress={() => router.push('/onboarding')} style={styles.primaryButton}>
-          <Text style={styles.primaryText}>Configurar mi perfil nutricional</Text>
+        <Pressable onPress={() => router.push('/targets')} style={styles.primaryButton}>
+          <Text style={styles.primaryText}>Ver mis objetivos nutricionales</Text>
+        </Pressable>
+
+        <Pressable onPress={() => router.push('/onboarding')} style={styles.secondaryButton}>
+          <Text style={styles.secondaryText}>Editar mi perfil nutricional</Text>
         </Pressable>
 
         <Pressable onPress={() => void logout()} style={styles.logoutButton}>
@@ -48,6 +52,8 @@ const styles = StyleSheet.create({
   cardValue: { color: '#F6FAF7', fontSize: 17, fontWeight: '700', marginTop: 8 },
   primaryButton: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 22, padding: 16 },
   primaryText: { color: '#07110B', fontSize: 15, fontWeight: '900' },
+  secondaryButton: { alignItems: 'center', backgroundColor: '#132718', borderColor: '#36503E', borderRadius: 14, borderWidth: 1, marginTop: 12, padding: 16 },
+  secondaryText: { color: '#DDE5DF', fontSize: 15, fontWeight: '800' },
   logoutButton: { alignItems: 'center', borderColor: '#36503E', borderRadius: 14, borderWidth: 1, marginTop: 12, padding: 16 },
   logoutText: { color: '#DDE5DF', fontSize: 15, fontWeight: '700' },
 });
