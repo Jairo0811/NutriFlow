@@ -1,20 +1,25 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NutriFlow.Api.Endpoints;
 using NutriFlow.Application.Abstractions;
 using NutriFlow.Application.Identity;
+using NutriFlow.Application.Nutrition;
 using NutriFlow.Infrastructure;
 using NutriFlow.Infrastructure.Persistence;
 using NutriFlow.Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<INutritionOnboardingService, NutritionOnboardingService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var jwt = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
@@ -62,12 +67,13 @@ app.UseAuthorization();
 
 app.MapHealthChecks("/health");
 app.MapAuthEndpoints();
+app.MapNutritionOnboardingEndpoints();
 
 app.MapGet("/", () => Results.Ok(new
 {
     name = "NutriFlow API",
     status = "running",
-    version = "0.2.0"
+    version = "0.3.0"
 }));
 
 app.Run();

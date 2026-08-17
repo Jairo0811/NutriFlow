@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NutriFlow.Application.Abstractions;
 using NutriFlow.Domain.Identity;
+using NutriFlow.Domain.Nutrition;
 
 namespace NutriFlow.Infrastructure.Persistence;
 
@@ -10,6 +11,7 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
+    public DbSet<NutritionProfile> NutritionProfiles => Set<NutritionProfile>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,11 +33,7 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
         refreshTokens.Property(token => token.ReplacedByTokenHash).HasMaxLength(64);
         refreshTokens.HasIndex(token => token.TokenHash).IsUnique();
         refreshTokens.HasIndex(token => new { token.UserId, token.ExpiresAtUtc });
-        refreshTokens
-            .HasOne(token => token.User)
-            .WithMany()
-            .HasForeignKey(token => token.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+        refreshTokens.HasOne(token => token.User).WithMany().HasForeignKey(token => token.UserId).OnDelete(DeleteBehavior.Cascade);
 
         var passwordResetTokens = modelBuilder.Entity<PasswordResetToken>();
         passwordResetTokens.ToTable("PasswordResetTokens");
@@ -43,10 +41,18 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
         passwordResetTokens.Property(token => token.TokenHash).HasMaxLength(64).IsRequired();
         passwordResetTokens.HasIndex(token => token.TokenHash).IsUnique();
         passwordResetTokens.HasIndex(token => new { token.UserId, token.ExpiresAtUtc });
-        passwordResetTokens
-            .HasOne(token => token.User)
-            .WithMany()
-            .HasForeignKey(token => token.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+        passwordResetTokens.HasOne(token => token.User).WithMany().HasForeignKey(token => token.UserId).OnDelete(DeleteBehavior.Cascade);
+
+        var nutritionProfiles = modelBuilder.Entity<NutritionProfile>();
+        nutritionProfiles.ToTable("NutritionProfiles");
+        nutritionProfiles.HasKey(profile => profile.UserId);
+        nutritionProfiles.Property(profile => profile.CurrentWeightPounds).HasPrecision(6, 2);
+        nutritionProfiles.Property(profile => profile.TargetWeightPounds).HasPrecision(6, 2);
+        nutritionProfiles.Property(profile => profile.BiologicalSex).HasConversion<string>().HasMaxLength(16);
+        nutritionProfiles.Property(profile => profile.ActivityLevel).HasConversion<string>().HasMaxLength(16);
+        nutritionProfiles.Property(profile => profile.GoalType).HasConversion<string>().HasMaxLength(24);
+        nutritionProfiles.Property(profile => profile.FoodPreferenceCodes).HasColumnType("text[]").IsRequired();
+        nutritionProfiles.Property(profile => profile.DietaryRestrictionCodes).HasColumnType("text[]").IsRequired();
+        nutritionProfiles.HasOne<User>().WithOne().HasForeignKey<NutritionProfile>(profile => profile.UserId).OnDelete(DeleteBehavior.Cascade);
     }
 }
