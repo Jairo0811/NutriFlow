@@ -16,7 +16,7 @@ public static class DependencyInjection
             ?? throw new InvalidOperationException("ConnectionStrings:NutriFlow is required.");
 
         services.AddDbContext<NutriFlowDbContext>(options => options.UseNpgsql(connectionString));
-        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+        services.Configure<JwtOptions>(options => ConfigureJwt(options, configuration));
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
@@ -30,4 +30,28 @@ public static class DependencyInjection
 
         return services;
     }
+
+    private static void ConfigureJwt(JwtOptions options, IConfiguration configuration)
+    {
+        var section = configuration.GetSection(JwtOptions.SectionName);
+
+        options.Issuer = section["Issuer"] ?? options.Issuer;
+        options.Audience = section["Audience"] ?? options.Audience;
+        options.SigningKey = section["SigningKey"] ?? string.Empty;
+        options.AccessTokenMinutes = ReadPositiveInt(section["AccessTokenMinutes"], options.AccessTokenMinutes);
+        options.RefreshTokenDays = ReadPositiveInt(section["RefreshTokenDays"], options.RefreshTokenDays);
+        options.PasswordResetTokenMinutes = ReadPositiveInt(
+            section["PasswordResetTokenMinutes"],
+            options.PasswordResetTokenMinutes);
+        options.GoogleClientIds = section
+            .GetSection("GoogleClientIds")
+            .GetChildren()
+            .Select(child => child.Value)
+            .Where(value => !string.IsNullOrWhiteSpace(value))
+            .Select(value => value!)
+            .ToArray();
+    }
+
+    private static int ReadPositiveInt(string? value, int fallback) =>
+        int.TryParse(value, out var parsed) && parsed > 0 ? parsed : fallback;
 }
