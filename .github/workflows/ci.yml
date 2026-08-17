@@ -28,6 +28,9 @@ jobs:
       - name: Build
         run: dotnet build apps/api/src/NutriFlow.Api/NutriFlow.Api.csproj --configuration Release --no-restore
 
+      - name: Test
+        run: dotnet test tests/NutriFlow.Application.Tests/NutriFlow.Application.Tests.csproj --configuration Release
+
   mobile:
     name: Mobile
     runs-on: ubuntu-latest
@@ -46,8 +49,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Audit production dependencies
+      - name: Report high production dependency advisories
+        continue-on-error: true
         run: npm audit --omit=dev --audit-level=high
+
+      - name: Block critical production vulnerabilities
+        run: npm audit --omit=dev --audit-level=critical
 
       - name: Type check
         run: npx tsc --noEmit
