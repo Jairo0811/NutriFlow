@@ -3,6 +3,8 @@ const apiUrl = (process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:5000').repl
 export type BiologicalSex = 'Female' | 'Male';
 export type ActivityLevel = 'Sedentary' | 'Light' | 'Moderate' | 'High';
 export type NutritionGoalType = 'LoseFat' | 'MaintainWeight' | 'GainMuscle';
+export type FoodPreferenceCode = 'protein' | 'carbohydrates' | 'fats' | 'dairy' | 'fruits';
+export type DietaryRestrictionCode = 'gluten' | 'shellfish';
 
 export type NutritionProfile = {
   userId: string;
@@ -14,6 +16,8 @@ export type NutritionProfile = {
   activityLevel?: ActivityLevel | null;
   goalType?: NutritionGoalType | null;
   targetWeightPounds?: number | null;
+  foodPreferenceCodes: FoodPreferenceCode[];
+  dietaryRestrictionCodes: DietaryRestrictionCode[];
   isCompleted: boolean;
 };
 
@@ -43,5 +47,9 @@ export const onboardingApi = {
     request<NutritionProfile>('/api/onboarding/activity', accessToken, { method: 'PUT', body: JSON.stringify({ activityLevel }) }),
   saveGoal: (accessToken: string, goalType: NutritionGoalType, targetWeightPounds: number | null) =>
     request<NutritionProfile>('/api/onboarding/goal', accessToken, { method: 'PUT', body: JSON.stringify({ goalType, targetWeightPounds }) }),
+  savePreferences: (accessToken: string, codes: FoodPreferenceCode[]) =>
+    request<NutritionProfile>('/api/onboarding/preferences', accessToken, { method: 'PUT', body: JSON.stringify({ codes }) }),
+  saveRestrictions: (accessToken: string, codes: DietaryRestrictionCode[]) =>
+    request<NutritionProfile>('/api/onboarding/restrictions', accessToken, { method: 'PUT', body: JSON.stringify({ codes }) }),
   complete: (accessToken: string) => request<NutritionProfile>('/api/onboarding/complete', accessToken, { method: 'POST' }),
 };
