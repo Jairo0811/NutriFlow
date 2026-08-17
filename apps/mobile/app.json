@@ -2,18 +2,19 @@
   "expo": {
     "name": "NutriFlow",
     "slug": "nutriflow",
-    "version": "0.1.0",
-    "orientation": "portrait",
     "scheme": "nutriflow",
+    "version": "0.2.0",
+    "orientation": "portrait",
     "userInterfaceStyle": "dark",
-    "newArchEnabled": true,
-    "ios": {
-      "bundleIdentifier": "com.jairomatias.nutriflow",
-      "supportsTablet": true
-    },
     "android": {
       "package": "com.jairomatias.nutriflow"
     },
-    "plugins": ["expo-router"]
+    "ios": {
+      "bundleIdentifier": "com.jairomatias.nutriflow"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ]
   }
 }
