@@ -216,7 +216,12 @@ La interfaz utiliza **ft / in / lb**. Cuando una fórmula requiere unidades mét
 
 ## 🧱 Stack tecnológico
 
-### 📱 Mobile
+### 📱 Mobile / Frontend
+
+<p>
+  <img src="https://skillicons.dev/icons?i=react,ts" alt="React Native y TypeScript" />
+  <img src="https://img.shields.io/badge/Expo-SDK%2057-000020?style=flat-square&logo=expo&logoColor=white" alt="Expo SDK 57" />
+</p>
 
 | Área | Tecnología |
 |---|---|
@@ -231,6 +236,10 @@ La interfaz utiliza **ft / in / lb**. Cuando una fórmula requiere unidades mét
 
 ### ⚙️ Backend
 
+<p>
+  <img src="https://skillicons.dev/icons?i=cs,dotnet" alt="C# y .NET" />
+</p>
+
 | Área | Tecnología |
 |---|---|
 | Plataforma | .NET 10 |
@@ -242,12 +251,24 @@ La interfaz utiliza **ft / in / lb**. Cuando una fórmula requiere unidades mét
 | Contrato HTTP | OpenAPI |
 | Health | ASP.NET Core Health Checks |
 
-### 🗄️ Datos e infraestructura
+### 🗄️ Datos
 
-- PostgreSQL 17;
-- Docker Compose;
-- Git y GitHub;
-- GitHub Actions.
+<p>
+  <img src="https://skillicons.dev/icons?i=postgres" alt="PostgreSQL" />
+</p>
+
+- PostgreSQL 17
+- Entity Framework Core + Npgsql
+
+### 🧰 Infraestructura y DevOps
+
+<p>
+  <img src="https://skillicons.dev/icons?i=docker,git,github,githubactions" alt="Docker, Git, GitHub y GitHub Actions" />
+</p>
+
+- Docker Compose
+- Git y GitHub
+- GitHub Actions
 
 ---
 
