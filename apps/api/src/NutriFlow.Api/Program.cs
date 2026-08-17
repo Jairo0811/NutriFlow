@@ -20,6 +20,7 @@ builder.Services.AddHealthChecks();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<INutritionOnboardingService, NutritionOnboardingService>();
+builder.Services.AddScoped<INutritionCalculationService, NutritionCalculationService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var jwt = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
@@ -68,12 +69,13 @@ app.UseAuthorization();
 app.MapHealthChecks("/health");
 app.MapAuthEndpoints();
 app.MapNutritionOnboardingEndpoints();
+app.MapNutritionCalculationEndpoints();
 
 app.MapGet("/", () => Results.Ok(new
 {
     name = "NutriFlow API",
     status = "running",
-    version = "0.3.0"
+    version = "0.4.0"
 }));
 
 app.Run();
