@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="../NutriFlow.Application/NutriFlow.Application.csproj" />
     <ProjectReference Include="../NutriFlow.Infrastructure/NutriFlow.Infrastructure.csproj" />
   </ItemGroup>
