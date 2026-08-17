@@ -30,7 +30,7 @@ public sealed class NutritionProfile
 
     private static readonly HashSet<string> AllowedRestrictionCodes = new(StringComparer.OrdinalIgnoreCase)
     {
-        "gluten", "shellfish"
+        "gluten", "wheat", "milk", "eggs", "fish", "shellfish", "peanuts", "tree_nuts", "soy", "sesame"
     };
 
     private NutritionProfile() { }
@@ -59,12 +59,9 @@ public sealed class NutritionProfile
 
     public void SetPhysicalProfile(DateOnly dateOfBirth, BiologicalSex biologicalSex, int heightInches, decimal currentWeightPounds)
     {
-        if (dateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
-            throw new ArgumentOutOfRangeException(nameof(dateOfBirth));
-        if (heightInches is < 36 or > 96)
-            throw new ArgumentOutOfRangeException(nameof(heightInches), "Height must be between 3 ft and 8 ft.");
-        if (currentWeightPounds is < 60 or > 800)
-            throw new ArgumentOutOfRangeException(nameof(currentWeightPounds), "Weight must be between 60 lb and 800 lb.");
+        if (dateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow)) throw new ArgumentOutOfRangeException(nameof(dateOfBirth));
+        if (heightInches is < 36 or > 96) throw new ArgumentOutOfRangeException(nameof(heightInches), "Height must be between 3 ft and 8 ft.");
+        if (currentWeightPounds is < 60 or > 800) throw new ArgumentOutOfRangeException(nameof(currentWeightPounds), "Weight must be between 60 lb and 800 lb.");
 
         DateOfBirth = dateOfBirth;
         BiologicalSex = biologicalSex;
@@ -83,8 +80,7 @@ public sealed class NutritionProfile
     {
         if (goalType != NutritionGoalType.MaintainWeight && targetWeightPounds is null)
             throw new ArgumentException("A target weight is required for this goal.", nameof(targetWeightPounds));
-        if (targetWeightPounds is < 60 or > 800)
-            throw new ArgumentOutOfRangeException(nameof(targetWeightPounds));
+        if (targetWeightPounds is < 60 or > 800) throw new ArgumentOutOfRangeException(nameof(targetWeightPounds));
 
         GoalType = goalType;
         TargetWeightPounds = goalType == NutritionGoalType.MaintainWeight ? CurrentWeightPounds : targetWeightPounds;
@@ -115,16 +111,9 @@ public sealed class NutritionProfile
 
     private static string[] NormalizeCodes(IEnumerable<string> codes, HashSet<string> allowed, string label)
     {
-        var normalized = codes
-            .Where(code => !string.IsNullOrWhiteSpace(code))
-            .Select(code => code.Trim().ToLowerInvariant())
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToArray();
-
+        var normalized = codes.Where(code => !string.IsNullOrWhiteSpace(code)).Select(code => code.Trim().ToLowerInvariant()).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
         var invalid = normalized.FirstOrDefault(code => !allowed.Contains(code));
-        if (invalid is not null)
-            throw new ArgumentException($"Unsupported {label} code: {invalid}.", nameof(codes));
-
+        if (invalid is not null) throw new ArgumentException($"Unsupported {label} code: {invalid}.", nameof(codes));
         return normalized;
     }
 
