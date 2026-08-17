@@ -169,6 +169,7 @@ El profesor **Ing. Pedro José Ramirez Rodriguez** aparece en dos momentos difer
 | 2 | Desarrollo de Software con Tecnología Propietaria 2 (ISO-710) | [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary) | Mayo - Agosto 2026 | **Ing. Pedro José Ramirez Rodriguez** |
 
 La relación es **formativa y cronológica**: los proyectos son independientes y la continuidad se fundamenta en el mismo profesor en dos etapas diferentes de la carrera.
+
 ---
 
 ## 🧩 Funcionalidades representadas en los mockups originales
