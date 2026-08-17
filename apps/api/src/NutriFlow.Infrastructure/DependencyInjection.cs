@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
         services.AddScoped<INutritionProfileRepository, NutritionProfileRepository>();
         services.AddScoped<IFoodRepository, FoodRepository>();
+        services.AddScoped<IMealRepository, MealRepository>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<NutriFlowDbContext>());
 
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
