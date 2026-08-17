@@ -9,25 +9,26 @@ import { checkFoodCompatibility, type FoodCompatibility } from '../../src/featur
 
 export default function BarcodeScannerScreen() {
   const { session } = useAuth();
+  const accessToken = session?.accessToken;
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [food, setFood] = useState<Food | null>(null);
   const [compatibility, setCompatibility] = useState<FoodCompatibility | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  if (!session) return null;
+  if (!session || !accessToken) return null;
 
   async function onScanned(result: BarcodeScanningResult) {
-    if (scanned) return;
+    if (scanned || !accessToken) return;
     setScanned(true);
     setFood(null);
     setCompatibility(null);
     setMessage('Consultando el catálogo…');
 
     try {
-      const found = await foodCatalogApi.getByBarcode(session.accessToken, result.data);
+      const found = await foodCatalogApi.getByBarcode(accessToken, result.data);
       setFood(found);
-      setCompatibility(await checkFoodCompatibility(session.accessToken, found.id));
+      setCompatibility(await checkFoodCompatibility(accessToken, found.id));
       setMessage(null);
     } catch {
       setMessage(`No encontramos el código ${result.data} en el catálogo.`);
