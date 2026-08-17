@@ -149,18 +149,18 @@ Para el desarrollo actual, Figma funciona como referencia primaria del diseño o
 
 ---
 
-## 🔗 Continuidad académica
+## 🧭 Continuidad académica
 
-NutriFlow permite documentar una continuidad docente que se extiende durante varios años dentro de la trayectoria académica en UNAPEC.
+**NutriFlow** representa el primer punto documentado de una continuidad académica con el profesor **Ing. Pedro José Ramirez Rodriguez** en la Universidad APEC (UNAPEC). La relación con [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary) es **formativa y cronológica**: son proyectos independientes desarrollados en asignaturas distintas, pero conectados por la presencia del mismo docente en dos etapas diferentes de la carrera.
 
-| Tipo de continuidad | Coincidencia | Proyecto relacionado |
-|---|---|---|
-| 👨‍🏫 Profesor recurrente | **Ing. Pedro José Ramirez Rodriguez** | [Digital Sanctuary](https://github.com/Jairo0811/DigitalSanctuary) — Desarrollo de Software con Tecnología Propietaria 2 (ISO-710) |
-| 🕰️ Continuidad temporal | **2024 → 2026** | El mismo profesor reaparece dos años después en otra etapa del plan de estudios |
+La secuencia comenzó en **Mayo - Agosto de 2024** con **Bases de Datos 1 (INF-164)**, donde surgió el prototipo académico que dio origen a NutriFlow. Dos años después, en **Mayo - Agosto de 2026**, la continuidad docente reapareció en **Desarrollo de Software con Tecnología Propietaria 2 (ISO-710)** con Digital Sanctuary.
 
-El vínculo conecta **Bases de Datos 1 (INF-164)**, cursada en **Mayo - Agosto de 2024**, con **Desarrollo de Software con Tecnología Propietaria 2 (ISO-710)**, cursada en **Mayo - Agosto de 2026**. Esto refleja continuidad académica con el mismo docente en áreas distintas: fundamentos de datos y desarrollo de software.
+| Orden | Código | Asignatura | Proyecto | Período | Enfoque académico |
+|---:|---|---|---|---|---|
+| 1 | INF-164 | Bases de Datos 1 | **NutriFlow** | Mayo - Agosto 2024 | Fundamentos de datos, modelado y prototipado de una solución nutricional |
+| 2 | ISO-710 | Desarrollo de Software con Tecnología Propietaria 2 | [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary) | Mayo - Agosto 2026 | Construcción y evolución de una aplicación Android a partir de un prototipo con IA |
 
-> Entre los equipos documentados en estos proyectos no se registra, por ahora, un compañero recurrente que pueda verificarse de forma inequívoca mediante **nombre y matrícula**.
+Vistos en conjunto, ambos proyectos muestran una evolución desde fundamentos de datos y diseño conceptual hacia la construcción de software móvil moderno. Cada repositorio conserva su identidad académica original; la continuidad se fundamenta en el **mismo profesor**, no en una dependencia técnica entre las aplicaciones.
 
 ---
 
