@@ -8,7 +8,7 @@ COPY apps/api/src/NutriFlow.Api/NutriFlow.Api.csproj apps/api/src/NutriFlow.Api/
 RUN dotnet restore apps/api/src/NutriFlow.Api/NutriFlow.Api.csproj
 
 COPY apps/api/src apps/api/src
-RUN dotnet publish apps/api/src/NutriFlow.Api/NutriFlow.Api.csproj -c Release -o /app/publish --no-restore /p:UseAppHost=false
+RUN dotnet publish apps/api/src/NutriFlow.Api/NutriFlow.Api.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
