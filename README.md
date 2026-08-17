@@ -2,14 +2,16 @@
   <img src="branding/cover.png" alt="NutriFlow — Nutrición, hábitos y progreso" width="100%" />
 </p>
 
-<h1 align="center">NutriFlow</h1>
+<p align="center">
+  <img src="https://img.shields.io/badge/UNAPEC-INF--164-003B70?style=for-the-badge" alt="UNAPEC INF-164">
+</p>
+
 
 <p align="center">
   <strong>Nutrición, hábitos y progreso en una experiencia móvil moderna.</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/UNAPEC-INF--164-003B70?style=for-the-badge" alt="UNAPEC INF-164">
   <img src="https://img.shields.io/badge/Estado-En%20desarrollo-F5A623?style=for-the-badge" alt="Estado en desarrollo">
   <img src="https://img.shields.io/badge/Versión-0.2.0-22C55E?style=for-the-badge" alt="Versión 0.2.0">
   <img src="https://img.shields.io/badge/Fase-Authentication%20%26%20Identity-111827?style=for-the-badge" alt="Fase Authentication & Identity">
