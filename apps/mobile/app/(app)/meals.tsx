@@ -59,10 +59,10 @@ export default function MealTrackingScreen() {
     meal: summary?.meals.find((meal) => meal.type === value),
   })), [summary]);
 
-  if (!session) return null;
+  if (!session || !accessToken) return null;
 
   async function addSelectedFood() {
-    if (!selectedFood) return;
+    if (!selectedFood || !accessToken) return;
     const parsedServings = Number(servings);
     if (!Number.isFinite(parsedServings) || parsedServings <= 0) {
       setError('La cantidad de porciones debe ser mayor que cero.');
@@ -72,7 +72,7 @@ export default function MealTrackingScreen() {
     setSaving(true);
     setError(null);
     try {
-      const updated = await mealTrackingApi.addEntry(session.accessToken, today, mealType, selectedFood.id, parsedServings);
+      const updated = await mealTrackingApi.addEntry(accessToken, today, mealType, selectedFood.id, parsedServings);
       setSummary(updated);
       setSelectedFood(null);
       setQuery('');
@@ -86,10 +86,11 @@ export default function MealTrackingScreen() {
   }
 
   async function removeEntry(entryId: string, type: MealType) {
+    if (!accessToken) return;
     setSaving(true);
     setError(null);
     try {
-      setSummary(await mealTrackingApi.removeEntry(session.accessToken, entryId, today, type));
+      setSummary(await mealTrackingApi.removeEntry(accessToken, entryId, today, type));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'No fue posible eliminar el alimento.');
     } finally {
