@@ -14,10 +14,10 @@ export default function AuthenticatedHomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 3</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 5</Text>
         <Text style={styles.title}>Hola, {session?.displayName ?? 'NutriFlow'}</Text>
         <Text style={styles.subtitle}>
-          Tu perfil puede convertirse ahora en objetivos diarios de energía y macronutrientes mediante el Nutrition Engine.
+          Tu perfil, objetivos y catálogo ya están listos. Ahora puedes registrar tus comidas y ver tu consumo diario acumulado.
         </Text>
 
         <View style={styles.card}>
@@ -25,8 +25,16 @@ export default function AuthenticatedHomeScreen() {
           <Text style={styles.cardValue}>{session?.email ?? 'Cargando...'}</Text>
         </View>
 
-        <Pressable onPress={() => router.push('/targets')} style={styles.primaryButton}>
-          <Text style={styles.primaryText}>Ver mis objetivos nutricionales</Text>
+        <Pressable onPress={() => router.push('/meals')} style={styles.primaryButton}>
+          <Text style={styles.primaryText}>Abrir mi diario de comidas</Text>
+        </Pressable>
+
+        <Pressable onPress={() => router.push('/foods')} style={styles.secondaryButton}>
+          <Text style={styles.secondaryText}>Explorar catálogo de alimentos</Text>
+        </Pressable>
+
+        <Pressable onPress={() => router.push('/targets')} style={styles.secondaryButton}>
+          <Text style={styles.secondaryText}>Ver mis objetivos nutricionales</Text>
         </Pressable>
 
         <Pressable onPress={() => router.push('/onboarding')} style={styles.secondaryButton}>

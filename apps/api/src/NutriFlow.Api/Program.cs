@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NutriFlow.Api.Endpoints;
 using NutriFlow.Application.Abstractions;
+using NutriFlow.Application.Foods;
 using NutriFlow.Application.Identity;
+using NutriFlow.Application.Meals;
 using NutriFlow.Application.Nutrition;
 using NutriFlow.Infrastructure;
 using NutriFlow.Infrastructure.Persistence;
@@ -21,6 +23,8 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<INutritionOnboardingService, NutritionOnboardingService>();
 builder.Services.AddScoped<INutritionCalculationService, NutritionCalculationService>();
+builder.Services.AddScoped<IFoodCatalogService, FoodCatalogService>();
+builder.Services.AddScoped<IMealTrackingService, MealTrackingService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var jwt = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
@@ -70,12 +74,14 @@ app.MapHealthChecks("/health");
 app.MapAuthEndpoints();
 app.MapNutritionOnboardingEndpoints();
 app.MapNutritionCalculationEndpoints();
+app.MapFoodCatalogEndpoints();
+app.MapMealTrackingEndpoints();
 
 app.MapGet("/", () => Results.Ok(new
 {
     name = "NutriFlow API",
     status = "running",
-    version = "0.4.0"
+    version = "0.6.0"
 }));
 
 app.Run();
