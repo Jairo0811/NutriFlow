@@ -101,7 +101,7 @@ Esas pantallas eran una **representación de funcionalidades propuestas**, no fu
 | 📖 Asignatura | Bases de Datos 1 (INF-164) |
 | 👨‍🏫 Profesor | Ing. Pedro José Ramirez Rodriguez |
 | 🏫 Institución | Universidad APEC (UNAPEC) |
-| 📅 Período académico | Mayo - Agosto 2024 |
+| 📅 Período académico | May - Ago 2024 |
 | 📁 Entrega original | Prototipo mediante mockups |
 | 🎨 Prototipo | [Figma — Daiet](https://www.figma.com/proto/Ww6fj3ebznHPc88hr48FSg/Daiet?node-id=0-1&t=U2MHmy9fFjnzx23I-1) |
 | 💻 Aplicación funcional en 2024 | No |
