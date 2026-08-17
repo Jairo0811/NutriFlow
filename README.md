@@ -6,15 +6,14 @@
   <img src="https://img.shields.io/badge/UNAPEC-INF--164-003B70?style=for-the-badge" alt="UNAPEC INF-164">
 </p>
 
-
 <p align="center">
   <strong>Nutrición, hábitos y progreso en una experiencia móvil moderna.</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Estado-En%20desarrollo-F5A623?style=for-the-badge" alt="Estado en desarrollo">
-  <img src="https://img.shields.io/badge/Versión-0.2.0-22C55E?style=for-the-badge" alt="Versión 0.2.0">
-  <img src="https://img.shields.io/badge/Fase-Authentication%20%26%20Identity-111827?style=for-the-badge" alt="Fase Authentication & Identity">
+  <img src="https://img.shields.io/badge/Estado-Estable-22C55E?style=for-the-badge" alt="Estado estable">
+  <img src="https://img.shields.io/badge/Versión-1.0.0-22C55E?style=for-the-badge" alt="Versión 1.0.0">
+  <img src="https://img.shields.io/badge/Roadmap-Fases%200--10%20completadas-111827?style=for-the-badge" alt="Roadmap completado">
 </p>
 
 <p align="center">
@@ -29,29 +28,33 @@
   <strong>React Native · Expo · TypeScript · ASP.NET Core · EF Core · PostgreSQL · Docker · GitHub Actions</strong>
 </p>
 
-> 🎓 **Origen académico:** NutriFlow parte de un conjunto de mockups desarrollado durante la asignatura **Bases de Datos 1 (INF-164)** de la **Universidad APEC (UNAPEC)**, en el período **Mayo - Agosto 2024**. En aquella etapa no se desarrolló una aplicación funcional. La versión actual toma ese prototipo como referencia conceptual y visual y construye por primera vez el producto como una aplicación móvil full-stack.
+> 🎓 **Origen académico:** NutriFlow parte de un conjunto de mockups desarrollado durante la asignatura **Bases de Datos 1 (INF-164)** de la **Universidad APEC (UNAPEC)**, en el período **Mayo - Agosto 2024**. En aquella etapa no se desarrolló una aplicación funcional. La implementación actual toma ese prototipo como referencia conceptual y visual y construye, por primera vez, una aplicación móvil full-stack real.
 
 ---
 
 ## 📖 Descripción
 
-**NutriFlow** es una aplicación móvil de seguimiento nutricional orientada a ayudar a las personas a registrar su alimentación, visualizar calorías y macronutrientes, establecer objetivos personales y analizar su progreso desde una experiencia clara, segura y consistente.
+**NutriFlow** es una aplicación móvil de seguimiento nutricional que permite registrar alimentación, calcular objetivos diarios, visualizar calorías y macronutrientes, escanear productos, gestionar restricciones alimentarias y medir el progreso de peso.
 
-El proyecto actual **no es una migración ni una refactorización de una aplicación anterior**. La entrega académica de 2024 consistió exclusivamente en **mockups de prototipo** que representaban cómo podría funcionar una futura aplicación de nutrición.
+La versión **v1.0.0** representa la primera versión estable del roadmap técnico inicial. El producto actual fue desarrollado desde cero y no es una migración de una aplicación anterior: el trabajo académico de 2024 consistió exclusivamente en **mockups y prototipo visual**.
 
-En 2026 se retoma esa idea para convertirla en software real, desarrollando desde cero:
+### Capacidades principales
 
-- aplicación móvil con React Native y Expo;
-- API REST con ASP.NET Core;
-- persistencia relacional con Entity Framework Core y PostgreSQL;
-- autenticación, sesiones y recuperación de acceso;
-- lógica nutricional;
-- integración futura con cámara y códigos de barras;
-- analítica de progreso;
-- infraestructura reproducible con Docker;
-- integración continua y controles de seguridad de dependencias.
-
-La meta es evolucionar el concepto universitario hasta convertirlo en un proyecto de portafolio con calidad suficiente para continuar hacia un producto real.
+- autenticación y sesiones seguras;
+- onboarding nutricional personalizado;
+- altura en **pies/pulgadas** y peso en **libras** en la experiencia del usuario;
+- cálculo determinístico de TMB, TDEE, calorías objetivo y macronutrientes;
+- catálogo de alimentos;
+- registro diario de comidas y porciones;
+- dashboard de consumo y valores restantes;
+- escáner de códigos de barras mediante cámara;
+- historial de peso y progreso;
+- alergias, restricciones y preferencias;
+- advertencias de incompatibilidad entre alimentos y restricciones;
+- API REST documentada mediante OpenAPI;
+- PostgreSQL + EF Core;
+- Docker Compose;
+- CI con build, tests, type-check, auditoría crítica y build del contenedor.
 
 ---
 
@@ -62,7 +65,7 @@ La meta es evolucionar el concepto universitario hasta convertirlo en un proyect
         │
         ├── Concepto de producto
         ├── Flujo de usuario
-        └── Mockups de prototipo
+        └── Mockups / prototipo
                 │
                 │ Sin aplicación funcional
                 │ Sin backend
@@ -73,35 +76,28 @@ La meta es evolucionar el concepto universitario hasta convertirlo en un proyect
         │
         ├── React Native + Expo
         ├── ASP.NET Core
-        ├── Entity Framework Core
-        ├── PostgreSQL
+        ├── Clean Architecture
+        ├── EF Core + PostgreSQL
         ├── Docker
         └── GitHub Actions
                 │
                 ▼
+             v1.0.0
         Aplicación móvil full-stack
 ```
-
-Esta separación conserva el valor histórico del trabajo universitario sin atribuirle implementaciones que no existieron en la entrega original.
 
 ---
 
 ## 🎓 Origen académico
 
-El concepto que da origen a NutriFlow fue preparado como proyecto de **Bases de Datos 1 (INF-164)** en la **Universidad APEC (UNAPEC)**.
-
-Durante aquella etapa el equipo produjo **mockups que definían visualmente la propuesta**, incluyendo pantallas para registro, perfil físico, nivel de actividad, preferencias alimentarias, objetivos, dashboard nutricional, comidas, escaneo y progreso.
-
-Esas pantallas eran una **representación de funcionalidades propuestas**, no funcionalidades implementadas en software.
-
-### 📚 Información académica
+El concepto original fue preparado como proyecto de **Bases de Datos 1 (INF-164)** en la **Universidad APEC (UNAPEC)**.
 
 | Información | Detalle |
 |---|---|
 | 📖 Asignatura | Bases de Datos 1 (INF-164) |
 | 👨‍🏫 Profesor | Ing. Pedro José Ramirez Rodriguez |
 | 🏫 Institución | Universidad APEC (UNAPEC) |
-| 📅 Período académico | May - Ago 2024 |
+| 📅 Período académico | Mayo - Agosto 2024 |
 | 📁 Entrega original | Prototipo mediante mockups |
 | 🎨 Prototipo | [Figma — Daiet](https://www.figma.com/proto/Ww6fj3ebznHPc88hr48FSg/Daiet?node-id=0-1&t=U2MHmy9fFjnzx23I-1) |
 | 💻 Aplicación funcional en 2024 | No |
@@ -109,204 +105,118 @@ Esas pantallas eran una **representación de funcionalidades propuestas**, no fu
 
 ### 👥 Equipo académico original
 
-| 👤 Integrante | 🆔 Matrícula |
+| Integrante | Matrícula |
 |---|---|
-| 👨🏻‍💻 Luis Alberto Jimenez Perez | A00102205 |
-| 👨🏻‍💻 Charlie de Leon Duran | A00108707 |
-| 👩🏻‍💻 Francisca Mariela Hernández Melo | A00113127 |
-| 👨🏻‍💻 Francis Jairo Matías Rosario | A00115261 |
+| Luis Alberto Jimenez Perez | A00102205 |
+| Charlie de Leon Duran | A00108707 |
+| Francisca Mariela Hernández Melo | A00113127 |
+| Francis Jairo Matías Rosario | A00115261 |
 
 ---
 
 ## 🎨 Prototipo académico original en Figma
 
-Los **mockups y el prototipo interactivo originales de 2024** se conservan en Figma y constituyen la **fuente visual de referencia del proyecto académico**. El diseño documenta la navegación, jerarquía de pantallas, textos, componentes y concepto de experiencia de usuario que dieron origen a NutriFlow.
+Los mockups originales de 2024 se conservan en Figma y funcionan como referencia visual primaria del concepto académico.
 
-<p align="center">
-  <a href="https://www.figma.com/proto/Ww6fj3ebznHPc88hr48FSg/Daiet?node-id=0-1&t=U2MHmy9fFjnzx23I-1">
-    <img src="https://img.shields.io/badge/Ver%20prototipo-Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt="Ver prototipo original en Figma">
-  </a>
-</p>
+Entre las pantallas del prototipo se encuentran:
 
-Entre las pantallas identificadas en el prototipo se encuentran:
-
-| Pantalla original | Propósito conceptual |
+| Pantalla | Propósito conceptual |
 |---|---|
 | `Inicio` | Presentación y entrada al flujo |
 | `Log in` | Inicio de sesión |
 | `Sign in` | Creación de cuenta |
 | `Actividad física` | Datos físicos, demográficos y nivel de actividad |
-| `Alimentos` | Selección de preferencias alimentarias |
+| `Alimentos` | Preferencias alimentarias |
 | `Alimentos v2` | Concepto de escaneo de alimentos |
-| `Objetivo` | Perder grasa, mantener peso o aumentar masa muscular |
+| `Objetivo` | Perder grasa, mantener peso o ganar músculo |
 | `Main Page` | Dashboard de calorías, macros y comidas |
 | `Alergias y preferencias` | Restricciones y alimentos no recomendados |
-| `Progreso` | Peso, objetivo y evolución semanal |
+| `Progreso` | Peso, objetivo y evolución |
 
-> **Importante:** el archivo de Figma representa un **prototipo académico**, no una aplicación funcional. La implementación móvil actual no busca copiarlo literalmente: conserva su intención, flujo e identidad conceptual, mientras moderniza UI/UX, accesibilidad, arquitectura y comportamiento para convertirlo en un producto real.
-
-Para el desarrollo actual, Figma funciona como referencia primaria del diseño original; la nueva interfaz de NutriFlow se implementa con **React Native + Expo** siguiendo los estándares y decisiones técnicas de la versión 2026.
+> El prototipo académico representa funcionalidades propuestas. No existió una aplicación funcional en 2024.
 
 ---
 
 ## 🧭 Continuidad académica
 
-**NutriFlow** documenta su continuidad académica mediante relaciones verificables entre estudiantes y profesores. En la colección actual no se ha identificado un compañero recurrente del equipo original, pero sí existe una **continuidad docente** con [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary).
-
-### 👥 Continuidad por estudiante
-
-Dentro de los proyectos académicos actualmente documentados en este portafolio no se ha verificado que **Luis Alberto Jimenez Perez (A00102205)**, **Charlie de Leon Duran (A00108707)** o **Francisca Mariela Hernández Melo (A00113127)** vuelvan a coincidir con Francis Jairo Matías Rosario en otro equipo por **mismo nombre completo y misma matrícula**.
-
-Por ello, NutriFlow no presenta una continuidad estudiantil directa con otro proyecto de la colección en este momento.
-
-### 👨‍🏫 Continuidad por profesor
-
-El profesor **Ing. Pedro José Ramirez Rodriguez** aparece en dos momentos diferentes de la trayectoria académica documentada en UNAPEC. La secuencia comienza en **Bases de Datos 1 (INF-164)** con NutriFlow y reaparece dos años después en **Desarrollo de Software con Tecnología Propietaria 2 (ISO-710)** con Digital Sanctuary.
+NutriFlow mantiene una continuidad docente documentada con el profesor **Ing. Pedro José Ramirez Rodriguez**.
 
 | Orden | Asignatura | Proyecto | Período | Profesor recurrente |
 |---:|---|---|---|---|
-| 1 | Bases de Datos 1 (INF-164) | **NutriFlow** | Mayo - Agosto 2024 | **Ing. Pedro José Ramirez Rodriguez** |
-| 2 | Desarrollo de Software con Tecnología Propietaria 2 (ISO-710) | [**Digital Sanctuary**](https://github.com/Jairo0811/DigitalSanctuary) | Mayo - Agosto 2026 | **Ing. Pedro José Ramirez Rodriguez** |
+| 1 | Bases de Datos 1 (INF-164) | **NutriFlow** | Mayo - Agosto 2024 | Ing. Pedro José Ramirez Rodriguez |
+| 2 | Desarrollo de Software con Tecnología Propietaria 2 (ISO-710) | [Digital Sanctuary](https://github.com/Jairo0811/DigitalSanctuary) | Mayo - Agosto 2026 | Ing. Pedro José Ramirez Rodriguez |
 
-La relación es **formativa y cronológica**: los proyectos son independientes y la continuidad se fundamenta en el mismo profesor en dos etapas diferentes de la carrera.
-
----
-
-## 🧩 Funcionalidades representadas en los mockups originales
-
-El prototipo académico planteaba:
-
-- registro e inicio de sesión;
-- captura de sexo, fecha de nacimiento, altura y peso;
-- selección del nivel de actividad física;
-- preferencias alimentarias;
-- alergias y restricciones;
-- selección de alimentos;
-- objetivos para perder grasa, mantener peso o aumentar masa muscular;
-- dashboard de calorías y macronutrientes;
-- organización de desayuno, almuerzo, cena y otras comidas;
-- concepto de escaneo de alimentos;
-- seguimiento de peso y progreso.
-
-> Estas características describen lo **representado en los mockups de 2024**. Su implementación real pertenece al desarrollo actual de NutriFlow.
+Los proyectos son independientes; la continuidad es formativa y cronológica.
 
 ---
 
-## 🎯 Visión del producto actual
+## ✨ Alcance de NutriFlow v1.0.0
 
-| Necesidad | Respuesta de NutriFlow |
-|---|---|
-| Registrar lo que se consume diariamente | Diario estructurado de comidas, alimentos y porciones |
-| Entender calorías y macronutrientes | Dashboard con objetivos, consumo y valores restantes |
-| Adaptar la nutrición al usuario | Perfil físico, actividad, objetivo, alergias y preferencias |
-| Registrar productos con rapidez | Búsqueda y escaneo mediante código de barras |
-| Medir la evolución | Historial, peso, adherencia y analítica temporal |
+| Módulo | Estado |
+|---|:---:|
+| Foundation / monorepo | ✅ |
+| Authentication & Identity | ✅ |
+| Nutritional Onboarding | ✅ |
+| Nutrition Engine | ✅ |
+| Food Catalog | ✅ |
+| Meal Tracking | ✅ |
+| Dashboard | ✅ |
+| Barcode Scanner | ✅ |
+| Progress | ✅ |
+| Allergies & Preferences | ✅ |
+| Production Readiness | ✅ |
 
-### Principios del producto
+### Flujo principal
 
-- **Mobile-first:** la experiencia principal está diseñada para teléfonos.
-- **Datos estructurados:** los cálculos nutricionales no dependen de texto libre.
-- **Privacidad por diseño:** los datos personales y nutricionales requieren controles adecuados.
-- **Dominio independiente:** las reglas de negocio no dependen de frameworks o persistencia.
-- **Evolución incremental:** cada capacidad se incorpora mediante fases y pull requests.
-- **Mantenibilidad:** Clean Code, SOLID, DRY, KISS y separación de responsabilidades.
-
----
-
-## 🔐 Fase 1 — Authentication & Identity
-
-La Fase 1 incorpora por primera vez identidad y sesiones funcionales en NutriFlow.
-
-### Backend
-
-- registro con correo, nombre y contraseña;
-- login mediante correo y contraseña;
-- contraseñas derivadas con **PBKDF2 + SHA-256**, salt individual y comparación segura;
-- contraseñas de al menos 12 caracteres con requisitos de complejidad;
-- access tokens JWT de corta duración;
-- refresh tokens opacos y rotativos;
-- almacenamiento exclusivo del **hash** de refresh tokens y tokens de recuperación;
-- cierre de sesión mediante revocación;
-- recuperación de contraseña con token de un solo uso y expiración;
-- revocación de sesiones activas al cambiar la contraseña;
-- Google Sign-In mediante verificación del ID token en backend;
-- persistencia de usuarios y sesiones con EF Core + PostgreSQL;
-- migración inicial del esquema de identidad;
-- endpoint autenticado para consultar la identidad actual.
-
-### Aplicación móvil
-
-- pantalla de inicio de sesión;
-- pantalla de registro;
-- recuperación de contraseña;
-- restablecimiento de contraseña;
-- integración de Google OAuth preparada para configuración por entorno;
-- `AuthProvider` centralizado;
-- almacenamiento de sesión mediante Expo SecureStore;
-- restauración de sesión al iniciar la aplicación;
-- renovación de access token utilizando refresh token;
-- cierre de sesión;
-- primera área protegida para validar el flujo autenticado.
-
-### Endpoints
-
-| Método | Endpoint | Uso |
-|---|---|---|
-| `POST` | `/api/auth/register` | Crear una cuenta |
-| `POST` | `/api/auth/login` | Iniciar sesión |
-| `POST` | `/api/auth/refresh` | Rotar sesión y renovar access token |
-| `POST` | `/api/auth/logout` | Revocar refresh token |
-| `POST` | `/api/auth/forgot-password` | Solicitar recuperación |
-| `POST` | `/api/auth/reset-password` | Establecer nueva contraseña |
-| `POST` | `/api/auth/google` | Autenticación mediante Google |
-| `GET` | `/api/auth/me` | Consultar identidad autenticada |
-
-> En desarrollo, el token de recuperación puede devolverse para facilitar pruebas locales. En producción deberá entregarse mediante un proveedor transaccional y nunca exponerse en la respuesta HTTP.
+```text
+Crear cuenta / iniciar sesión
+          ↓
+Onboarding nutricional
+          ↓
+Perfil físico + actividad + objetivo
+          ↓
+Nutrition Engine
+          ↓
+Objetivos diarios de calorías y macros
+          ↓
+Catálogo / escáner / comidas
+          ↓
+Dashboard diario
+          ↓
+Seguimiento de peso y progreso
+```
 
 ---
 
-## ✨ Alcance funcional de la primera versión estable
+## ⚙️ Nutrition Engine
 
-- autenticación y gestión de sesiones;
-- perfil físico y nutricional;
-- onboarding de objetivos;
-- cálculo de TMB y TDEE;
-- objetivos diarios de calorías y macronutrientes;
-- catálogo de alimentos;
-- registro de comidas y porciones;
-- dashboard diario;
-- escaneo de código de barras;
-- historial de peso y progreso;
-- alergias, restricciones y preferencias.
+El motor nutricional utiliza reglas determinísticas y datos estructurados. La fórmula base implementada es **Mifflin-St Jeor**.
 
-### Evolución posterior
+```text
+Perfil físico
+   ↓
+TMB / energía en reposo
+   ↓
+Factor de actividad
+   ↓
+TDEE
+   ↓
+Objetivo nutricional
+   ↓
+Calorías objetivo
+   ↓
+Proteína · Carbohidratos · Grasas
+```
 
-- hidratación diaria;
-- recetas y comidas frecuentes;
-- favoritos y duplicación de comidas;
-- creación manual de alimentos y recetas;
-- historial y calendario nutricional;
-- seguimiento de micronutrientes;
-- comparación de productos;
-- lista de compras;
-- recomendaciones según macros restantes;
-- objetivos intermedios;
-- reportes y exportación de datos;
-- funcionamiento offline y sincronización;
-- integración futura con profesionales de nutrición.
+La interfaz utiliza **ft / in / lb**. Cuando una fórmula requiere unidades métricas, la conversión se realiza internamente dentro del dominio.
 
-> La inteligencia artificial, si se incorpora en etapas futuras, será una capa complementaria. Los cálculos de calorías, macronutrientes, TMB, TDEE y restricciones permanecerán basados en reglas determinísticas y datos estructurados.
+> Los resultados son estimaciones y no sustituyen una evaluación nutricional profesional.
 
 ---
 
 ## 🧱 Stack tecnológico
 
-### 📱 Aplicación móvil
-
-<p>
-  <img src="https://skillicons.dev/icons?i=react,ts" alt="React y TypeScript">
-  <img src="https://img.shields.io/badge/Expo-SDK%2057-000020?style=for-the-badge&logo=expo&logoColor=white" alt="Expo SDK 57">
-</p>
+### 📱 Mobile
 
 | Área | Tecnología |
 |---|---|
@@ -314,15 +224,12 @@ La Fase 1 incorpora por primera vez identidad y sesiones funcionales en NutriFlo
 | Plataforma | Expo SDK 57 |
 | Lenguaje | TypeScript 6 |
 | Navegación | Expo Router |
-| Sesiones locales | Expo SecureStore |
+| Cámara / Barcode | Expo Camera |
+| Sesión local | Expo SecureStore |
 | OAuth | Expo AuthSession |
 | Organización | Feature-based modular |
 
 ### ⚙️ Backend
-
-<p>
-  <img src="https://skillicons.dev/icons?i=dotnet,cs" alt=".NET y C#">
-</p>
 
 | Área | Tecnología |
 |---|---|
@@ -333,234 +240,133 @@ La Fase 1 incorpora por primera vez identidad y sesiones funcionales en NutriFlo
 | Autenticación | JWT + refresh tokens rotativos |
 | Federación | Google ID token verification |
 | Contrato HTTP | OpenAPI |
-| Observabilidad inicial | Health Checks |
+| Health | ASP.NET Core Health Checks |
 
 ### 🗄️ Datos e infraestructura
 
-<p>
-  <img src="https://skillicons.dev/icons?i=postgres,docker,git,github,githubactions" alt="PostgreSQL, Docker, Git, GitHub y GitHub Actions">
-</p>
-
-- **PostgreSQL 17:** base de datos relacional principal.
-- **Docker Compose:** infraestructura local reproducible.
-- **Git y GitHub:** control de versiones y colaboración.
-- **GitHub Actions:** build, pruebas, type-check y auditoría de dependencias.
+- PostgreSQL 17;
+- Docker Compose;
+- Git y GitHub;
+- GitHub Actions.
 
 ---
 
 ## 🏗️ Arquitectura
 
 ```text
-┌──────────────────────────────┐
-│ React Native + Expo          │
-│ NutriFlow Mobile             │
-└──────────────┬───────────────┘
-               │ HTTPS / JSON
-               ▼
-┌──────────────────────────────┐
-│ ASP.NET Core Web API         │
-│ NutriFlow.Api                │
-└──────────────┬───────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ Application                  │
-│ Casos de uso y contratos     │
-└──────────────┬───────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ Domain                       │
-│ Entidades y reglas           │
-└──────────────┬───────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ Infrastructure               │
-│ EF Core / PostgreSQL         │
-└──────────────────────────────┘
-```
-
-### Dependencias del backend
-
-```text
+React Native + Expo
+        │
+        │ HTTPS / JSON
+        ▼
 NutriFlow.Api
-   ├── NutriFlow.Application
-   └── NutriFlow.Infrastructure
-
-NutriFlow.Infrastructure
-   ├── NutriFlow.Application
-   └── NutriFlow.Domain
-
-NutriFlow.Application
-   └── NutriFlow.Domain
+        │
+        ▼
+Application
+        │
+        ▼
+Domain
+        ▲
+        │
+Infrastructure
+   EF Core / PostgreSQL
 ```
 
 `NutriFlow.Domain` permanece independiente de HTTP, persistencia, frameworks y servicios externos.
 
-La documentación arquitectónica se encuentra en [`docs/architecture`](docs/architecture/README.md).
+Documentación adicional: [`docs/architecture`](docs/architecture/README.md).
 
 ---
 
-## 📂 Estructura del repositorio
+## 🔌 API principal
+
+### Identity
 
 ```text
-NutriFlow/
-├── apps/
-│   ├── mobile/
-│   │   ├── app/
-│   │   ├── src/features/auth/
-│   │   └── package.json
-│   │
-│   └── api/
-│       └── src/
-│           ├── NutriFlow.Api/
-│           ├── NutriFlow.Application/
-│           ├── NutriFlow.Domain/
-│           └── NutriFlow.Infrastructure/
-│
-├── tests/
-│   └── NutriFlow.Application.Tests/
-│
-├── docs/
-│   └── architecture/
-│
-├── .github/workflows/ci.yml
-├── .env.example
-├── SECURITY.md
-├── docker-compose.yml
-└── README.md
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/google
+POST /api/auth/refresh
+POST /api/auth/logout
+POST /api/auth/forgot-password
+POST /api/auth/reset-password
+GET  /api/auth/me
 ```
 
----
+### Onboarding y nutrición
 
-## ✅ Estado actual
+```text
+GET  /api/onboarding/
+PUT  /api/onboarding/physical-profile
+PUT  /api/onboarding/activity
+PUT  /api/onboarding/goal
+PUT  /api/onboarding/preferences
+PUT  /api/onboarding/restrictions
+POST /api/onboarding/complete
+GET  /api/nutrition/targets
+```
 
-La **Fase 1 — Authentication & Identity** está implementada, validada por CI e integrada en `main`.
+### Alimentos, comidas y producto
 
-| Componente | Estado |
-|---|:---:|
-| Mockups académicos de referencia | ✅ |
-| Prototipo original en Figma documentado | ✅ |
-| Identidad visual NutriFlow | ✅ |
-| Foundation / monorepo | ✅ |
-| React Native + Expo | ✅ |
-| ASP.NET Core + Clean Architecture | ✅ |
-| PostgreSQL 17 + Docker Compose | ✅ |
-| EF Core + Npgsql | ✅ |
-| Registro y login | ✅ |
-| JWT + refresh token rotation | ✅ |
-| Logout y revocación | ✅ |
-| Recuperación y cambio de contraseña | ✅ |
-| Google Sign-In — implementación | ✅ |
-| Google Sign-In — credenciales externas | ⚙️ Configurable |
-| SecureStore y restauración de sesión | ✅ |
-| Pruebas de autenticación | ✅ |
-| CI API + Mobile | ✅ |
-| Onboarding nutricional | ⏳ |
-| Motor nutricional | ⏳ |
-| Catálogo de alimentos | ⏳ |
-| Diario de comidas | ⏳ |
-| Dashboard funcional | ⏳ |
-| Escáner de código de barras | ⏳ |
-| Seguimiento de progreso | ⏳ |
+```text
+GET  /api/foods/
+GET  /api/foods/{id}
+GET  /api/foods/barcode/{barcode}
+POST /api/foods/
+GET  /api/meals/
+POST /api/meals/entries
+PUT  /api/meals/entries/{entryId}
+DELETE /api/meals/entries/{entryId}
+GET  /api/dashboard/?date=YYYY-MM-DD
+```
 
-> **Leyenda:** ✅ disponible · ⚙️ requiere configuración externa · 🔄 en progreso · ⏳ planificado
+Los módulos de progreso y compatibilidad alimentaria también están expuestos mediante endpoints autenticados dentro de la API.
 
 ---
 
-## 🗺️ Hoja de ruta
+## 🧪 Calidad y CI
 
-### Fase 0 — Foundation ✅
+La integración final del roadmap se validó con CI antes de fusionarse a `main`.
 
-- [x] Inicializar el repositorio.
-- [x] Crear la aplicación móvil con Expo y TypeScript.
-- [x] Crear el backend ASP.NET Core.
-- [x] Definir `Api`, `Application`, `Domain` e `Infrastructure`.
-- [x] Configurar PostgreSQL mediante Docker Compose.
-- [x] Incorporar health checks y OpenAPI.
-- [x] Configurar GitHub Actions.
-- [x] Documentar arquitectura y origen académico.
+- restore y build Release de la API;
+- **27 tests .NET**;
+- validación de Docker Compose;
+- build de la imagen Docker de la API;
+- instalación de dependencias Mobile;
+- reporte de advisories high del toolchain;
+- bloqueo de vulnerabilidades críticas;
+- TypeScript strict/type-check.
 
-### Fase 1 — Authentication & Identity ✅
+Los advisories high conocidos del toolchain Expo continúan documentados y monitoreados; no se fuerza un downgrade incompatible únicamente para silenciarlos. Consulta [`SECURITY.md`](SECURITY.md).
 
-- [x] Registro de usuarios.
-- [x] Inicio y cierre de sesión.
-- [x] JWT de corta duración.
-- [x] Refresh tokens rotativos.
-- [x] Revocación de sesiones.
-- [x] Recuperación de contraseña mediante token de un solo uso.
-- [x] Google Sign-In a nivel de aplicación y backend.
-- [x] Persistencia de identidad con EF Core.
-- [x] Sesión móvil mediante SecureStore.
-- [x] Pruebas automatizadas del servicio de autenticación.
+---
 
-### Fase 2 — Nutritional Onboarding
+## 🔐 Seguridad
 
-- [ ] Datos físicos y demográficos.
-- [ ] Nivel de actividad.
-- [ ] Preferencias y restricciones.
-- [ ] Selección de objetivo.
+NutriFlow incluye:
 
-### Fase 3 — Nutrition Engine
+- PBKDF2 + SHA-256 con salt individual para contraseñas;
+- JWT de corta duración;
+- refresh tokens opacos, rotativos y revocables;
+- almacenamiento de hashes de tokens persistentes en servidor;
+- SecureStore para la sesión móvil;
+- tokens de recuperación de un solo uso;
+- validación de Google ID tokens en backend;
+- rate limiting en autenticación;
+- Problem Details y manejo global de excepciones;
+- CORS configurable;
+- HSTS fuera de Development;
+- forwarded headers con configuración conservadora;
+- cabeceras HTTP defensivas;
+- secretos y configuración sensible mediante variables de entorno;
+- auditoría de dependencias mediante CI.
 
-- [ ] TMB y TDEE.
-- [ ] Déficit, mantenimiento y superávit.
-- [ ] Objetivos de calorías y macronutrientes.
-- [ ] Recalibración ante cambios importantes de peso.
+### Configuración externa pendiente por entorno
 
-### Fase 4 — Food Catalog
+La aplicación incluye la implementación necesaria, pero algunos servicios requieren credenciales externas antes de un despliegue real:
 
-- [ ] Catálogo nutricional.
-- [ ] Búsqueda y filtros.
-- [ ] Favoritos.
-- [ ] Alimentos personalizados.
-- [ ] Base para códigos de barras.
-
-### Fase 5 — Meal Tracking
-
-- [ ] Desayuno, almuerzo, cena y snacks.
-- [ ] Porciones y cantidades.
-- [ ] Totales diarios automáticos.
-- [ ] Comidas frecuentes y duplicación.
-
-### Fase 6 — Dashboard
-
-- [ ] Calorías consumidas y restantes.
-- [ ] Proteína, carbohidratos y grasas.
-- [ ] Cumplimiento del objetivo diario.
-- [ ] Accesos rápidos.
-
-### Fase 7 — Barcode Scanner
-
-- [ ] Escaneo mediante cámara.
-- [ ] Resolución de productos por código.
-- [ ] Selección de porción.
-- [ ] Registro inmediato en el diario.
-
-### Fase 8 — Progress
-
-- [ ] Registro de peso.
-- [ ] Gráficas semanales y mensuales.
-- [ ] Objetivos intermedios.
-- [ ] Historial de adherencia.
-
-### Fase 9 — Allergies & Preferences
-
-- [ ] Gestión de alergias.
-- [ ] Exclusiones alimentarias.
-- [ ] Advertencias de incompatibilidad.
-- [ ] Preferencias configurables.
-
-### Fase 10 — Production Readiness
-
-- [ ] Cobertura de pruebas ampliada.
-- [ ] Seguridad y hardening.
-- [ ] Proveedor transaccional para recuperación de contraseña.
-- [ ] Telemetría y observabilidad.
-- [ ] Documentación operativa.
-- [ ] Pipeline de release.
-- [ ] Primera versión estable `v1.0.0`.
+- Google OAuth / Google Client ID;
+- entrega transaccional de correos para recuperación de contraseña en producción;
+- secretos JWT y credenciales de PostgreSQL de producción.
 
 ---
 
@@ -568,44 +374,38 @@ La **Fase 1 — Authentication & Identity** está implementada, validada por CI 
 
 ### Requisitos
 
-- .NET SDK 10.
-- Node.js 24 y npm.
+- .NET SDK 10;
+- Node.js 24 + npm;
 - Docker Desktop o Docker Engine con Docker Compose.
 
-### 1. Clonar el repositorio
+### 1. Clonar
 
 ```bash
 git clone https://github.com/Jairo0811/NutriFlow.git
 cd NutriFlow
 ```
 
-### 2. Levantar PostgreSQL
+### 2. Configurar entorno
 
-```bash
-docker compose up -d
-```
+Usa `.env.example` como referencia y nunca publiques secretos reales.
 
-### 3. Configurar la API
-
-Para desarrollo local existe una clave de firma exclusivamente de desarrollo. Para otros entornos configura los valores mediante variables de entorno:
+Variables principales:
 
 ```text
 ConnectionStrings__NutriFlow=Host=localhost;Port=5432;Database=NutriFlowDb;Username=nutriflow;Password=<password>
 Jwt__SigningKey=<secreto-aleatorio-de-al-menos-32-bytes>
 Jwt__GoogleClientIds__0=<google-client-id>
+EXPO_PUBLIC_API_URL=http://localhost:5000
+EXPO_PUBLIC_GOOGLE_CLIENT_ID=<google-client-id>
 ```
 
-### 4. Ejecutar la API
+### 3. Levantar infraestructura y API
 
 ```bash
+docker compose up -d
+
 dotnet restore apps/api/src/NutriFlow.Api/NutriFlow.Api.csproj
 dotnet run --project apps/api/src/NutriFlow.Api/NutriFlow.Api.csproj
-```
-
-Por defecto, el perfil local expone la API en:
-
-```text
-http://localhost:5000
 ```
 
 Health check:
@@ -614,18 +414,7 @@ Health check:
 http://localhost:5000/health
 ```
 
-### 5. Configurar la aplicación móvil
-
-Usa `.env.example` como referencia:
-
-```text
-EXPO_PUBLIC_API_URL=http://localhost:5000
-EXPO_PUBLIC_GOOGLE_CLIENT_ID=<google-client-id>
-```
-
-> En un dispositivo físico, `localhost` apunta al propio teléfono. Para probar contra la API local utiliza la IP accesible de la computadora dentro de la red o el mecanismo de túnel correspondiente.
-
-### 6. Ejecutar Mobile
+### 4. Ejecutar Mobile
 
 ```bash
 cd apps/mobile
@@ -633,76 +422,56 @@ npm install
 npm start
 ```
 
----
-
-## 🧪 Calidad y CI
-
-GitHub Actions valida cada pull request hacia `main` mediante dos trabajos principales:
-
-**API**
-
-- restore;
-- build Release con warnings tratados como errores;
-- pruebas automatizadas del servicio de autenticación.
-
-**Mobile**
-
-- instalación de dependencias;
-- reporte de advisories de producción;
-- bloqueo de vulnerabilidades críticas;
-- TypeScript strict/type-check.
-
-Las vulnerabilidades transitivas conocidas del toolchain móvil se documentan en [`SECURITY.md`](SECURITY.md) para mantener el riesgo visible sin aplicar downgrades incompatibles de Expo.
+> En un dispositivo físico, configura `EXPO_PUBLIC_API_URL` con una dirección accesible desde el teléfono; `localhost` apunta al propio dispositivo.
 
 ---
 
-## 🔐 Seguridad y privacidad
-
-NutriFlow manejará información personal y potencialmente sensible relacionada con hábitos, características físicas y objetivos del usuario. La arquitectura contempla desde el inicio:
-
-- contraseñas derivadas con salt individual;
-- access tokens de corta duración;
-- refresh tokens rotativos y revocables;
-- almacenamiento de tokens persistentes únicamente mediante hash en servidor;
-- almacenamiento seguro de sesión en el dispositivo;
-- recuperación de contraseña con tokens de un solo uso;
-- invalidación de sesiones después del restablecimiento de contraseña;
-- validación de identidad de Google en backend;
-- configuración sensible mediante variables de entorno;
-- ausencia de secretos reales de producción en el repositorio;
-- auditoría continua de dependencias mediante CI.
-
-Consulta [`SECURITY.md`](SECURITY.md) para decisiones y advisories de seguridad conocidos.
-
-> NutriFlow es una herramienta de seguimiento y organización nutricional. No sustituye evaluación, diagnóstico ni tratamiento proporcionado por profesionales de salud.
-
----
-
-## 🌿 Filosofía de desarrollo
-
-- Clean Code;
-- principios SOLID;
-- DRY;
-- KISS;
-- arquitectura modular;
-- separación de responsabilidades;
-- seguridad por diseño;
-- pruebas automatizadas progresivas;
-- pull requests revisables;
-- CI antes de integrar cambios en `main`.
+## 🗺️ Roadmap inicial
 
 ```text
-main
- └── feature/*
+Fase 0   Foundation                    ✅
+Fase 1   Authentication & Identity    ✅
+Fase 2   Nutritional Onboarding       ✅
+Fase 3   Nutrition Engine             ✅
+Fase 4   Food Catalog                 ✅
+Fase 5   Meal Tracking                ✅
+Fase 6   Dashboard                    ✅
+Fase 7   Barcode Scanner              ✅
+Fase 8   Progress                     ✅
+Fase 9   Allergies & Preferences      ✅
+Fase 10  Production Readiness         ✅
 ```
 
-Cada fase debe mantener el repositorio ejecutable, probado y documentado antes de avanzar a la siguiente.
+El roadmap técnico inicial está **completado** desde v1.0.0.
+
+### Evolución posterior
+
+- hidratación;
+- recetas y comidas frecuentes;
+- favoritos y duplicación;
+- micronutrientes;
+- calendario nutricional;
+- comparación de productos;
+- lista de compras;
+- recomendaciones según macros restantes;
+- **¿Qué puedo comer ahora?** basado en presupuesto restante y restricciones;
+- exportaciones PDF/CSV;
+- funcionamiento offline y sincronización;
+- integración con profesionales de nutrición.
+
+---
+
+## 📦 Versionado
+
+La primera versión estable es **NutriFlow v1.0.0**.
+
+La API y la aplicación móvil reportan la versión `1.0.0`. Las notas de esta versión se encuentran en [`CHANGELOG.md`](CHANGELOG.md).
 
 ---
 
 ## 👨‍💻 Evolución y mantenimiento
 
-La nueva implementación de **NutriFlow** es desarrollada y mantenida por **Francis Jairo Matías Rosario**, retomando el concepto creado junto al equipo académico de 2024 y llevándolo por primera vez a una implementación móvil funcional.
+La implementación actual de NutriFlow es desarrollada y mantenida por **Francis Jairo Matías Rosario**, retomando el concepto creado junto al equipo académico de 2024 y llevándolo por primera vez a una implementación móvil funcional.
 
 ---
 
@@ -714,9 +483,9 @@ La nueva implementación de **NutriFlow** es desarrollada y mantenida por **Fran
 - **Período:** Mayo - Agosto 2024
 - **Profesor:** Ing. Pedro José Ramirez Rodriguez
 - **Entrega original:** prototipo mediante mockups
-- **Prototipo original:** [Figma — Daiet](https://www.figma.com/proto/Ww6fj3ebznHPc88hr48FSg/Daiet?node-id=0-1&t=U2MHmy9fFjnzx23I-1)
+- **Prototipo:** [Figma — Daiet](https://www.figma.com/proto/Ww6fj3ebznHPc88hr48FSg/Daiet?node-id=0-1&t=U2MHmy9fFjnzx23I-1)
 - **Equipo original:** Luis Alberto Jimenez Perez, Charlie de Leon Duran, Francisca Mariela Hernández Melo y Francis Jairo Matías Rosario
-- **Implementación móvil actual y mantenimiento:** Francis Jairo Matías Rosario
+- **Implementación actual y mantenimiento:** Francis Jairo Matías Rosario
 
 ---
 
