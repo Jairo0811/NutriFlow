@@ -12,6 +12,7 @@ export type Food = {
   carbohydrateGrams: number;
   fatGrams: number;
   barcode?: string | null;
+  allergenCodes: string[];
   source: 'System' | 'User' | 'External';
 };
 
