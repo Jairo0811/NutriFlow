@@ -14,10 +14,10 @@ export default function AuthenticatedHomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 4</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 5</Text>
         <Text style={styles.title}>Hola, {session?.displayName ?? 'NutriFlow'}</Text>
         <Text style={styles.subtitle}>
-          Tu perfil y objetivos ya están listos. Ahora puedes explorar el catálogo estructurado que alimentará el registro de comidas.
+          Tu perfil, objetivos y catálogo ya están listos. Ahora puedes registrar tus comidas y ver tu consumo diario acumulado.
         </Text>
 
         <View style={styles.card}>
@@ -25,8 +25,12 @@ export default function AuthenticatedHomeScreen() {
           <Text style={styles.cardValue}>{session?.email ?? 'Cargando...'}</Text>
         </View>
 
-        <Pressable onPress={() => router.push('/foods')} style={styles.primaryButton}>
-          <Text style={styles.primaryText}>Explorar catálogo de alimentos</Text>
+        <Pressable onPress={() => router.push('/meals')} style={styles.primaryButton}>
+          <Text style={styles.primaryText}>Abrir mi diario de comidas</Text>
+        </Pressable>
+
+        <Pressable onPress={() => router.push('/foods')} style={styles.secondaryButton}>
+          <Text style={styles.secondaryText}>Explorar catálogo de alimentos</Text>
         </Pressable>
 
         <Pressable onPress={() => router.push('/targets')} style={styles.secondaryButton}>
