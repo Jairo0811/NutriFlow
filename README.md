@@ -1,21 +1,14 @@
+<h1 align="center">NutriFlow</h1>
+
 <p align="center">
-  <strong style="font-size: 2rem;">NutriFlow</strong>
+  <strong>Nutrición, hábitos y progreso en una experiencia móvil moderna.</strong>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/UNAPEC-INF--164-003B70?style=for-the-badge" alt="UNAPEC INF-164">
-</p>
-
-<p align="center">
-  <strong>Nutrición, hábitos y progreso en una sola experiencia móvil.</strong><br>
-  Reconstrucción profesional de un proyecto académico de Bases de Datos 1, evolucionado como aplicación móvil full-stack.
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/badge/Estado-En%20desarrollo-F5A623?style=for-the-badge" alt="Estado en desarrollo">
   <img src="https://img.shields.io/badge/Versión-0.1.0-22C55E?style=for-the-badge" alt="Versión 0.1.0">
   <img src="https://img.shields.io/badge/Fase-Foundation-111827?style=for-the-badge" alt="Fase Foundation">
-  <img src="https://img.shields.io/badge/Proyecto-Académico%20%2B%20Portafolio-7C3AED?style=for-the-badge" alt="Proyecto académico y portafolio">
 </p>
 
 <p align="center">
@@ -30,48 +23,80 @@
   <strong>React Native · Expo · TypeScript · ASP.NET Core · PostgreSQL · Docker · GitHub Actions</strong>
 </p>
 
-> 🎓 Proyecto académico originado en **Bases de Datos 1 (INF-164)** de la **Universidad APEC (UNAPEC)** durante el período **Mayo - Agosto 2024**, impartido por el **Ing. Pedro José Ramirez Rodriguez**. La versión actual reconstruye y amplía aquella propuesta con una arquitectura moderna orientada a producto.
+> 🎓 **Origen académico:** NutriFlow parte de un conjunto de mockups desarrollado durante la asignatura **Bases de Datos 1 (INF-164)** de la **Universidad APEC (UNAPEC)**, en el período **Mayo - Agosto 2024**. En esa etapa no se desarrolló una aplicación funcional. La versión actual toma aquel prototipo como referencia conceptual y visual y construye por primera vez el producto como una aplicación móvil full-stack.
 
 ---
 
 ## 📖 Descripción
 
-**NutriFlow** es una aplicación móvil para el seguimiento nutricional y de hábitos alimenticios. Su objetivo es ayudar al usuario a registrar lo que consume, comprender su distribución de calorías y macronutrientes, definir objetivos personales y visualizar su evolución de forma clara.
+**NutriFlow** es una aplicación móvil de seguimiento nutricional orientada a ayudar a las personas a registrar su alimentación, visualizar calorías y macronutrientes, establecer objetivos personales y analizar su progreso desde una experiencia clara y consistente.
 
-El concepto nace de un proyecto académico de UNAPEC cuyo prototipo contemplaba registro e inicio de sesión, captura de datos físicos, selección de nivel de actividad, preferencias alimentarias, alergias, objetivos de composición corporal, registro de alimentos, escaneo de productos, dashboard nutricional y seguimiento de progreso.
+El proyecto actual **no es una migración ni una refactorización de una aplicación anterior**. La entrega académica de 2024 consistió exclusivamente en **mockups de prototipo** que representaban cómo podría funcionar una futura aplicación de nutrición.
 
-La reconstrucción profesional conserva ese núcleo funcional y lo transforma en un producto full-stack preparado para incorporar persistencia real, seguridad, analítica, recomendaciones, reportes e integraciones móviles.
+En 2026 se retoma esa idea para convertirla en software real, creando desde cero:
 
-### Principios del producto
+- una aplicación móvil con React Native y Expo;
+- una API con ASP.NET Core;
+- persistencia relacional con PostgreSQL;
+- autenticación y seguridad;
+- lógica nutricional;
+- integración con cámara y códigos de barras;
+- analítica de progreso;
+- infraestructura reproducible y CI.
 
-- experiencia móvil simple y centrada en el usuario;
-- cálculos nutricionales determinísticos y auditables;
-- separación estricta entre dominio, infraestructura y presentación;
-- seguridad y privacidad por diseño;
-- arquitectura modular y preparada para crecer;
-- código mantenible siguiendo Clean Code, SOLID, DRY y KISS;
-- evolución incremental mediante ramas, pull requests y CI.
+La meta es evolucionar el concepto académico hasta convertirlo en un proyecto de portafolio con calidad suficiente para continuar hacia un producto real.
 
 ---
 
-## 🎯 Problema y propuesta de valor
+## 🕰️ Evolución del proyecto
 
-| Necesidad | Respuesta de NutriFlow |
+```text
+2024 — UNAPEC · INF-164
+        │
+        ├── Concepto de producto
+        ├── Flujo de usuario
+        └── Mockups de prototipo
+                │
+                │ Sin aplicación funcional
+                │ Sin backend
+                │ Sin API
+                │ Sin implementación móvil
+                ▼
+2026 — NutriFlow
+        │
+        ├── React Native + Expo
+        ├── ASP.NET Core
+        ├── PostgreSQL
+        ├── Docker
+        └── GitHub Actions
+                │
+                ▼
+        Aplicación móvil full-stack
+```
+
+Esta separación permite conservar el valor histórico del trabajo universitario sin atribuirle implementaciones que no existieron en la entrega original.
+
+---
+
+## 🎓 Origen académico
+
+El concepto que da origen a NutriFlow fue preparado como proyecto de **Bases de Datos 1 (INF-164)** en la **Universidad APEC (UNAPEC)**.
+
+Durante aquella etapa el equipo produjo **mockups que definían visualmente la propuesta**, incluyendo pantallas para registro, perfil físico, nivel de actividad, preferencias alimentarias, objetivos, dashboard nutricional, comidas, escaneo y progreso.
+
+Esas pantallas eran una **representación de funcionalidades propuestas**, no funcionalidades implementadas en software.
+
+### 📚 Información académica
+
+| Información | Detalle |
 |---|---|
-| Dificultad para saber cuánto se consume realmente | Registro estructurado de alimentos, porciones, calorías y macros |
-| Objetivos nutricionales poco claros | Metas calculadas a partir del perfil físico, actividad y objetivo |
-| Seguimiento disperso entre notas y aplicaciones distintas | Dashboard diario, historial y progreso centralizados |
-| Productos sin información inmediata | Escaneo de código de barras y consulta nutricional |
-| Alergias y restricciones alimentarias | Preferencias, exclusiones y advertencias durante el registro |
-| Poca visibilidad del avance | Evolución de peso, adherencia y métricas semanales/mensuales |
-
----
-
-## 🎓 Origen del proyecto
-
-La primera propuesta de NutriFlow fue desarrollada como proyecto académico de la asignatura **Bases de Datos 1 (INF-164)** en la **Universidad APEC (UNAPEC)**.
-
-La versión de 2024 definió el concepto funcional y los mockups de la aplicación. La versión actual utiliza ese trabajo como referencia histórica y de producto, pero se reconstruye desde cero con una nueva base de código, arquitectura, stack tecnológico e identidad visual.
+| 📖 Asignatura | Bases de Datos 1 (INF-164) |
+| 👨‍🏫 Profesor | Ing. Pedro José Ramirez Rodriguez |
+| 🏫 Institución | Universidad APEC (UNAPEC) |
+| 📅 Período académico | Mayo - Agosto 2024 |
+| 📁 Entrega original | Prototipo mediante mockups |
+| 💻 Aplicación funcional en 2024 | No |
+| 📱 Implementación actual | Aplicación móvil full-stack desarrollada desde cero |
 
 ### 👥 Equipo académico original
 
@@ -82,50 +107,84 @@ La versión de 2024 definió el concepto funcional y los mockups de la aplicaci�
 | Francisca Mariela Hernández Melo | A00113127 |
 | Francis Jairo Matías Rosario | A00115261 |
 
-### 📚 Información académica
-
-| Información | Detalle |
-|---|---|
-| 📖 Asignatura | Bases de Datos 1 (INF-164) |
-| 👨‍🏫 Profesor | Ing. Pedro José Ramirez Rodriguez |
-| 🏫 Institución | Universidad APEC (UNAPEC) |
-| 📅 Período académico | Mayo - Agosto 2024 |
-| 📁 Tipo de proyecto | Proyecto académico de aplicación móvil / base de datos |
-
 ---
 
-## ✨ Alcance funcional
+## 🧩 Funcionalidades representadas en los mockups originales
 
-### Funcionalidades heredadas del concepto académico
+El prototipo académico planteaba una experiencia de seguimiento nutricional compuesta por:
 
 - registro e inicio de sesión;
 - captura de sexo, fecha de nacimiento, altura y peso;
-- nivel de actividad física;
-- selección de alimentos y preferencias;
+- selección del nivel de actividad física;
+- preferencias alimentarias;
 - alergias y restricciones;
-- objetivos: perder grasa, mantener peso o aumentar masa muscular;
+- selección de alimentos;
+- objetivos para perder grasa, mantener peso o aumentar masa muscular;
 - dashboard de calorías y macronutrientes;
-- registro de desayuno, almuerzo, cena y otras comidas;
-- escaneo de alimentos mediante código de barras;
+- organización de desayuno, almuerzo, cena y otras comidas;
+- concepto de escaneo de alimentos;
 - seguimiento de peso y progreso.
 
-### Evolución planificada
+> Estas características describen lo **representado en los mockups de 2024**. Su implementación real forma parte del desarrollo actual de NutriFlow.
 
-- cálculo de TMB, TDEE y objetivos nutricionales;
-- historial y calendario nutricional;
+---
+
+## 🎯 Visión del producto actual
+
+NutriFlow busca resolver cinco necesidades principales:
+
+| Necesidad | Respuesta de NutriFlow |
+|---|---|
+| Registrar lo que se consume diariamente | Diario estructurado de comidas, alimentos y porciones |
+| Entender calorías y macronutrientes | Dashboard con objetivos, consumo y valores restantes |
+| Adaptar la nutrición al usuario | Perfil físico, actividad, objetivo, alergias y preferencias |
+| Registrar productos con rapidez | Búsqueda y escaneo mediante código de barras |
+| Medir la evolución | Historial, peso, adherencia y analítica temporal |
+
+### Principios del producto
+
+- **Mobile-first:** la experiencia principal está diseñada para teléfonos.
+- **Datos estructurados:** los cálculos nutricionales no dependen de texto libre.
+- **Privacidad por diseño:** los datos personales y de salud requieren controles adecuados.
+- **Dominio independiente:** las reglas de negocio no dependen de frameworks o persistencia.
+- **Evolución incremental:** cada capacidad se incorpora mediante fases y pull requests.
+- **Mantenibilidad:** Clean Code, SOLID, DRY, KISS y separación de responsabilidades.
+
+---
+
+## ✨ Alcance funcional de la nueva aplicación
+
+### Núcleo de la primera versión estable
+
+- autenticación y gestión de sesiones;
+- perfil físico y nutricional;
+- onboarding de objetivos;
+- cálculo de TMB y TDEE;
+- objetivos diarios de calorías y macronutrientes;
+- catálogo de alimentos;
+- registro de comidas y porciones;
+- dashboard diario;
+- escaneo de código de barras;
+- historial de peso y progreso;
+- alergias, restricciones y preferencias.
+
+### Evolución posterior
+
 - hidratación diaria;
 - recetas y comidas frecuentes;
 - favoritos y duplicación de comidas;
 - creación manual de alimentos y recetas;
-- lista de compras;
-- comparación de productos;
+- historial y calendario nutricional;
 - seguimiento de micronutrientes;
-- recomendaciones basadas en macros restantes;
+- comparación de productos;
+- lista de compras;
+- recomendaciones según macros restantes;
+- objetivos intermedios;
 - reportes y exportación de datos;
-- integración futura con profesionales de nutrición;
-- funcionamiento offline y sincronización posterior.
+- funcionamiento offline y sincronización;
+- integración futura con profesionales de nutrición.
 
-> La inteligencia artificial, cuando se incorpore, será complementaria. Los cálculos de calorías, macronutrientes y objetivos permanecerán basados en reglas y datos estructurados.
+> La inteligencia artificial, si se incorpora en etapas futuras, será una capa complementaria. Los cálculos de calorías, macronutrientes, TMB, TDEE y restricciones permanecerán basados en reglas determinísticas y datos estructurados.
 
 ---
 
@@ -144,9 +203,7 @@ La versión de 2024 definió el concepto funcional y los mockups de la aplicaci�
 | Plataforma | Expo SDK 57 |
 | Lenguaje | TypeScript 6 |
 | Navegación | Expo Router |
-| UI base | React Native |
-
-La aplicación móvil crecerá siguiendo una organización **feature-based**, evitando acoplar navegación, lógica de negocio y acceso a servicios externos.
+| Organización | Feature-based modular |
 
 ### ⚙️ Backend
 
@@ -158,10 +215,10 @@ La aplicación móvil crecerá siguiendo una organización **feature-based**, ev
 |---|---|
 | Plataforma | .NET 10 |
 | API | ASP.NET Core Web API |
-| Contrato HTTP | OpenAPI |
 | Arquitectura | Clean Architecture |
+| Contrato HTTP | OpenAPI |
 | Observabilidad inicial | Health Checks |
-| ORM | Entity Framework Core / Npgsql, planificado para persistencia |
+| Persistencia | Entity Framework Core + Npgsql, planificado |
 
 ### 🗄️ Datos e infraestructura
 
@@ -170,15 +227,16 @@ La aplicación móvil crecerá siguiendo una organización **feature-based**, ev
 </p>
 
 - **PostgreSQL 17:** base de datos relacional principal.
-- **Docker Compose:** entorno local reproducible para infraestructura.
-- **Git y GitHub:** control de versiones y colaboración.
-- **GitHub Actions:** integración continua para backend y aplicación móvil.
+- **Docker Compose:** infraestructura local reproducible.
+- **Git:** control de versiones.
+- **GitHub:** repositorio y colaboración.
+- **GitHub Actions:** integración continua.
 
 ---
 
 ## 🏗️ Arquitectura
 
-NutriFlow utiliza un monorepo con separación explícita entre cliente móvil, backend y documentación.
+NutriFlow utiliza un monorepo que separa la aplicación móvil, la API y la documentación técnica.
 
 ```text
 ┌──────────────────────────────┐
@@ -189,7 +247,7 @@ NutriFlow utiliza un monorepo con separación explícita entre cliente móvil, b
                ▼
 ┌──────────────────────────────┐
 │ ASP.NET Core Web API         │
-│ Presentation / API           │
+│ NutriFlow.Api                │
 └──────────────┬───────────────┘
                │
                ▼
@@ -226,7 +284,7 @@ NutriFlow.Application
    └── NutriFlow.Domain
 ```
 
-El dominio no debe depender de frameworks, almacenamiento, HTTP ni detalles de infraestructura.
+`NutriFlow.Domain` permanece independiente de HTTP, persistencia, frameworks y servicios externos.
 
 La documentación arquitectónica se encuentra en [`docs/architecture`](docs/architecture/README.md).
 
@@ -265,8 +323,12 @@ NutriFlow/
 
 ## ✅ Estado actual
 
+NutriFlow se encuentra en **Fase 0 — Foundation**.
+
 | Componente | Estado |
 |---|:---:|
+| Concepto y mockups académicos de referencia | ✅ |
+| Identidad NutriFlow | ✅ |
 | Repositorio y estrategia Git | ✅ |
 | Monorepo inicial | ✅ |
 | React Native + Expo | ✅ |
@@ -285,11 +347,11 @@ NutriFlow/
 | Motor nutricional | ⏳ |
 | Catálogo de alimentos | ⏳ |
 | Diario de comidas | ⏳ |
-| Dashboard real | ⏳ |
+| Dashboard funcional | ⏳ |
 | Escáner de código de barras | ⏳ |
 | Seguimiento de progreso | ⏳ |
 
-> **Leyenda:** ✅ implementado · 🔄 en progreso · ⏳ planificado
+> **Leyenda:** ✅ disponible · 🔄 en progreso · ⏳ planificado
 
 ---
 
@@ -297,10 +359,10 @@ NutriFlow/
 
 ### Fase 0 — Foundation
 
-- [x] Inicializar repositorio.
-- [x] Crear aplicación móvil con Expo y TypeScript.
-- [x] Crear backend ASP.NET Core.
-- [x] Definir proyectos `Api`, `Application`, `Domain` e `Infrastructure`.
+- [x] Inicializar el repositorio.
+- [x] Crear la aplicación móvil con Expo y TypeScript.
+- [x] Crear el backend ASP.NET Core.
+- [x] Definir `Api`, `Application`, `Domain` e `Infrastructure`.
 - [x] Configurar PostgreSQL mediante Docker Compose.
 - [x] Incorporar health checks y OpenAPI.
 - [x] Configurar GitHub Actions.
@@ -314,7 +376,7 @@ NutriFlow/
 - [ ] Refresh tokens rotativos.
 - [ ] Revocación de sesiones.
 - [ ] Recuperación de contraseña.
-- [ ] Integración de Google Sign-In.
+- [ ] Google Sign-In.
 
 ### Fase 2 — Nutritional Onboarding
 
@@ -333,7 +395,8 @@ NutriFlow/
 ### Fase 4 — Food Catalog
 
 - [ ] Catálogo nutricional.
-- [ ] Búsqueda, filtros y favoritos.
+- [ ] Búsqueda y filtros.
+- [ ] Favoritos.
 - [ ] Alimentos personalizados.
 - [ ] Base para códigos de barras.
 
@@ -389,8 +452,7 @@ NutriFlow/
 
 - .NET SDK 10.
 - Node.js y npm.
-- Docker Desktop o Docker Engine con Compose.
-- Git.
+- Docker Desktop o Docker Engine con Docker Compose.
 
 ### 1. Clonar el repositorio
 
@@ -399,13 +461,11 @@ git clone https://github.com/Jairo0811/NutriFlow.git
 cd NutriFlow
 ```
 
-### 2. Iniciar PostgreSQL
+### 2. Levantar PostgreSQL
 
 ```bash
 docker compose up -d
 ```
-
-La configuración local crea la base `NutriFlowDb` sobre PostgreSQL 17.
 
 ### 3. Ejecutar la API
 
@@ -428,54 +488,58 @@ npm install
 npm start
 ```
 
-Desde Expo se podrá abrir el proyecto en Android, iOS o web según el entorno disponible.
-
-> Las credenciales incluidas en `docker-compose.yml` son exclusivamente para desarrollo local y deberán sustituirse por secretos administrados antes de cualquier despliegue real.
+Expo permitirá abrir el proyecto en un dispositivo compatible, emulador o entorno soportado durante el desarrollo.
 
 ---
 
-## 🔄 Flujo de desarrollo
+## 🔐 Seguridad y privacidad
+
+NutriFlow manejará información personal y potencialmente sensible relacionada con hábitos, características físicas y objetivos del usuario. Por ello, la arquitectura contempla desde el inicio:
+
+- autenticación robusta;
+- contraseñas almacenadas mediante hashing seguro;
+- access tokens de corta duración;
+- refresh tokens rotativos y revocables;
+- validación de entrada en backend;
+- autorización aplicada en servidor;
+- configuración sensible mediante variables de entorno;
+- ausencia de secretos reales en el repositorio;
+- minimización de los datos almacenados;
+- trazabilidad para operaciones sensibles cuando corresponda.
+
+> NutriFlow es una herramienta de seguimiento y organización nutricional. No sustituye evaluación, diagnóstico ni tratamiento proporcionado por profesionales de salud.
+
+---
+
+## 🌿 Filosofía de desarrollo
+
+El proyecto se desarrolla de forma incremental bajo los siguientes criterios:
+
+- Clean Code;
+- principios SOLID;
+- DRY;
+- KISS;
+- arquitectura modular;
+- separación de responsabilidades;
+- seguridad por diseño;
+- pruebas automatizadas progresivas;
+- pull requests pequeños y revisables;
+- CI antes de integrar cambios en `main`.
+
+Flujo de ramas previsto:
 
 ```text
 main
  └── feature/*
-       ↓
- Pull Request
-       ↓
- GitHub Actions
-       ↓
- revisión
-       ↓
- merge
 ```
 
-Las funcionalidades se incorporarán mediante cambios pequeños y verificables, evitando integrar trabajo incompleto directamente en `main`.
-
----
-
-## 🔐 Consideraciones de seguridad
-
-La evolución del proyecto deberá mantener como mínimo:
-
-- contraseñas almacenadas únicamente mediante hash fuerte;
-- access tokens de corta duración;
-- refresh tokens revocables y almacenados de forma segura;
-- validación de entradas en backend;
-- secretos fuera del repositorio;
-- autorización aplicada en API y nunca delegada solo a la interfaz;
-- límites y validaciones para archivos o imágenes futuras;
-- minimización de datos personales y nutricionales almacenados;
-- exportación y eliminación controlada de información del usuario.
+Cada fase debe mantener el repositorio ejecutable y documentado antes de avanzar a la siguiente.
 
 ---
 
 ## 👨‍💻 Evolución y mantenimiento
 
-**Francis Jairo Matías Rosario**  
-🎓 Ingeniería de Software — Universidad APEC (UNAPEC)  
-🆔 Matrícula: **A00115261**
-
-La reconstrucción, evolución técnica y mantenimiento de esta versión de **NutriFlow** se realizan como proyecto de portafolio a partir del concepto académico original desarrollado por el equipo de INF-164.
+La nueva implementación de **NutriFlow** es desarrollada y mantenida por **Francis Jairo Matías Rosario**, retomando el concepto creado junto al equipo académico de 2024 y llevándolo por primera vez a una implementación móvil funcional.
 
 ---
 
@@ -484,13 +548,14 @@ La reconstrucción, evolución técnica y mantenimiento de esta versión de **Nu
 - **Universidad:** Universidad APEC (UNAPEC)
 - **Asignatura:** Bases de Datos 1
 - **Código:** INF-164
+- **Período:** Mayo - Agosto 2024
 - **Profesor:** Ing. Pedro José Ramirez Rodriguez
-- **Período académico:** Mayo - Agosto 2024
-- **Equipo académico original:** Luis Alberto Jimenez Perez, Charlie de Leon Duran, Francisca Mariela Hernández Melo y Francis Jairo Matías Rosario
-- **Evolución y mantenimiento de NutriFlow:** Francis Jairo Matías Rosario
+- **Entrega original:** prototipo mediante mockups
+- **Equipo original:** Luis Alberto Jimenez Perez, Charlie de Leon Duran, Francisca Mariela Hernández Melo y Francis Jairo Matías Rosario
+- **Implementación móvil actual y mantenimiento:** Francis Jairo Matías Rosario
 
 ---
 
 <p align="center">
-  Desarrollado con ❤️ como evolución de un proyecto académico de UNAPEC.
+  <strong>De prototipo académico a aplicación móvil real.</strong>
 </p>
