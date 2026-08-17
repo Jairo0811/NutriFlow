@@ -23,6 +23,16 @@ public enum NutritionGoalType
 
 public sealed class NutritionProfile
 {
+    private static readonly HashSet<string> AllowedPreferenceCodes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "protein", "carbohydrates", "fats", "dairy", "fruits"
+    };
+
+    private static readonly HashSet<string> AllowedRestrictionCodes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "gluten", "shellfish"
+    };
+
     private NutritionProfile() { }
 
     public NutritionProfile(Guid userId)
@@ -40,6 +50,8 @@ public sealed class NutritionProfile
     public ActivityLevel? ActivityLevel { get; private set; }
     public NutritionGoalType? GoalType { get; private set; }
     public decimal? TargetWeightPounds { get; private set; }
+    public string[] FoodPreferenceCodes { get; private set; } = [];
+    public string[] DietaryRestrictionCodes { get; private set; } = [];
     public bool IsCompleted { get; private set; }
     public DateTimeOffset CreatedAtUtc { get; private set; }
     public DateTimeOffset UpdatedAtUtc { get; private set; }
@@ -79,6 +91,18 @@ public sealed class NutritionProfile
         Touch();
     }
 
+    public void SetFoodPreferences(IEnumerable<string> codes)
+    {
+        FoodPreferenceCodes = NormalizeCodes(codes, AllowedPreferenceCodes, "food preference");
+        Touch();
+    }
+
+    public void SetDietaryRestrictions(IEnumerable<string> codes)
+    {
+        DietaryRestrictionCodes = NormalizeCodes(codes, AllowedRestrictionCodes, "dietary restriction");
+        Touch();
+    }
+
     public void Complete()
     {
         if (DateOfBirth is null || BiologicalSex is null || HeightInches is null || CurrentWeightPounds is null || ActivityLevel is null || GoalType is null)
@@ -87,6 +111,21 @@ public sealed class NutritionProfile
         IsCompleted = true;
         CompletedAtUtc = DateTimeOffset.UtcNow;
         Touch();
+    }
+
+    private static string[] NormalizeCodes(IEnumerable<string> codes, HashSet<string> allowed, string label)
+    {
+        var normalized = codes
+            .Where(code => !string.IsNullOrWhiteSpace(code))
+            .Select(code => code.Trim().ToLowerInvariant())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+
+        var invalid = normalized.FirstOrDefault(code => !allowed.Contains(code));
+        if (invalid is not null)
+            throw new ArgumentException($"Unsupported {label} code: {invalid}.", nameof(codes));
+
+        return normalized;
     }
 
     private void Touch() => UpdatedAtUtc = DateTimeOffset.UtcNow;
