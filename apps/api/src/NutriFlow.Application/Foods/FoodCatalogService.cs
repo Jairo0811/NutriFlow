@@ -3,8 +3,8 @@ using NutriFlow.Domain.Foods;
 
 namespace NutriFlow.Application.Foods;
 
-public sealed record FoodDto(Guid Id, string Name, string? Brand, string Category, decimal ServingSize, string ServingUnit, decimal Calories, decimal ProteinGrams, decimal CarbohydrateGrams, decimal FatGrams, string? Barcode, FoodSource Source);
-public sealed record CreateFoodCommand(string Name, string? Brand, string Category, decimal ServingSize, string ServingUnit, decimal Calories, decimal ProteinGrams, decimal CarbohydrateGrams, decimal FatGrams, string? Barcode);
+public sealed record FoodDto(Guid Id, string Name, string? Brand, string Category, decimal ServingSize, string ServingUnit, decimal Calories, decimal ProteinGrams, decimal CarbohydrateGrams, decimal FatGrams, string? Barcode, IReadOnlyList<string> AllergenCodes, FoodSource Source);
+public sealed record CreateFoodCommand(string Name, string? Brand, string Category, decimal ServingSize, string ServingUnit, decimal Calories, decimal ProteinGrams, decimal CarbohydrateGrams, decimal FatGrams, string? Barcode, IReadOnlyList<string>? AllergenCodes = null);
 
 public interface IFoodCatalogService
 {
@@ -42,7 +42,7 @@ public sealed class FoodCatalogService(IFoodRepository foods, IUnitOfWork unitOf
         var food = new Food(
             Guid.NewGuid(), command.Name, command.Category, command.ServingSize, command.ServingUnit,
             command.Calories, command.ProteinGrams, command.CarbohydrateGrams, command.FatGrams,
-            FoodSource.User, command.Brand, barcode);
+            FoodSource.User, command.Brand, barcode, command.AllergenCodes);
 
         await foods.AddAsync(food, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -50,5 +50,5 @@ public sealed class FoodCatalogService(IFoodRepository foods, IUnitOfWork unitOf
     }
 
     private static string? Normalize(string? value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
-    private static FoodDto ToDto(Food food) => new(food.Id, food.Name, food.Brand, food.Category, food.ServingSize, food.ServingUnit, food.Calories, food.ProteinGrams, food.CarbohydrateGrams, food.FatGrams, food.Barcode, food.Source);
+    private static FoodDto ToDto(Food food) => new(food.Id, food.Name, food.Brand, food.Category, food.ServingSize, food.ServingUnit, food.Calories, food.ProteinGrams, food.CarbohydrateGrams, food.FatGrams, food.Barcode, food.AllergenCodes, food.Source);
 }
