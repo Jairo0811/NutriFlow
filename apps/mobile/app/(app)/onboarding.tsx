@@ -54,9 +54,10 @@ export default function NutritionalOnboardingScreen() {
   const [dietaryRestrictions, setDietaryRestrictions] = useState<DietaryRestrictionCode[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const accessToken = session?.accessToken;
 
-  if (!accessToken) return null;
+  if (!session) return null;
+
+  const accessToken = session.accessToken;
 
   function togglePreference(value: FoodPreferenceCode) {
     setPreferences((current) => current.includes(value)
