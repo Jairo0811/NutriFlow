@@ -8,6 +8,8 @@ import {
   onboardingApi,
   type ActivityLevel,
   type BiologicalSex,
+  type DietaryRestrictionCode,
+  type FoodPreferenceCode,
   type NutritionGoalType,
 } from '../../src/features/onboarding/api';
 
@@ -24,6 +26,19 @@ const goals: { value: NutritionGoalType; title: string; detail: string }[] = [
   { value: 'GainMuscle', title: 'Ganar músculo', detail: 'Aumenta masa muscular y fuerza.' },
 ];
 
+const foodPreferences: { value: FoodPreferenceCode; title: string }[] = [
+  { value: 'protein', title: 'Proteínas' },
+  { value: 'carbohydrates', title: 'Carbohidratos' },
+  { value: 'fats', title: 'Grasas' },
+  { value: 'dairy', title: 'Bebidas y lácteos' },
+  { value: 'fruits', title: 'Frutas' },
+];
+
+const restrictions: { value: DietaryRestrictionCode; title: string; detail: string }[] = [
+  { value: 'gluten', title: 'Gluten', detail: 'Evitar alimentos que contengan gluten.' },
+  { value: 'shellfish', title: 'Mariscos', detail: 'Evitar productos derivados de mariscos.' },
+];
+
 export default function NutritionalOnboardingScreen() {
   const { session } = useAuth();
   const [step, setStep] = useState(1);
@@ -35,10 +50,24 @@ export default function NutritionalOnboardingScreen() {
   const [activity, setActivity] = useState<ActivityLevel>('Moderate');
   const [goal, setGoal] = useState<NutritionGoalType>('MaintainWeight');
   const [targetWeight, setTargetWeight] = useState('');
+  const [preferences, setPreferences] = useState<FoodPreferenceCode[]>([]);
+  const [dietaryRestrictions, setDietaryRestrictions] = useState<DietaryRestrictionCode[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   if (!session) return null;
+
+  function togglePreference(value: FoodPreferenceCode) {
+    setPreferences((current) => current.includes(value)
+      ? current.filter((item) => item !== value)
+      : [...current, value]);
+  }
+
+  function toggleRestriction(value: DietaryRestrictionCode) {
+    setDietaryRestrictions((current) => current.includes(value)
+      ? current.filter((item) => item !== value)
+      : [...current, value]);
+  }
 
   async function continueFlow() {
     setError(null);
@@ -59,6 +88,12 @@ export default function NutritionalOnboardingScreen() {
       } else if (step === 3) {
         const target = goal === 'MaintainWeight' ? null : Number(targetWeight);
         await onboardingApi.saveGoal(session.accessToken, goal, target);
+        setStep(4);
+      } else if (step === 4) {
+        await onboardingApi.savePreferences(session.accessToken, preferences);
+        setStep(5);
+      } else if (step === 5) {
+        await onboardingApi.saveRestrictions(session.accessToken, dietaryRestrictions);
         await onboardingApi.complete(session.accessToken);
         router.replace('/');
       }
@@ -76,10 +111,12 @@ export default function NutritionalOnboardingScreen() {
           <Pressable disabled={step === 1 || saving} onPress={() => setStep((current) => Math.max(1, current - 1))}>
             <Text style={[styles.back, step === 1 && styles.muted]}>Atrás</Text>
           </Pressable>
-          <Text style={styles.progress}>Paso {step} de 3</Text>
+          <Text style={styles.progress}>Paso {step} de 5</Text>
         </View>
 
-        <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${step * 33.333}%` }]} /></View>
+        <View style={styles.progressTrack}>
+          <View style={[styles.progressFill, { width: `${step * 20}%` }]} />
+        </View>
 
         {step === 1 && (
           <>
@@ -144,10 +181,35 @@ export default function NutritionalOnboardingScreen() {
           </>
         )}
 
+        {step === 4 && (
+          <>
+            <Text style={styles.eyebrow}>ALIMENTOS</Text>
+            <Text style={styles.title}>¿Qué deseas incluir?</Text>
+            <Text style={styles.subtitle}>Esta selección conserva las categorías principales del mockup original y servirá para personalizar el catálogo y las recomendaciones futuras.</Text>
+            <View style={styles.chipGrid}>
+              {foodPreferences.map((item) => (
+                <ChoiceChip key={item.value} selected={preferences.includes(item.value)} title={item.title} onPress={() => togglePreference(item.value)} />
+              ))}
+            </View>
+          </>
+        )}
+
+        {step === 5 && (
+          <>
+            <Text style={styles.eyebrow}>RESTRICCIONES</Text>
+            <Text style={styles.title}>¿Qué debemos evitar?</Text>
+            <Text style={styles.subtitle}>El prototipo original contemplaba gluten y mariscos. Por ahora registramos estas restricciones como preferencias del perfil; las advertencias avanzadas llegarán en la Fase 9.</Text>
+            {restrictions.map((item) => (
+              <SelectCard key={item.value} selected={dietaryRestrictions.includes(item.value)} title={item.title} detail={item.detail} onPress={() => toggleRestriction(item.value)} />
+            ))}
+            <Text style={styles.helper}>Si ninguna aplica, puedes continuar sin seleccionar opciones.</Text>
+          </>
+        )}
+
         {error && <Text style={styles.error}>{error}</Text>}
 
         <Pressable disabled={saving} onPress={() => void continueFlow()} style={[styles.primaryButton, saving && styles.disabled]}>
-          <Text style={styles.primaryText}>{saving ? 'Guardando…' : step === 3 ? 'Completar onboarding' : 'Continuar'}</Text>
+          <Text style={styles.primaryText}>{saving ? 'Guardando…' : step === 5 ? 'Completar onboarding' : 'Continuar'}</Text>
         </Pressable>
       </ScrollView>
     </SafeAreaView>
@@ -156,6 +218,10 @@ export default function NutritionalOnboardingScreen() {
 
 function Choice({ selected, title, onPress }: { selected: boolean; title: string; onPress: () => void }) {
   return <Pressable onPress={onPress} style={[styles.choice, selected && styles.selected]}><Text style={styles.choiceText}>{title}</Text></Pressable>;
+}
+
+function ChoiceChip({ selected, title, onPress }: { selected: boolean; title: string; onPress: () => void }) {
+  return <Pressable onPress={onPress} style={[styles.chip, selected && styles.selected]}><Text style={styles.choiceText}>{title}</Text></Pressable>;
 }
 
 function SelectCard({ selected, title, detail, onPress }: { selected: boolean; title: string; detail: string; onPress: () => void }) {
@@ -187,9 +253,12 @@ const styles = StyleSheet.create({
   choice: { flex: 1, backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 14, padding: 16, alignItems: 'center' },
   selected: { borderColor: '#62E62C', backgroundColor: '#132718' },
   choiceText: { color: '#F6FAF7', fontWeight: '700' },
+  chipGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  chip: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 12 },
   card: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 18, padding: 18, marginBottom: 12 },
   cardTitle: { color: '#F6FAF7', fontSize: 17, fontWeight: '800' },
   cardDetail: { color: '#95A59B', fontSize: 14, lineHeight: 20, marginTop: 5 },
+  helper: { color: '#7E8E84', fontSize: 13, lineHeight: 19, marginTop: 8 },
   error: { color: '#FF8E8E', marginTop: 18, lineHeight: 20 },
   primaryButton: { backgroundColor: '#62E62C', borderRadius: 16, alignItems: 'center', paddingVertical: 17, marginTop: 28 },
   primaryText: { color: '#07110B', fontSize: 16, fontWeight: '900' },
