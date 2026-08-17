@@ -51,6 +51,8 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
         nutritionProfiles.Property(profile => profile.BiologicalSex).HasConversion<string>().HasMaxLength(16);
         nutritionProfiles.Property(profile => profile.ActivityLevel).HasConversion<string>().HasMaxLength(16);
         nutritionProfiles.Property(profile => profile.GoalType).HasConversion<string>().HasMaxLength(24);
+        nutritionProfiles.Property(profile => profile.FoodPreferenceCodes).HasColumnType("text[]").IsRequired();
+        nutritionProfiles.Property(profile => profile.DietaryRestrictionCodes).HasColumnType("text[]").IsRequired();
         nutritionProfiles.HasOne<User>().WithOne().HasForeignKey<NutritionProfile>(profile => profile.UserId).OnDelete(DeleteBehavior.Cascade);
     }
 }
