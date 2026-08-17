@@ -14,10 +14,10 @@ export default function AuthenticatedHomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 3</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 4</Text>
         <Text style={styles.title}>Hola, {session?.displayName ?? 'NutriFlow'}</Text>
         <Text style={styles.subtitle}>
-          Tu perfil puede convertirse ahora en objetivos diarios de energía y macronutrientes mediante el Nutrition Engine.
+          Tu perfil y objetivos ya están listos. Ahora puedes explorar el catálogo estructurado que alimentará el registro de comidas.
         </Text>
 
         <View style={styles.card}>
@@ -25,8 +25,12 @@ export default function AuthenticatedHomeScreen() {
           <Text style={styles.cardValue}>{session?.email ?? 'Cargando...'}</Text>
         </View>
 
-        <Pressable onPress={() => router.push('/targets')} style={styles.primaryButton}>
-          <Text style={styles.primaryText}>Ver mis objetivos nutricionales</Text>
+        <Pressable onPress={() => router.push('/foods')} style={styles.primaryButton}>
+          <Text style={styles.primaryText}>Explorar catálogo de alimentos</Text>
+        </Pressable>
+
+        <Pressable onPress={() => router.push('/targets')} style={styles.secondaryButton}>
+          <Text style={styles.secondaryText}>Ver mis objetivos nutricionales</Text>
         </Pressable>
 
         <Pressable onPress={() => router.push('/onboarding')} style={styles.secondaryButton}>
