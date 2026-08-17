@@ -75,6 +75,7 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
         foods.Property(food => food.CarbohydrateGrams).HasPrecision(8, 2);
         foods.Property(food => food.FatGrams).HasPrecision(8, 2);
         foods.Property(food => food.Barcode).HasMaxLength(32);
+        foods.Property(food => food.AllergenCodes).HasColumnType("text[]").IsRequired();
         foods.Property(food => food.Source).HasConversion<string>().HasMaxLength(16);
         foods.HasIndex(food => food.Name);
         foods.HasIndex(food => food.Category);
