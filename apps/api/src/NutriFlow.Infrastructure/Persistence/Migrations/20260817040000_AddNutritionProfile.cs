@@ -21,6 +21,8 @@ public sealed class AddNutritionProfile : Migration
                 ActivityLevel = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),
                 GoalType = table.Column<string>(type: "character varying(24)", maxLength: 24, nullable: true),
                 TargetWeightPounds = table.Column<decimal>(type: "numeric(6,2)", precision: 6, scale: 2, nullable: true),
+                FoodPreferenceCodes = table.Column<string[]>(type: "text[]", nullable: false, defaultValue: Array.Empty<string>()),
+                DietaryRestrictionCodes = table.Column<string[]>(type: "text[]", nullable: false, defaultValue: Array.Empty<string>()),
                 IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
                 CreatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                 UpdatedAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
