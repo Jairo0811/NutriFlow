@@ -33,6 +33,7 @@ const restrictionOptions: { code: DietaryRestrictionCode; label: string }[] = [
 
 export default function PreferencesScreen() {
   const { session } = useAuth();
+  const accessToken = session?.accessToken;
   const [profile, setProfile] = useState<NutritionProfile | null>(null);
   const [preferences, setPreferences] = useState<FoodPreferenceCode[]>([]);
   const [restrictions, setRestrictions] = useState<DietaryRestrictionCode[]>([]);
@@ -40,25 +41,27 @@ export default function PreferencesScreen() {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!session?.accessToken) return;
-    onboardingApi.get(session.accessToken).then((value) => {
+    if (!accessToken) return;
+    onboardingApi.get(accessToken).then((value) => {
       setProfile(value);
       setPreferences(value.foodPreferenceCodes);
       setRestrictions(value.dietaryRestrictionCodes);
     });
-  }, [session?.accessToken]);
+  }, [accessToken]);
 
-  if (!session) return null;
+  if (!session || !accessToken) return null;
 
-  const toggle = <T extends string>(value: T, current: T[], setter: (next: T[]) => void) =>
+  function toggle<T extends string>(value: T, current: T[], setter: (next: T[]) => void) {
     setter(current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
+  }
 
   async function save() {
+    if (!accessToken) return;
     setSaving(true);
     setMessage(null);
     try {
-      await onboardingApi.savePreferences(session.accessToken, preferences);
-      const updated = await onboardingApi.saveRestrictions(session.accessToken, restrictions);
+      await onboardingApi.savePreferences(accessToken, preferences);
+      const updated = await onboardingApi.saveRestrictions(accessToken, restrictions);
       setProfile(updated);
       setMessage('Preferencias y restricciones actualizadas.');
     } catch (cause) {
