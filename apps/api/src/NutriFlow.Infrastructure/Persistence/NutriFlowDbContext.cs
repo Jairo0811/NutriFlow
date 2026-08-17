@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NutriFlow.Application.Abstractions;
 using NutriFlow.Domain.Foods;
 using NutriFlow.Domain.Identity;
+using NutriFlow.Domain.Meals;
 using NutriFlow.Domain.Nutrition;
 
 namespace NutriFlow.Infrastructure.Persistence;
@@ -14,6 +15,8 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
     public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
     public DbSet<NutritionProfile> NutritionProfiles => Set<NutritionProfile>();
     public DbSet<Food> Foods => Set<Food>();
+    public DbSet<Meal> Meals => Set<Meal>();
+    public DbSet<MealEntry> MealEntries => Set<MealEntry>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -74,5 +77,30 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
         foods.HasIndex(food => food.Name);
         foods.HasIndex(food => food.Category);
         foods.HasIndex(food => food.Barcode).IsUnique();
+
+        var meals = modelBuilder.Entity<Meal>();
+        meals.ToTable("Meals");
+        meals.HasKey(meal => meal.Id);
+        meals.Property(meal => meal.Type).HasConversion<string>().HasMaxLength(16).IsRequired();
+        meals.HasIndex(meal => new { meal.UserId, meal.Date, meal.Type }).IsUnique();
+        meals.HasOne<User>().WithMany().HasForeignKey(meal => meal.UserId).OnDelete(DeleteBehavior.Cascade);
+        meals.HasMany(meal => meal.Entries).WithOne().HasForeignKey(entry => entry.MealId).OnDelete(DeleteBehavior.Cascade);
+        meals.Navigation(meal => meal.Entries).UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        var mealEntries = modelBuilder.Entity<MealEntry>();
+        mealEntries.ToTable("MealEntries");
+        mealEntries.HasKey(entry => entry.Id);
+        mealEntries.Property(entry => entry.FoodName).HasMaxLength(120).IsRequired();
+        mealEntries.Property(entry => entry.Brand).HasMaxLength(120);
+        mealEntries.Property(entry => entry.ServingUnit).HasMaxLength(24).IsRequired();
+        mealEntries.Property(entry => entry.ServingSize).HasPrecision(8, 2);
+        mealEntries.Property(entry => entry.Servings).HasPrecision(8, 3);
+        mealEntries.Property(entry => entry.CaloriesPerServing).HasPrecision(8, 2);
+        mealEntries.Property(entry => entry.ProteinGramsPerServing).HasPrecision(8, 2);
+        mealEntries.Property(entry => entry.CarbohydrateGramsPerServing).HasPrecision(8, 2);
+        mealEntries.Property(entry => entry.FatGramsPerServing).HasPrecision(8, 2);
+        mealEntries.HasIndex(entry => entry.MealId);
+        mealEntries.HasIndex(entry => entry.FoodId);
+        mealEntries.HasOne<Food>().WithMany().HasForeignKey(entry => entry.FoodId).OnDelete(DeleteBehavior.Restrict);
     }
 }
