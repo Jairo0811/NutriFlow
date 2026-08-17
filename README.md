@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="branding/cover.webp" alt="NutriFlow — Nutrición, hábitos y progreso" width="100%" />
+</p>
+
 <h1 align="center">NutriFlow</h1>
 
 <p align="center">
