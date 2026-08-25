@@ -141,11 +141,11 @@ Entre las pantallas del prototipo se encuentran:
 
 NutriFlow constituye el primer punto de una continuidad docente de **tres proyectos** con el profesor **Ing. Pedro José Ramirez Rodriguez** dentro de la trayectoria documentada en la Universidad APEC (UNAPEC).
 
-| Orden | Asignatura | Proyecto | Período | Profesor |
-|---:|---|---|---|---|
-| 1 | Bases de Datos 1 (INF-164) | **NutriFlow** | Mayo - Agosto 2024 | Ing. Pedro José Ramirez Rodriguez |
-| 2 | Fundamentos de Seguridad de Software (ISO-915) | [CertiChain](https://github.com/Jairo0811/CertiChain) | Septiembre - Diciembre 2025 | Ing. Pedro José Ramirez Rodriguez |
-| 3 | Desarrollo de Software con Tecnología Propietaria 2 (ISO-710) | [Digital Sanctuary](https://github.com/Jairo0811/DigitalSanctuary) | Mayo - Agosto 2026 | Ing. Pedro José Ramirez Rodriguez |
+| Orden | Asignatura | Proyecto | Período |
+|---:|---|---|---|
+| 1 | Bases de Datos 1 (INF-164) | **NutriFlow** | Mayo - Agosto 2024 |
+| 2 | Fundamentos de Seguridad de Software (ISO-915) | [CertiChain](https://github.com/Jairo0811/CertiChain) | Septiembre - Diciembre 2025 |
+| 3 | Desarrollo de Software con Tecnología Propietaria 2 (ISO-710) | [Digital Sanctuary](https://github.com/Jairo0811/DigitalSanctuary) | Mayo - Agosto 2026 |
 
 La secuencia es **formativa y cronológica**: comienza con fundamentos de datos y modelado, continúa con seguridad de software y blockchain, y posteriormente llega al desarrollo de una aplicación Android nativa. Los tres proyectos son independientes y no constituyen versiones ni dependencias técnicas entre sí.
 
