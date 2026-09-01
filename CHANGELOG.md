@@ -4,6 +4,29 @@ Todos los cambios relevantes de NutriFlow se documentan en este archivo.
 
 El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 
+## [Unreleased]
+
+### Added
+
+- Fase 11 — Freemium Foundation.
+- Modelo de planes `Free` y `Premium` desacoplado de Identity.
+- Catálogo centralizado de entitlements Premium.
+- Límites de uso iniciales para escáner, IA e historial.
+- Endpoint autenticado `GET /api/billing/access` para consultar el acceso efectivo del usuario.
+- Contrato TypeScript para consumir planes, entitlements y usage limits desde Mobile.
+- Documentación de arquitectura Freemium y roadmap comercial v1.1 → v2.0.
+- Pruebas unitarias para la política de acceso Free y el catálogo Premium.
+
+### Changed
+
+- La API reporta `1.1.0-dev` durante el desarrollo de la siguiente versión.
+
+### Notes
+
+- La Fase 11 no procesa pagos reales todavía.
+- Todas las cuentas se resuelven temporalmente como `Free` hasta conectar un proveedor de billing.
+- RevenueCat se contempla como adaptador inicial para App Store y Google Play sin acoplar el dominio al proveedor.
+
 ## [1.0.0] - 2026-08-17
 
 Primera versión estable del roadmap técnico inicial de NutriFlow.
