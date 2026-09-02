@@ -107,10 +107,10 @@ El concepto original fue preparado como proyecto de **Bases de Datos 1 (INF-164)
 
 | Integrante | Matrícula |
 |---|---|
-| Luis Alberto Jimenez Perez | A00102205 |
-| Charlie de Leon Duran | A00108707 |
-| Francisca Mariela Hernández Melo | A00113127 |
-| Francis Jairo Matías Rosario | A00115261 |
+| 👨🏻‍💻 Luis Alberto Jimenez Perez | A00102205 |
+| 👨🏻‍💻 Charlie de Leon Duran | A00108707 |
+| 👩🏻‍💻 Francisca Mariela Hernández Melo | A00113127 |
+| 👨🏻‍💻 Francis Jairo Matías Rosario | A00115261 |
 
 ---
 
