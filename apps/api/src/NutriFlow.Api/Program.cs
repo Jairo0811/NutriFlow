@@ -30,6 +30,8 @@ builder.Services.AddHealthChecks();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISubscriptionAccessService, SubscriptionAccessService>();
+builder.Services.AddScoped<IFeatureGateService, FeatureGateService>();
+builder.Services.AddScoped<IUsageLimitService, UsageLimitService>();
 builder.Services.AddScoped<INutritionOnboardingService, NutritionOnboardingService>();
 builder.Services.AddScoped<INutritionCalculationService, NutritionCalculationService>();
 builder.Services.AddScoped<IFoodCatalogService, FoodCatalogService>();
