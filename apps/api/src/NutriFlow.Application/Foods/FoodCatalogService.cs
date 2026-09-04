@@ -4,7 +4,25 @@ using NutriFlow.Domain.Foods;
 namespace NutriFlow.Application.Foods;
 
 public sealed record FoodDto(Guid Id, string Name, string? Brand, string Category, decimal ServingSize, string ServingUnit, decimal Calories, decimal ProteinGrams, decimal CarbohydrateGrams, decimal FatGrams, string? Barcode, IReadOnlyList<string> AllergenCodes, FoodSource Source);
-public sealed record CreateFoodCommand(string Name, string? Brand, string Category, decimal ServingSize, string ServingUnit, decimal Calories, decimal ProteinGrams, decimal CarbohydrateGrams, decimal FatGrams, string? Barcode, IReadOnlyList<string>? AllergenCodes = null);
+public sealed record CreateFoodCommand(
+    string Name,
+    string? Brand,
+    string Category,
+    decimal ServingSize,
+    string ServingUnit,
+    decimal Calories,
+    decimal ProteinGrams,
+    decimal CarbohydrateGrams,
+    decimal FatGrams,
+    string? Barcode,
+    IReadOnlyList<string>? AllergenCodes = null,
+    decimal FiberGrams = 0,
+    decimal SodiumMilligrams = 0,
+    decimal PotassiumMilligrams = 0,
+    decimal CalciumMilligrams = 0,
+    decimal IronMilligrams = 0,
+    decimal VitaminCMilligrams = 0,
+    decimal VitaminDMicrograms = 0);
 
 public interface IFoodCatalogService
 {
@@ -42,7 +60,10 @@ public sealed class FoodCatalogService(IFoodRepository foods, IUnitOfWork unitOf
         var food = new Food(
             Guid.NewGuid(), command.Name, command.Category, command.ServingSize, command.ServingUnit,
             command.Calories, command.ProteinGrams, command.CarbohydrateGrams, command.FatGrams,
-            FoodSource.User, command.Brand, barcode, command.AllergenCodes);
+            FoodSource.User, command.Brand, barcode, command.AllergenCodes,
+            command.FiberGrams, command.SodiumMilligrams, command.PotassiumMilligrams,
+            command.CalciumMilligrams, command.IronMilligrams, command.VitaminCMilligrams,
+            command.VitaminDMicrograms);
 
         await foods.AddAsync(food, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);

@@ -29,7 +29,14 @@ public sealed class Food
         FoodSource source = FoodSource.System,
         string? brand = null,
         string? barcode = null,
-        IEnumerable<string>? allergenCodes = null)
+        IEnumerable<string>? allergenCodes = null,
+        decimal fiberGrams = 0,
+        decimal sodiumMilligrams = 0,
+        decimal potassiumMilligrams = 0,
+        decimal calciumMilligrams = 0,
+        decimal ironMilligrams = 0,
+        decimal vitaminCMilligrams = 0,
+        decimal vitaminDMicrograms = 0)
     {
         if (id == Guid.Empty) throw new ArgumentException("Food id is required.", nameof(id));
 
@@ -43,12 +50,21 @@ public sealed class Food
         if (servingSize <= 0 || servingSize > 10_000) throw new ArgumentOutOfRangeException(nameof(servingSize));
         if (calories < 0 || calories > 10_000) throw new ArgumentOutOfRangeException(nameof(calories));
         if (proteinGrams < 0 || carbohydrateGrams < 0 || fatGrams < 0) throw new ArgumentOutOfRangeException(nameof(proteinGrams), "Macronutrients cannot be negative.");
+        if (fiberGrams < 0 || sodiumMilligrams < 0 || potassiumMilligrams < 0 || calciumMilligrams < 0 || ironMilligrams < 0 || vitaminCMilligrams < 0 || vitaminDMicrograms < 0)
+            throw new ArgumentOutOfRangeException(nameof(fiberGrams), "Micronutrients cannot be negative.");
 
         ServingSize = servingSize;
         Calories = calories;
         ProteinGrams = proteinGrams;
         CarbohydrateGrams = carbohydrateGrams;
         FatGrams = fatGrams;
+        FiberGrams = fiberGrams;
+        SodiumMilligrams = sodiumMilligrams;
+        PotassiumMilligrams = potassiumMilligrams;
+        CalciumMilligrams = calciumMilligrams;
+        IronMilligrams = ironMilligrams;
+        VitaminCMilligrams = vitaminCMilligrams;
+        VitaminDMicrograms = vitaminDMicrograms;
         AllergenCodes = NormalizeAllergens(allergenCodes ?? []);
         Source = source;
         IsActive = true;
@@ -66,6 +82,13 @@ public sealed class Food
     public decimal ProteinGrams { get; private set; }
     public decimal CarbohydrateGrams { get; private set; }
     public decimal FatGrams { get; private set; }
+    public decimal FiberGrams { get; private set; }
+    public decimal SodiumMilligrams { get; private set; }
+    public decimal PotassiumMilligrams { get; private set; }
+    public decimal CalciumMilligrams { get; private set; }
+    public decimal IronMilligrams { get; private set; }
+    public decimal VitaminCMilligrams { get; private set; }
+    public decimal VitaminDMicrograms { get; private set; }
     public string? Barcode { get; private set; }
     public string[] AllergenCodes { get; private set; } = [];
     public FoodSource Source { get; private set; }

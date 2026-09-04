@@ -34,21 +34,34 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 - Acciones de favorito integradas en el catálogo de alimentos.
 - Pruebas de hidratación, streaks, favoritos idempotentes y nutrición de recetas.
 - Documentación dedicada en `docs/engagement`.
+- Fase 14 — Premium Analytics & Micronutrients.
+- Analítica Premium para ventanas de 7, 30 y 90 días protegida por `analytics.advanced`.
+- Métricas de consistencia, calorías, macros, adherencia calórica y cumplimiento del objetivo de proteína.
+- Soporte estructurado de fibra, sodio, potasio, calcio, hierro, vitamina C y vitamina D.
+- Snapshots de micronutrientes en `MealEntry` para preservar el histórico nutricional.
+- Endpoint autenticado `GET /api/analytics/premium`.
+- Endpoint autenticado `GET /api/analytics/micronutrients` protegido por `nutrition.micronutrients`.
+- Nueva pantalla móvil Premium Analytics con estado bloqueado para cuentas Free.
+- Migración `AddMicronutrients` para `Foods` y `MealEntries`.
+- Pruebas para feature gates, períodos válidos, adherencia y promedios de micronutrientes.
+- Documentación dedicada en `docs/analytics`.
 
 ### Changed
 
-- La API reporta `1.2.0-dev` durante el desarrollo de Engagement & Retention.
+- La API reporta `1.3.0-dev` durante el desarrollo de Premium Analytics & Micronutrients.
 - El escáner Free aplica realmente el límite de 10 consultas mensuales desde backend.
 - El historial Free de progreso se limita a los últimos 30 días; Premium queda preparado para `history.unlimited`.
-- La pantalla principal enlaza el nuevo Engagement Hub.
+- La pantalla principal enlaza Engagement Hub y Premium Analytics.
+- La creación de alimentos acepta micronutrientes opcionales sin exponerlos mediante el catálogo Free.
 
 ### Notes
 
-- Las Fases 11–13 todavía no procesan pagos reales.
+- Las Fases 11–14 todavía no procesan pagos reales.
 - Todas las cuentas se resuelven temporalmente como `Free` hasta conectar un proveedor de billing.
 - RevenueCat se contempla como adaptador inicial para App Store y Google Play sin acoplar el dominio al proveedor.
 - La cuota de IA queda implementada a nivel de infraestructura, pero comenzará a consumirse cuando NutriFlow AI exista como módulo funcional.
 - Push notifications, objetivo de agua configurable, recetas comunitarias y gamificación avanzada quedan fuera del alcance de la Fase 13.
+- La Fase 14 no define recomendaciones clínicas ni valores objetivo personalizados de micronutrientes; presenta métricas de seguimiento derivadas del historial registrado.
 
 ## [1.0.0] - 2026-08-17
 
@@ -59,7 +72,7 @@ Primera versión estable del roadmap técnico inicial de NutriFlow.
 - Foundation del monorepo con aplicación móvil, API, PostgreSQL, Docker y CI.
 - Authentication & Identity con registro, login, JWT, refresh tokens rotativos, logout, recuperación de contraseña y Google Sign-In.
 - Nutritional Onboarding con datos físicos, actividad, objetivo, preferencias y restricciones.
-- Experiencia de medidas en pies, pulgadas y libras.
+- Experiencia de medidas en pies/pulgadas y peso en libras.
 - Nutrition Engine determinístico basado en Mifflin-St Jeor para TMB, TDEE, calorías objetivo y macronutrientes.
 - Food Catalog con búsqueda, detalle, barcode lookup y alimentos personalizados.
 - Meal Tracking con desayuno, almuerzo, cena y snacks, porciones y snapshots nutricionales.
