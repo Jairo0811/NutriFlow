@@ -1,10 +1,13 @@
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace NutriFlow.Infrastructure.Persistence.Migrations;
 
-public partial class AddUsageCounters : Migration
+[DbContext(typeof(NutriFlowDbContext))]
+[Migration("20260904105000_AddUsageCounters")]
+public sealed class AddUsageCounters : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
