@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NutriFlow.Application.Abstractions;
 using NutriFlow.Domain.Billing;
+using NutriFlow.Domain.Engagement;
 using NutriFlow.Domain.Foods;
 using NutriFlow.Domain.Identity;
 using NutriFlow.Domain.Meals;
@@ -21,6 +22,10 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
     public DbSet<Meal> Meals => Set<Meal>();
     public DbSet<MealEntry> MealEntries => Set<MealEntry>();
     public DbSet<WeightEntry> WeightEntries => Set<WeightEntry>();
+    public DbSet<WaterEntry> WaterEntries => Set<WaterEntry>();
+    public DbSet<FavoriteFood> FavoriteFoods => Set<FavoriteFood>();
+    public DbSet<Recipe> Recipes => Set<Recipe>();
+    public DbSet<RecipeIngredient> RecipeIngredients => Set<RecipeIngredient>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -123,5 +128,43 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
         weightEntries.Property(entry => entry.Note).HasMaxLength(240);
         weightEntries.HasIndex(entry => new { entry.UserId, entry.Date }).IsUnique();
         weightEntries.HasOne<User>().WithMany().HasForeignKey(entry => entry.UserId).OnDelete(DeleteBehavior.Cascade);
+
+        var waterEntries = modelBuilder.Entity<WaterEntry>();
+        waterEntries.ToTable("WaterEntries");
+        waterEntries.HasKey(entry => entry.Id);
+        waterEntries.Property(entry => entry.AmountOunces).HasPrecision(7, 2);
+        waterEntries.HasIndex(entry => new { entry.UserId, entry.Date });
+        waterEntries.HasOne<User>().WithMany().HasForeignKey(entry => entry.UserId).OnDelete(DeleteBehavior.Cascade);
+
+        var favoriteFoods = modelBuilder.Entity<FavoriteFood>();
+        favoriteFoods.ToTable("FavoriteFoods");
+        favoriteFoods.HasKey(favorite => new { favorite.UserId, favorite.FoodId });
+        favoriteFoods.HasIndex(favorite => new { favorite.UserId, favorite.CreatedAtUtc });
+        favoriteFoods.HasOne<User>().WithMany().HasForeignKey(favorite => favorite.UserId).OnDelete(DeleteBehavior.Cascade);
+        favoriteFoods.HasOne<Food>().WithMany().HasForeignKey(favorite => favorite.FoodId).OnDelete(DeleteBehavior.Restrict);
+
+        var recipes = modelBuilder.Entity<Recipe>();
+        recipes.ToTable("Recipes");
+        recipes.HasKey(recipe => recipe.Id);
+        recipes.Property(recipe => recipe.Name).HasMaxLength(120).IsRequired();
+        recipes.Property(recipe => recipe.Instructions).HasMaxLength(2000);
+        recipes.HasIndex(recipe => new { recipe.UserId, recipe.CreatedAtUtc });
+        recipes.HasOne<User>().WithMany().HasForeignKey(recipe => recipe.UserId).OnDelete(DeleteBehavior.Cascade);
+        recipes.HasMany(recipe => recipe.Ingredients).WithOne().HasForeignKey(ingredient => ingredient.RecipeId).OnDelete(DeleteBehavior.Cascade);
+        recipes.Navigation(recipe => recipe.Ingredients).UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        var recipeIngredients = modelBuilder.Entity<RecipeIngredient>();
+        recipeIngredients.ToTable("RecipeIngredients");
+        recipeIngredients.HasKey(ingredient => ingredient.Id);
+        recipeIngredients.Property(ingredient => ingredient.FoodName).HasMaxLength(120).IsRequired();
+        recipeIngredients.Property(ingredient => ingredient.Brand).HasMaxLength(120);
+        recipeIngredients.Property(ingredient => ingredient.Servings).HasPrecision(8, 3);
+        recipeIngredients.Property(ingredient => ingredient.CaloriesPerServing).HasPrecision(8, 2);
+        recipeIngredients.Property(ingredient => ingredient.ProteinGramsPerServing).HasPrecision(8, 2);
+        recipeIngredients.Property(ingredient => ingredient.CarbohydrateGramsPerServing).HasPrecision(8, 2);
+        recipeIngredients.Property(ingredient => ingredient.FatGramsPerServing).HasPrecision(8, 2);
+        recipeIngredients.HasIndex(ingredient => ingredient.RecipeId);
+        recipeIngredients.HasIndex(ingredient => ingredient.FoodId);
+        recipeIngredients.HasOne<Food>().WithMany().HasForeignKey(ingredient => ingredient.FoodId).OnDelete(DeleteBehavior.Restrict);
     }
 }
