@@ -89,6 +89,13 @@ public sealed class MealEntry
         ProteinGramsPerServing = food.ProteinGrams;
         CarbohydrateGramsPerServing = food.CarbohydrateGrams;
         FatGramsPerServing = food.FatGrams;
+        FiberGramsPerServing = food.FiberGrams;
+        SodiumMilligramsPerServing = food.SodiumMilligrams;
+        PotassiumMilligramsPerServing = food.PotassiumMilligrams;
+        CalciumMilligramsPerServing = food.CalciumMilligrams;
+        IronMilligramsPerServing = food.IronMilligrams;
+        VitaminCMilligramsPerServing = food.VitaminCMilligrams;
+        VitaminDMicrogramsPerServing = food.VitaminDMicrograms;
         Servings = servings;
         CreatedAtUtc = DateTimeOffset.UtcNow;
         UpdatedAtUtc = CreatedAtUtc;
@@ -106,6 +113,13 @@ public sealed class MealEntry
     public decimal ProteinGramsPerServing { get; private set; }
     public decimal CarbohydrateGramsPerServing { get; private set; }
     public decimal FatGramsPerServing { get; private set; }
+    public decimal FiberGramsPerServing { get; private set; }
+    public decimal SodiumMilligramsPerServing { get; private set; }
+    public decimal PotassiumMilligramsPerServing { get; private set; }
+    public decimal CalciumMilligramsPerServing { get; private set; }
+    public decimal IronMilligramsPerServing { get; private set; }
+    public decimal VitaminCMilligramsPerServing { get; private set; }
+    public decimal VitaminDMicrogramsPerServing { get; private set; }
     public DateTimeOffset CreatedAtUtc { get; private set; }
     public DateTimeOffset UpdatedAtUtc { get; private set; }
 
@@ -113,6 +127,13 @@ public sealed class MealEntry
     public decimal TotalProteinGrams => ProteinGramsPerServing * Servings;
     public decimal TotalCarbohydrateGrams => CarbohydrateGramsPerServing * Servings;
     public decimal TotalFatGrams => FatGramsPerServing * Servings;
+    public decimal TotalFiberGrams => FiberGramsPerServing * Servings;
+    public decimal TotalSodiumMilligrams => SodiumMilligramsPerServing * Servings;
+    public decimal TotalPotassiumMilligrams => PotassiumMilligramsPerServing * Servings;
+    public decimal TotalCalciumMilligrams => CalciumMilligramsPerServing * Servings;
+    public decimal TotalIronMilligrams => IronMilligramsPerServing * Servings;
+    public decimal TotalVitaminCMilligrams => VitaminCMilligramsPerServing * Servings;
+    public decimal TotalVitaminDMicrograms => VitaminDMicrogramsPerServing * Servings;
 
     internal void UpdateServings(decimal servings)
     {
