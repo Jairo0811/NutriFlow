@@ -24,19 +24,31 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 - Endpoint autenticado `GET /api/billing/usage` con uso, restante y período actual.
 - Manejo móvil específico para `usage_limit_reached` en el escáner.
 - Pruebas de límite mensual, reinicio por período, bypass Premium y ventana de historial.
+- Fase 13 — Engagement & Retention.
+- Registro diario de hidratación en onzas con objetivo inicial de 64 oz.
+- Alimentos favoritos persistentes por usuario.
+- Recetas personales con snapshots nutricionales y cálculo de macros por porción.
+- Racha actual y récord calculados desde actividad real de agua, comidas y peso.
+- Endpoints autenticados `/api/engagement/*` para overview, agua, favoritos y recetas.
+- `Engagement Hub` móvil con hidratación, streaks, favoritos y constructor rápido de recetas.
+- Acciones de favorito integradas en el catálogo de alimentos.
+- Pruebas de hidratación, streaks, favoritos idempotentes y nutrición de recetas.
+- Documentación dedicada en `docs/engagement`.
 
 ### Changed
 
-- La API reporta `1.1.0-dev` durante el desarrollo de la siguiente versión.
-- El escáner Free ahora aplica realmente el límite de 10 consultas mensuales desde backend.
+- La API reporta `1.2.0-dev` durante el desarrollo de Engagement & Retention.
+- El escáner Free aplica realmente el límite de 10 consultas mensuales desde backend.
 - El historial Free de progreso se limita a los últimos 30 días; Premium queda preparado para `history.unlimited`.
+- La pantalla principal enlaza el nuevo Engagement Hub.
 
 ### Notes
 
-- La Fase 12 todavía no procesa pagos reales.
+- Las Fases 11–13 todavía no procesan pagos reales.
 - Todas las cuentas se resuelven temporalmente como `Free` hasta conectar un proveedor de billing.
 - RevenueCat se contempla como adaptador inicial para App Store y Google Play sin acoplar el dominio al proveedor.
 - La cuota de IA queda implementada a nivel de infraestructura, pero comenzará a consumirse cuando NutriFlow AI exista como módulo funcional.
+- Push notifications, objetivo de agua configurable, recetas comunitarias y gamificación avanzada quedan fuera del alcance de la Fase 13.
 
 ## [1.0.0] - 2026-08-17
 

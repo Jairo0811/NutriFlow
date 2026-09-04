@@ -12,10 +12,10 @@ export default function AuthenticatedHomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · v1.0</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · v1.2 DEV</Text>
         <Text style={styles.title}>Hola, {session?.displayName ?? 'NutriFlow'}</Text>
         <Text style={styles.subtitle}>
-          Controla tu objetivo nutricional, registra comidas, escanea productos y sigue tu progreso desde un solo lugar.
+          Controla tu objetivo nutricional, registra comidas, hidrátate, crea recetas y construye hábitos desde un solo lugar.
         </Text>
 
         <View style={styles.card}>
@@ -25,6 +25,9 @@ export default function AuthenticatedHomeScreen() {
 
         <Pressable onPress={() => router.push('/dashboard')} style={styles.primaryButton}>
           <Text style={styles.primaryText}>Abrir dashboard diario</Text>
+        </Pressable>
+        <Pressable onPress={() => router.push('/engagement')} style={styles.secondaryButton}>
+          <Text style={styles.secondaryText}>💧 Engagement Hub · hábitos y recetas</Text>
         </Pressable>
         <Pressable onPress={() => router.push('/meals')} style={styles.secondaryButton}>
           <Text style={styles.secondaryText}>Diario de comidas</Text>
