@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NutriFlow.Application.Abstractions;
+using NutriFlow.Domain.Billing;
 using NutriFlow.Domain.Foods;
 using NutriFlow.Domain.Identity;
 using NutriFlow.Domain.Meals;
@@ -14,6 +15,7 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
+    public DbSet<UsageCounter> UsageCounters => Set<UsageCounter>();
     public DbSet<NutritionProfile> NutritionProfiles => Set<NutritionProfile>();
     public DbSet<Food> Foods => Set<Food>();
     public DbSet<Meal> Meals => Set<Meal>();
@@ -49,6 +51,14 @@ public sealed class NutriFlowDbContext(DbContextOptions<NutriFlowDbContext> opti
         passwordResetTokens.HasIndex(token => token.TokenHash).IsUnique();
         passwordResetTokens.HasIndex(token => new { token.UserId, token.ExpiresAtUtc });
         passwordResetTokens.HasOne(token => token.User).WithMany().HasForeignKey(token => token.UserId).OnDelete(DeleteBehavior.Cascade);
+
+        var usageCounters = modelBuilder.Entity<UsageCounter>();
+        usageCounters.ToTable("UsageCounters");
+        usageCounters.HasKey(counter => new { counter.UserId, counter.Code, counter.PeriodStartUtc });
+        usageCounters.Property(counter => counter.Code).HasMaxLength(80).IsRequired();
+        usageCounters.Property(counter => counter.Count).IsRequired();
+        usageCounters.HasIndex(counter => new { counter.UserId, counter.PeriodStartUtc });
+        usageCounters.HasOne<User>().WithMany().HasForeignKey(counter => counter.UserId).OnDelete(DeleteBehavior.Cascade);
 
         var nutritionProfiles = modelBuilder.Entity<NutritionProfile>();
         nutritionProfiles.ToTable("NutritionProfiles");

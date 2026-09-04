@@ -1,3 +1,5 @@
+import type { UsageSnapshot } from '../billing/access';
+
 const apiUrl = (process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:5000').replace(/\/$/, '');
 
 export type Food = {
@@ -16,6 +18,18 @@ export type Food = {
   source: 'System' | 'User' | 'External';
 };
 
+export class FoodCatalogApiError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number,
+    public readonly code?: string,
+    public readonly usage?: UsageSnapshot,
+  ) {
+    super(message);
+    this.name = 'FoodCatalogApiError';
+  }
+}
+
 async function request<T>(path: string, accessToken: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${apiUrl}${path}`, {
     ...init,
@@ -27,8 +41,20 @@ async function request<T>(path: string, accessToken: string, init?: RequestInit)
   });
 
   if (!response.ok) {
-    const problem = await response.json().catch(() => null) as { error?: string; detail?: string; title?: string } | null;
-    throw new Error(problem?.error ?? problem?.detail ?? problem?.title ?? 'No fue posible consultar el catálogo.');
+    const problem = await response.json().catch(() => null) as {
+      error?: string;
+      message?: string;
+      detail?: string;
+      title?: string;
+      usage?: UsageSnapshot;
+    } | null;
+
+    throw new FoodCatalogApiError(
+      problem?.message ?? problem?.detail ?? problem?.title ?? problem?.error ?? 'No fue posible consultar el catálogo.',
+      response.status,
+      problem?.error,
+      problem?.usage,
+    );
   }
 
   return response.json() as Promise<T>;

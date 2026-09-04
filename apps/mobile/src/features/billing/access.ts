@@ -7,6 +7,16 @@ export type UserAccessSnapshot = {
   usageLimits: Record<string, number>;
 };
 
+export type UsageSnapshot = {
+  code: string;
+  limit: number | null;
+  used: number;
+  remaining: number | null;
+  isUnlimited: boolean;
+  periodStartUtc: string | null;
+  periodEndUtc: string | null;
+};
+
 export const entitlementCodes = {
   barcodeUnlimited: 'barcode.unlimited',
   historyUnlimited: 'history.unlimited',
@@ -22,6 +32,12 @@ export const entitlementCodes = {
   healthAdvanced: 'health.advanced',
 } as const;
 
+export const usageLimitCodes = {
+  barcodeScansMonthly: 'barcode.scans.monthly',
+  aiRequestsMonthly: 'ai.requests.monthly',
+  historyDays: 'history.days',
+} as const;
+
 export function hasEntitlement(access: UserAccessSnapshot | null | undefined, entitlement: string): boolean {
   return access?.entitlements.includes(entitlement) ?? false;
 }
@@ -29,4 +45,8 @@ export function hasEntitlement(access: UserAccessSnapshot | null | undefined, en
 export function getUsageLimit(access: UserAccessSnapshot | null | undefined, key: string): number | null {
   const value = access?.usageLimits[key];
   return typeof value === 'number' ? value : null;
+}
+
+export function getUsageSnapshot(usage: UsageSnapshot[] | null | undefined, code: string): UsageSnapshot | null {
+  return usage?.find((item) => item.code === code) ?? null;
 }
