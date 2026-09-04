@@ -3,6 +3,7 @@ using NutriFlow.Application.Billing;
 using NutriFlow.Application.Meals;
 using NutriFlow.Application.Nutrition;
 using NutriFlow.Domain.Meals;
+using NutriFlow.Domain.Nutrition;
 
 namespace NutriFlow.Application.Ai;
 
