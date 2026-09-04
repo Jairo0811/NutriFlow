@@ -45,23 +45,38 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 - Migración `AddMicronutrients` para `Foods` y `MealEntries`.
 - Pruebas para feature gates, períodos válidos, adherencia y promedios de micronutrientes.
 - Documentación dedicada en `docs/analytics`.
+- Fase 15 — NutriFlow AI.
+- `AI Coach` contextual con consumo, objetivos, preferencias y restricciones del usuario.
+- Cuota real `ai.requests.monthly`: 5 solicitudes Free y 100 Premium.
+- `Meal Photo AI` protegido por `ai.meal-photo` con captura Expo Camera, Structured Outputs y resolución contra el catálogo.
+- `Voice Logging` protegido por `ai.voice-logging` usando transcript de dictado del sistema y propuestas estructuradas.
+- Confirmación explícita antes de registrar cualquier alimento sugerido por IA.
+- Revalidación backend de alergias/restricciones antes de confirmar comidas asistidas por IA.
+- Abstracción `INutritionAiProvider` y adaptador `OpenAiNutritionProvider` basado en Responses API.
+- Endpoints autenticados `/api/ai/status`, `/coach`, `/meal-photo`, `/voice-log` y `/confirm-meal`.
+- Nuevo hub móvil NutriFlow AI y flujo dedicado de fotografía de comidas.
+- Pruebas para cuota Free, feature gates Premium, mapeo contra catálogo y bloqueo de conflictos dietarios.
+- Documentación dedicada en `docs/ai`.
 
 ### Changed
 
-- La API reporta `1.3.0-dev` durante el desarrollo de Premium Analytics & Micronutrients.
+- La API reporta `1.4.0-dev` durante el desarrollo de NutriFlow AI.
 - El escáner Free aplica realmente el límite de 10 consultas mensuales desde backend.
 - El historial Free de progreso se limita a los últimos 30 días; Premium queda preparado para `history.unlimited`.
-- La pantalla principal enlaza Engagement Hub y Premium Analytics.
+- La pantalla principal enlaza Engagement Hub, Premium Analytics y NutriFlow AI.
 - La creación de alimentos acepta micronutrientes opcionales sin exponerlos mediante el catálogo Free.
+- La cuota de IA implementada en Fase 12 comienza a consumirse por operaciones reales de NutriFlow AI.
 
 ### Notes
 
-- Las Fases 11–14 todavía no procesan pagos reales.
+- Las Fases 11–15 todavía no procesan pagos reales.
 - Todas las cuentas se resuelven temporalmente como `Free` hasta conectar un proveedor de billing.
 - RevenueCat se contempla como adaptador inicial para App Store y Google Play sin acoplar el dominio al proveedor.
-- La cuota de IA queda implementada a nivel de infraestructura, pero comenzará a consumirse cuando NutriFlow AI exista como módulo funcional.
 - Push notifications, objetivo de agua configurable, recetas comunitarias y gamificación avanzada quedan fuera del alcance de la Fase 13.
 - La Fase 14 no define recomendaciones clínicas ni valores objetivo personalizados de micronutrientes; presenta métricas de seguimiento derivadas del historial registrado.
+- NutriFlow AI requiere `OpenAI__ApiKey` server-side; la key nunca se expone a Mobile.
+- AI Coach ofrece orientación general y no diagnostica ni sustituye atención clínica.
+- Meal Photo AI y Voice Logging nunca registran comidas automáticamente: el usuario confirma y el backend vuelve a aplicar las restricciones guardadas.
 
 ## [1.0.0] - 2026-08-17
 
@@ -110,6 +125,7 @@ Para un despliegue real todavía deben configurarse por entorno:
 - Google OAuth / Google Client ID.
 - Proveedor transaccional de correo para recuperación de contraseña en producción.
 - Secretos JWT y credenciales PostgreSQL de producción.
+- `OpenAI__ApiKey` y modelo configurado para habilitar NutriFlow AI.
 
 ### Academic origin
 
