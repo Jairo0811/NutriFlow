@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
-import { foodCatalogApi, type Food } from '../../src/features/foods/api';
+import { FoodCatalogApiError, foodCatalogApi, type Food } from '../../src/features/foods/api';
 import { checkFoodCompatibility, type FoodCompatibility } from '../../src/features/preferences/api';
 
 export default function BarcodeScannerScreen() {
@@ -15,6 +15,7 @@ export default function BarcodeScannerScreen() {
   const [food, setFood] = useState<Food | null>(null);
   const [compatibility, setCompatibility] = useState<FoodCompatibility | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [quotaReached, setQuotaReached] = useState(false);
 
   if (!session || !accessToken) return null;
 
@@ -23,6 +24,7 @@ export default function BarcodeScannerScreen() {
     setScanned(true);
     setFood(null);
     setCompatibility(null);
+    setQuotaReached(false);
     setMessage('Consultando el catálogo…');
 
     try {
@@ -30,7 +32,13 @@ export default function BarcodeScannerScreen() {
       setFood(found);
       setCompatibility(await checkFoodCompatibility(accessToken, found.id));
       setMessage(null);
-    } catch {
+    } catch (error) {
+      if (error instanceof FoodCatalogApiError && error.code === 'usage_limit_reached') {
+        setQuotaReached(true);
+        setMessage('Alcanzaste el límite mensual de escaneos de NutriFlow Free. Premium incluye escaneos ilimitados.');
+        return;
+      }
+
       setMessage(`No encontramos el código ${result.data} en el catálogo.`);
     }
   }
@@ -52,7 +60,7 @@ export default function BarcodeScannerScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 7 + 9</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · FREEMIUM</Text>
         <Text style={styles.title}>Escanea tus alimentos</Text>
         <CameraView
           style={styles.camera}
@@ -75,8 +83,8 @@ export default function BarcodeScannerScreen() {
           </View>
         )}
 
-        {message && <Text style={styles.message}>{message}</Text>}
-        {scanned && (
+        {message && <Text style={quotaReached ? styles.quotaMessage : styles.message}>{message}</Text>}
+        {scanned && !quotaReached && (
           <Pressable onPress={() => { setScanned(false); setFood(null); setCompatibility(null); setMessage(null); }} style={styles.button}>
             <Text style={styles.buttonText}>Escanear otro producto</Text>
           </Pressable>
@@ -102,6 +110,7 @@ const styles = StyleSheet.create({
   warningTitle: { color: '#FFB1B1', fontWeight: '900' },
   warningText: { color: '#FFD4D4', marginTop: 4 },
   message: { color: '#DDE5DF', marginTop: 16, textAlign: 'center' },
+  quotaMessage: { color: '#FFCC80', marginTop: 16, textAlign: 'center', fontWeight: '800' },
   button: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 16, padding: 16 },
   buttonText: { color: '#07110B', fontWeight: '900' },
 });
