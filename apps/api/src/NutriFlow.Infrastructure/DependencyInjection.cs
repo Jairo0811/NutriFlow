@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NutriFlow.Application.Abstractions;
 using NutriFlow.Application.Billing;
+using NutriFlow.Application.Engagement;
 using NutriFlow.Infrastructure.Persistence;
 using NutriFlow.Infrastructure.Persistence.Repositories;
 using NutriFlow.Infrastructure.Security;
@@ -27,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<IMealRepository, MealRepository>();
         services.AddScoped<IWeightEntryRepository, WeightEntryRepository>();
         services.AddScoped<IUsageCounterRepository, UsageCounterRepository>();
+        services.AddScoped<IEngagementRepository, EngagementRepository>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<NutriFlowDbContext>());
 
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
