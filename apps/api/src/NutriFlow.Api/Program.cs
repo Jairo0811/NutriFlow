@@ -10,6 +10,7 @@ using NutriFlow.Api.Endpoints;
 using NutriFlow.Application.Abstractions;
 using NutriFlow.Application.Billing;
 using NutriFlow.Application.Dashboard;
+using NutriFlow.Application.Engagement;
 using NutriFlow.Application.Foods;
 using NutriFlow.Application.Identity;
 using NutriFlow.Application.Meals;
@@ -39,6 +40,7 @@ builder.Services.AddScoped<IMealTrackingService, MealTrackingService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IProgressService, ProgressService>();
 builder.Services.AddScoped<IFoodCompatibilityService, FoodCompatibilityService>();
+builder.Services.AddScoped<IEngagementService, EngagementService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
@@ -133,12 +135,13 @@ app.MapMealTrackingEndpoints();
 app.MapDashboardEndpoints();
 app.MapProgressEndpoints();
 app.MapPreferenceEndpoints();
+app.MapEngagementEndpoints();
 
 app.MapGet("/", () => Results.Ok(new
 {
     name = "NutriFlow API",
     status = "running",
-    version = "1.1.0-dev"
+    version = "1.2.0-dev"
 }));
 
 app.Run();
