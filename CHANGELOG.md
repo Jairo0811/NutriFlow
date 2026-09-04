@@ -16,16 +16,27 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 - Contrato TypeScript para consumir planes, entitlements y usage limits desde Mobile.
 - Documentación de arquitectura Freemium y roadmap comercial v1.1 → v2.0.
 - Pruebas unitarias para la política de acceso Free y el catálogo Premium.
+- Fase 12 — Usage Limits & Feature Gates.
+- Persistencia PostgreSQL de cuotas mediante `UsageCounters`.
+- Incremento atómico de cuotas por usuario, código y período mensual.
+- Servicio `IFeatureGateService` para centralizar permisos Premium.
+- Servicio `IUsageLimitService` para consultar y consumir cuotas.
+- Endpoint autenticado `GET /api/billing/usage` con uso, restante y período actual.
+- Manejo móvil específico para `usage_limit_reached` en el escáner.
+- Pruebas de límite mensual, reinicio por período, bypass Premium y ventana de historial.
 
 ### Changed
 
 - La API reporta `1.1.0-dev` durante el desarrollo de la siguiente versión.
+- El escáner Free ahora aplica realmente el límite de 10 consultas mensuales desde backend.
+- El historial Free de progreso se limita a los últimos 30 días; Premium queda preparado para `history.unlimited`.
 
 ### Notes
 
-- La Fase 11 no procesa pagos reales todavía.
+- La Fase 12 todavía no procesa pagos reales.
 - Todas las cuentas se resuelven temporalmente como `Free` hasta conectar un proveedor de billing.
 - RevenueCat se contempla como adaptador inicial para App Store y Google Play sin acoplar el dominio al proveedor.
+- La cuota de IA queda implementada a nivel de infraestructura, pero comenzará a consumirse cuando NutriFlow AI exista como módulo funcional.
 
 ## [1.0.0] - 2026-08-17
 
