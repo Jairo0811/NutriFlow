@@ -84,11 +84,11 @@ public sealed class PremiumAnalyticsService(
             // Analytics remains useful when onboarding is incomplete; target-based KPIs are omitted.
         }
 
-        var adherence = targetCalories is > 0 && logged.Length > 0
+        decimal? adherence = targetCalories is > 0 && logged.Length > 0
             ? Round(logged.Average(point => Math.Max(0m, 100m - (Math.Abs(point.Calories - targetCalories.Value) / targetCalories.Value * 100m))))
             : null;
 
-        var proteinHitRate = targetProtein is > 0 && logged.Length > 0
+        decimal? proteinHitRate = targetProtein is > 0 && logged.Length > 0
             ? Round(logged.Count(point => point.ProteinGrams >= targetProtein.Value * 0.9m) * 100m / logged.Length)
             : null;
 
