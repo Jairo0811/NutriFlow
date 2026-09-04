@@ -6,5 +6,6 @@ public interface IMealRepository
 {
     Task<Meal?> GetAsync(Guid userId, DateOnly date, MealType type, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<Meal>> GetDayAsync(Guid userId, DateOnly date, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Meal>> GetRangeAsync(Guid userId, DateOnly startDate, DateOnly endDate, CancellationToken cancellationToken = default);
     Task AddAsync(Meal meal, CancellationToken cancellationToken = default);
 }
