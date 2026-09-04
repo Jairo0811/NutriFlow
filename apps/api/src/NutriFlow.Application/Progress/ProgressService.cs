@@ -1,4 +1,5 @@
 using NutriFlow.Application.Abstractions;
+using NutriFlow.Application.Billing;
 using NutriFlow.Domain.Progress;
 
 namespace NutriFlow.Application.Progress;
@@ -17,12 +18,23 @@ public interface IProgressService
 public sealed class ProgressService(
     IWeightEntryRepository entries,
     INutritionProfileRepository profiles,
-    IUnitOfWork unitOfWork) : IProgressService
+    IUnitOfWork unitOfWork,
+    IFeatureGateService featureGates,
+    TimeProvider timeProvider) : IProgressService
 {
     public async Task<ProgressSummaryDto> GetAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         var profile = await profiles.GetByUserIdAsync(userId, cancellationToken);
-        var history = await entries.GetByUserAsync(userId, 365, cancellationToken);
+        var history = await entries.GetByUserAsync(userId, 3650, cancellationToken);
+
+        if (!featureGates.HasEntitlement(userId, EntitlementCodes.HistoryUnlimited)
+            && featureGates.GetUsageLimit(userId, UsageLimitCodes.HistoryDays) is { } historyDays)
+        {
+            var today = DateOnly.FromDateTime(timeProvider.GetUtcNow().UtcDateTime);
+            var earliestVisibleDate = today.AddDays(-(Math.Max(1, historyDays) - 1));
+            history = history.Where(item => item.Date >= earliestVisibleDate).ToArray();
+        }
+
         var ordered = history.OrderBy(item => item.Date).ToArray();
         var starting = ordered.FirstOrDefault()?.WeightPounds ?? profile?.CurrentWeightPounds;
         var current = ordered.LastOrDefault()?.WeightPounds ?? profile?.CurrentWeightPounds;
@@ -37,7 +49,8 @@ public sealed class ProgressService(
 
     public async Task<ProgressSummaryDto> LogWeightAsync(Guid userId, LogWeightCommand command, CancellationToken cancellationToken = default)
     {
-        if (command.Date > DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1)))
+        var today = DateOnly.FromDateTime(timeProvider.GetUtcNow().UtcDateTime);
+        if (command.Date > today.AddDays(1))
             throw new ArgumentOutOfRangeException(nameof(command.Date), "Weight date cannot be in the future.");
 
         if (await entries.GetByUserAndDateAsync(userId, command.Date, cancellationToken) is not null)
