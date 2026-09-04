@@ -43,9 +43,9 @@ public sealed class SubscriptionAccessService : ISubscriptionAccessService
         new HashSet<string>(StringComparer.Ordinal),
         new Dictionary<string, int>(StringComparer.Ordinal)
         {
-            ["barcode.scans.monthly"] = 10,
-            ["ai.requests.monthly"] = 5,
-            ["history.days"] = 30
+            [UsageLimitCodes.BarcodeScansMonthly] = 10,
+            [UsageLimitCodes.AiRequestsMonthly] = 5,
+            [UsageLimitCodes.HistoryDays] = 30
         });
 
     private static readonly PlanDefinition Premium = new(
@@ -68,14 +68,14 @@ public sealed class SubscriptionAccessService : ISubscriptionAccessService
         },
         new Dictionary<string, int>(StringComparer.Ordinal)
         {
-            ["ai.requests.monthly"] = 100
+            [UsageLimitCodes.AiRequestsMonthly] = 100
         });
 
     public UserAccessSnapshot GetAccess(Guid userId)
     {
         _ = userId;
 
-        // Phase 11 intentionally defaults every account to Free. A billing provider
+        // Phase 11/12 intentionally defaults every account to Free. A billing provider
         // will become the source of truth in the payment integration phase.
         return ToSnapshot(Free);
     }
