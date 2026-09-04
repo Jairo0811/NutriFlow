@@ -12,10 +12,10 @@ export default function AuthenticatedHomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · v1.3 DEV</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · v1.4 DEV</Text>
         <Text style={styles.title}>Hola, {session?.displayName ?? 'NutriFlow'}</Text>
         <Text style={styles.subtitle}>
-          Controla tu nutrición, construye hábitos y analiza tendencias de progreso desde un solo lugar.
+          Controla tu nutrición, construye hábitos, analiza tendencias y usa asistencia inteligente desde un solo lugar.
         </Text>
 
         <View style={styles.card}>
@@ -25,6 +25,9 @@ export default function AuthenticatedHomeScreen() {
 
         <Pressable onPress={() => router.push('/dashboard')} style={styles.primaryButton}>
           <Text style={styles.primaryText}>Abrir dashboard diario</Text>
+        </Pressable>
+        <Pressable onPress={() => router.push('/ai')} style={styles.aiButton}>
+          <Text style={styles.aiText}>✦ NutriFlow AI · Coach, foto y voz</Text>
         </Pressable>
         <Pressable onPress={() => router.push('/analytics')} style={styles.premiumButton}>
           <Text style={styles.premiumText}>✦ Premium Analytics · 7/30/90 días</Text>
@@ -72,6 +75,8 @@ const styles = StyleSheet.create({
   cardValue: { color: '#F6FAF7', fontSize: 17, fontWeight: '700', marginTop: 8 },
   primaryButton: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 22, padding: 16 },
   primaryText: { color: '#07110B', fontSize: 15, fontWeight: '900' },
+  aiButton: { alignItems: 'center', backgroundColor: '#15251B', borderColor: '#8CF65D', borderRadius: 14, borderWidth: 1, marginTop: 10, padding: 16 },
+  aiText: { color: '#8CF65D', fontSize: 15, fontWeight: '900' },
   premiumButton: { alignItems: 'center', backgroundColor: '#17241B', borderColor: '#62E62C', borderRadius: 14, borderWidth: 1, marginTop: 10, padding: 16 },
   premiumText: { color: '#62E62C', fontSize: 15, fontWeight: '900' },
   secondaryButton: { alignItems: 'center', backgroundColor: '#132718', borderColor: '#36503E', borderRadius: 14, borderWidth: 1, marginTop: 10, padding: 16 },
