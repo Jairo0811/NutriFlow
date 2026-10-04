@@ -1,5 +1,5 @@
 import { Redirect, Stack, useSegments } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
@@ -9,42 +9,49 @@ import { toUserFacingError } from '../../src/features/shared/errors';
 export default function AuthenticatedLayout() {
   const { session, isLoading } = useAuth();
   const segments = useSegments();
+  const isOnboardingRoute = segments.includes('onboarding');
+  const wasOnboardingRoute = useRef(isOnboardingRoute);
   const [checkingProfile, setCheckingProfile] = useState(false);
   const [profileCompleted, setProfileCompleted] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const refreshProfile = useCallback(async () => {
     if (!session?.accessToken) {
       setProfileCompleted(null);
       return;
     }
 
-    let mounted = true;
     setCheckingProfile(true);
     setError(null);
-
-    void onboardingApi.get(session.accessToken)
-      .then((profile) => {
-        if (mounted) setProfileCompleted(profile.isCompleted);
-      })
-      .catch((cause) => {
-        if (mounted) {
-          setError(toUserFacingError(cause, 'No pudimos comprobar tu perfil nutricional.'));
-          setProfileCompleted(null);
-        }
-      })
-      .finally(() => {
-        if (mounted) setCheckingProfile(false);
-      });
-
-    return () => {
-      mounted = false;
-    };
+    try {
+      const profile = await onboardingApi.get(session.accessToken);
+      setProfileCompleted(profile.isCompleted);
+    } catch (cause) {
+      setError(toUserFacingError(cause, 'No pudimos comprobar tu perfil nutricional.'));
+      setProfileCompleted(null);
+    } finally {
+      setCheckingProfile(false);
+    }
   }, [session?.accessToken]);
+
+  useEffect(() => {
+    void refreshProfile();
+  }, [refreshProfile]);
+
+  const leavingOnboarding = wasOnboardingRoute.current && !isOnboardingRoute;
+
+  useEffect(() => {
+    const wasOnboarding = wasOnboardingRoute.current;
+    wasOnboardingRoute.current = isOnboardingRoute;
+
+    if (wasOnboarding && !isOnboardingRoute) {
+      void refreshProfile();
+    }
+  }, [isOnboardingRoute, refreshProfile]);
 
   if (!isLoading && !session) return <Redirect href="/login" />;
 
-  if (isLoading || checkingProfile || (session && profileCompleted === null && !error)) {
+  if (isLoading || checkingProfile || leavingOnboarding || (session && profileCompleted === null && !error)) {
     return (
       <View style={styles.loading}>
         <ActivityIndicator color="#62E62C" size="large" />
@@ -61,7 +68,6 @@ export default function AuthenticatedLayout() {
     );
   }
 
-  const isOnboardingRoute = segments.includes('onboarding');
   if (session && profileCompleted === false && !isOnboardingRoute) {
     return <Redirect href="/onboarding" />;
   }
