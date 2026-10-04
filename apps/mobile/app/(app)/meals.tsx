@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { foodCatalogApi, type Food } from '../../src/features/foods/api';
 import { mealTrackingApi, type DailyMealSummary, type MealType } from '../../src/features/meals/api';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
 const mealTypes: { value: MealType; label: string }[] = [
   { value: 'Breakfast', label: 'Desayuno' },
@@ -32,9 +33,10 @@ export default function MealTrackingScreen() {
   useEffect(() => {
     if (!accessToken) return;
     setLoading(true);
+    setError(null);
     mealTrackingApi.getDay(accessToken, today)
       .then(setSummary)
-      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No fue posible cargar tu diario.'))
+      .catch((cause) => setError(toUserFacingError(cause, 'No fue posible cargar tu diario de comidas.')))
       .finally(() => setLoading(false));
   }, [accessToken]);
 
@@ -46,8 +48,11 @@ export default function MealTrackingScreen() {
 
     const timer = setTimeout(() => {
       foodCatalogApi.search(accessToken, query)
-        .then(setFoods)
-        .catch((cause) => setError(cause instanceof Error ? cause.message : 'No fue posible buscar alimentos.'));
+        .then((results) => {
+          setFoods(results);
+          setError(null);
+        })
+        .catch((cause) => setError(toUserFacingError(cause, 'No fue posible buscar alimentos.')));
     }, 300);
 
     return () => clearTimeout(timer);
@@ -79,7 +84,7 @@ export default function MealTrackingScreen() {
       setFoods([]);
       setServings('1');
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible registrar el alimento.');
+      setError(toUserFacingError(cause, 'No fue posible registrar el alimento.'));
     } finally {
       setSaving(false);
     }
@@ -92,7 +97,7 @@ export default function MealTrackingScreen() {
     try {
       setSummary(await mealTrackingApi.removeEntry(accessToken, entryId, today, type));
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible eliminar el alimento.');
+      setError(toUserFacingError(cause, 'No fue posible eliminar el alimento.'));
     } finally {
       setSaving(false);
     }
@@ -101,9 +106,9 @@ export default function MealTrackingScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 5</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · DIARIO</Text>
         <Text style={styles.title}>Diario de comidas</Text>
-        <Text style={styles.subtitle}>{today} · registra lo que consumes y conserva un snapshot nutricional histórico.</Text>
+        <Text style={styles.subtitle}>{today} · registra lo que consumes y conserva un historial nutricional.</Text>
 
         <View style={styles.totalCard}>
           <Text style={styles.totalLabel}>Consumido hoy</Text>
