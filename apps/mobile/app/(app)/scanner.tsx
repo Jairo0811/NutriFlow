@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { FoodCatalogApiError, foodCatalogApi, type Food } from '../../src/features/foods/api';
 import { checkFoodCompatibility, type FoodCompatibility } from '../../src/features/preferences/api';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
 export default function BarcodeScannerScreen() {
   const { session } = useAuth();
@@ -39,7 +40,12 @@ export default function BarcodeScannerScreen() {
         return;
       }
 
-      setMessage(`No encontramos el código ${result.data} en el catálogo.`);
+      if (error instanceof FoodCatalogApiError && error.status === 404) {
+        setMessage(`No encontramos el código ${result.data} en el catálogo.`);
+        return;
+      }
+
+      setMessage(toUserFacingError(error, 'No fue posible consultar este código de barras.'));
     }
   }
 
@@ -60,7 +66,7 @@ export default function BarcodeScannerScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FREEMIUM</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · ESCÁNER</Text>
         <Text style={styles.title}>Escanea tus alimentos</Text>
         <CameraView
           style={styles.camera}

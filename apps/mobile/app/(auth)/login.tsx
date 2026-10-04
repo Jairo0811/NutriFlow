@@ -8,6 +8,7 @@ import { useAuth } from '../../src/features/auth/AuthProvider';
 import { AuthButton } from '../../src/features/auth/components/AuthButton';
 import { AuthField } from '../../src/features/auth/components/AuthField';
 import { AuthScaffold } from '../../src/features/auth/components/AuthScaffold';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -58,7 +59,7 @@ export default function LoginScreen() {
         await signInWithGoogle(tokenResponse.idToken);
         router.replace('/(app)');
       } catch (caught) {
-        setError(caught instanceof Error ? caught.message : 'No fue posible iniciar sesión con Google.');
+        setError(toUserFacingError(caught, 'No fue posible iniciar sesión con Google.'));
       } finally {
         setGoogleLoading(false);
       }
@@ -75,7 +76,7 @@ export default function LoginScreen() {
       await login({ email, password });
       router.replace('/(app)');
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'No fue posible iniciar sesión.');
+      setError(toUserFacingError(caught, 'No fue posible iniciar sesión.'));
     } finally {
       setLoading(false);
     }

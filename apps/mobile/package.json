@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@expo/vector-icons": "^15.1.1",
     "expo": "~57.0.9",
     "expo-auth-session": "~57.0.5",
     "expo-camera": "~57.0.1",

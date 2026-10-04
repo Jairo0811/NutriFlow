@@ -1,16 +1,20 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ComponentProps } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { foodCatalogApi, type Food } from '../../src/features/foods/api';
 import { mealTrackingApi, type DailyMealSummary, type MealType } from '../../src/features/meals/api';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
-const mealTypes: { value: MealType; label: string }[] = [
-  { value: 'Breakfast', label: 'Desayuno' },
-  { value: 'Lunch', label: 'Almuerzo' },
-  { value: 'Dinner', label: 'Cena' },
-  { value: 'Snack', label: 'Snacks' },
+type MealIconName = ComponentProps<typeof Ionicons>['name'];
+
+const mealTypes: { value: MealType; label: string; icon: MealIconName }[] = [
+  { value: 'Breakfast', label: 'Desayuno', icon: 'cafe-outline' },
+  { value: 'Lunch', label: 'Almuerzo', icon: 'restaurant-outline' },
+  { value: 'Dinner', label: 'Cena', icon: 'moon-outline' },
+  { value: 'Snack', label: 'Snacks', icon: 'nutrition-outline' },
 ];
 
 const today = new Date().toISOString().slice(0, 10);
@@ -32,9 +36,10 @@ export default function MealTrackingScreen() {
   useEffect(() => {
     if (!accessToken) return;
     setLoading(true);
+    setError(null);
     mealTrackingApi.getDay(accessToken, today)
       .then(setSummary)
-      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No fue posible cargar tu diario.'))
+      .catch((cause) => setError(toUserFacingError(cause, 'No fue posible cargar tu diario de comidas.')))
       .finally(() => setLoading(false));
   }, [accessToken]);
 
@@ -46,16 +51,20 @@ export default function MealTrackingScreen() {
 
     const timer = setTimeout(() => {
       foodCatalogApi.search(accessToken, query)
-        .then(setFoods)
-        .catch((cause) => setError(cause instanceof Error ? cause.message : 'No fue posible buscar alimentos.'));
+        .then((results) => {
+          setFoods(results);
+          setError(null);
+        })
+        .catch((cause) => setError(toUserFacingError(cause, 'No fue posible buscar alimentos.')));
     }, 300);
 
     return () => clearTimeout(timer);
   }, [accessToken, query]);
 
-  const groups = useMemo(() => mealTypes.map(({ value, label }) => ({
+  const groups = useMemo(() => mealTypes.map(({ value, label, icon }) => ({
     value,
     label,
+    icon,
     meal: summary?.meals.find((meal) => meal.type === value),
   })), [summary]);
 
@@ -79,7 +88,7 @@ export default function MealTrackingScreen() {
       setFoods([]);
       setServings('1');
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible registrar el alimento.');
+      setError(toUserFacingError(cause, 'No fue posible registrar el alimento.'));
     } finally {
       setSaving(false);
     }
@@ -92,7 +101,7 @@ export default function MealTrackingScreen() {
     try {
       setSummary(await mealTrackingApi.removeEntry(accessToken, entryId, today, type));
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible eliminar el alimento.');
+      setError(toUserFacingError(cause, 'No fue posible eliminar el alimento.'));
     } finally {
       setSaving(false);
     }
@@ -101,9 +110,9 @@ export default function MealTrackingScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 5</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · DIARIO</Text>
         <Text style={styles.title}>Diario de comidas</Text>
-        <Text style={styles.subtitle}>{today} · registra lo que consumes y conserva un snapshot nutricional histórico.</Text>
+        <Text style={styles.subtitle}>{today} · registra lo que consumes y conserva un historial nutricional.</Text>
 
         <View style={styles.totalCard}>
           <Text style={styles.totalLabel}>Consumido hoy</Text>
@@ -115,11 +124,21 @@ export default function MealTrackingScreen() {
 
         <Text style={styles.sectionTitle}>Agregar alimento</Text>
         <View style={styles.mealTypeRow}>
-          {mealTypes.map((item) => (
-            <Pressable key={item.value} onPress={() => setMealType(item.value)} style={[styles.mealTypeChip, mealType === item.value && styles.selected]}>
-              <Text style={styles.chipText}>{item.label}</Text>
-            </Pressable>
-          ))}
+          {mealTypes.map((item) => {
+            const isSelected = mealType === item.value;
+            return (
+              <Pressable
+                key={item.value}
+                onPress={() => setMealType(item.value)}
+                style={[styles.mealTypeChip, isSelected && styles.selected]}
+              >
+                <View style={styles.chipContent}>
+                  <Ionicons name={item.icon} size={18} color={isSelected ? '#62E62C' : '#DDE5DF'} />
+                  <Text style={[styles.chipText, isSelected && styles.selectedChipText]}>{item.label}</Text>
+                </View>
+              </Pressable>
+            );
+          })}
         </View>
 
         <TextInput
@@ -158,10 +177,15 @@ export default function MealTrackingScreen() {
         {loading && <Text style={styles.helper}>Cargando diario…</Text>}
 
         <Text style={styles.sectionTitle}>Tus comidas</Text>
-        {groups.map(({ value, label, meal }) => (
+        {groups.map(({ value, label, icon, meal }) => (
           <View key={value} style={styles.mealCard}>
             <View style={styles.mealHeader}>
-              <Text style={styles.mealTitle}>{label}</Text>
+              <View style={styles.mealHeading}>
+                <View style={styles.mealIconBadge}>
+                  <Ionicons name={icon} size={20} color="#62E62C" />
+                </View>
+                <Text style={styles.mealTitle}>{label}</Text>
+              </View>
               <Text style={styles.mealCalories}>{Math.round(meal?.calories ?? 0)} kcal</Text>
             </View>
 
@@ -199,7 +223,9 @@ const styles = StyleSheet.create({
   mealTypeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   mealTypeChip: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 10 },
   selected: { backgroundColor: '#132718', borderColor: '#62E62C' },
+  chipContent: { alignItems: 'center', flexDirection: 'row', gap: 7 },
   chipText: { color: '#F6FAF7', fontWeight: '700' },
+  selectedChipText: { color: '#62E62C' },
   input: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 14, color: '#F6FAF7', fontSize: 16, paddingHorizontal: 16, paddingVertical: 14, marginTop: 12 },
   searchResult: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 13, borderBottomColor: '#18251D', borderBottomWidth: 1 },
   flex: { flex: 1 },
@@ -217,6 +243,8 @@ const styles = StyleSheet.create({
   helper: { color: '#7E8E84', lineHeight: 20 },
   mealCard: { backgroundColor: '#101C14', borderColor: '#223228', borderWidth: 1, borderRadius: 18, padding: 16, marginBottom: 12 },
   mealHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+  mealHeading: { alignItems: 'center', flexDirection: 'row', gap: 10 },
+  mealIconBadge: { alignItems: 'center', backgroundColor: '#17331D', borderColor: '#31533A', borderRadius: 11, borderWidth: 1, height: 38, justifyContent: 'center', width: 38 },
   mealTitle: { color: '#F6FAF7', fontSize: 18, fontWeight: '800' },
   mealCalories: { color: '#62E62C', fontWeight: '800' },
   entryRow: { flexDirection: 'row', gap: 12, alignItems: 'center', paddingVertical: 12, borderTopColor: '#18251D', borderTopWidth: 1 },

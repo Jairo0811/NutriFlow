@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { getNutritionTargets, type NutritionTargets } from '../../src/features/nutrition/api';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
 export default function NutritionTargetsScreen() {
   const { session, isLoading } = useAuth();
@@ -15,12 +16,13 @@ export default function NutritionTargetsScreen() {
     if (!session) return;
 
     let mounted = true;
+    setError(null);
     void getNutritionTargets(session.accessToken)
       .then((result) => {
         if (mounted) setTargets(result);
       })
       .catch((cause) => {
-        if (mounted) setError(cause instanceof Error ? cause.message : 'No fue posible calcular tus objetivos.');
+        if (mounted) setError(toUserFacingError(cause, 'No fue posible calcular tus objetivos nutricionales.'));
       });
 
     return () => {
@@ -33,7 +35,7 @@ export default function NutritionTargetsScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRITION ENGINE · FASE 3</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · PLAN NUTRICIONAL</Text>
         <Text style={styles.title}>Tus objetivos diarios</Text>
         <Text style={styles.subtitle}>
           Estimaciones calculadas de forma determinística a partir de tu perfil. No sustituyen una evaluación nutricional profesional.

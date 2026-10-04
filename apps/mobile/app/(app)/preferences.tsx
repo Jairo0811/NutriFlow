@@ -9,6 +9,7 @@ import {
   type FoodPreferenceCode,
   type NutritionProfile,
 } from '../../src/features/onboarding/api';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
 const preferenceOptions: { code: FoodPreferenceCode; label: string }[] = [
   { code: 'protein', label: 'Proteínas' },
@@ -42,11 +43,14 @@ export default function PreferencesScreen() {
 
   useEffect(() => {
     if (!accessToken) return;
-    onboardingApi.get(accessToken).then((value) => {
-      setProfile(value);
-      setPreferences(value.foodPreferenceCodes);
-      setRestrictions(value.dietaryRestrictionCodes);
-    });
+    setMessage(null);
+    onboardingApi.get(accessToken)
+      .then((value) => {
+        setProfile(value);
+        setPreferences(value.foodPreferenceCodes);
+        setRestrictions(value.dietaryRestrictionCodes);
+      })
+      .catch((cause) => setMessage(toUserFacingError(cause, 'No fue posible cargar tus preferencias.')));
   }, [accessToken]);
 
   if (!session || !accessToken) return null;
@@ -65,7 +69,7 @@ export default function PreferencesScreen() {
       setProfile(updated);
       setMessage('Preferencias y restricciones actualizadas.');
     } catch (cause) {
-      setMessage(cause instanceof Error ? cause.message : 'No fue posible guardar los cambios.');
+      setMessage(toUserFacingError(cause, 'No fue posible guardar los cambios.'));
     } finally {
       setSaving(false);
     }
@@ -74,7 +78,7 @@ export default function PreferencesScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 9</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · SEGURIDAD ALIMENTARIA</Text>
         <Text style={styles.title}>Alergias y preferencias</Text>
         <Text style={styles.subtitle}>Estas reglas se usan para detectar conflictos al consultar alimentos. No sustituyen la lectura de etiquetas ni una evaluación clínica.</Text>
 
@@ -114,7 +118,7 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#07110B' },
   container: { padding: 24, paddingBottom: 48 },
   eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
-  title: { color: '#F6FAF7', fontSize: 34, fontWeight: '900', marginTop: 10 },
+  title: { color: '#F6FAF7', fontSize: 32, fontWeight: '900', marginTop: 10 },
   subtitle: { color: '#95A59B', fontSize: 15, lineHeight: 23, marginTop: 8 },
   sectionTitle: { color: '#F6FAF7', fontSize: 20, fontWeight: '900', marginTop: 28, marginBottom: 12 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 9 },
