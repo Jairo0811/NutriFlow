@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { router } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
@@ -11,7 +11,9 @@ import {
   type DietaryRestrictionCode,
   type FoodPreferenceCode,
   type NutritionGoalType,
+  type NutritionProfile,
 } from '../../src/features/onboarding/api';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
 const activities: { value: ActivityLevel; title: string; detail: string }[] = [
   { value: 'Sedentary', title: 'Sedentaria', detail: 'Nada o poco ejercicio' },
@@ -36,8 +38,23 @@ const foodPreferences: { value: FoodPreferenceCode; title: string }[] = [
 
 const restrictions: { value: DietaryRestrictionCode; title: string; detail: string }[] = [
   { value: 'gluten', title: 'Gluten', detail: 'Evitar alimentos que contengan gluten.' },
+  { value: 'wheat', title: 'Trigo', detail: 'Evitar trigo y productos derivados.' },
+  { value: 'milk', title: 'Leche', detail: 'Evitar leche y alérgenos lácteos.' },
+  { value: 'eggs', title: 'Huevos', detail: 'Evitar huevo y productos derivados.' },
+  { value: 'fish', title: 'Pescado', detail: 'Evitar pescado y productos derivados.' },
   { value: 'shellfish', title: 'Mariscos', detail: 'Evitar productos derivados de mariscos.' },
+  { value: 'peanuts', title: 'Maní', detail: 'Evitar maní y productos que lo contengan.' },
+  { value: 'tree_nuts', title: 'Frutos secos', detail: 'Evitar nueces y otros frutos secos.' },
+  { value: 'soy', title: 'Soya', detail: 'Evitar soya y productos derivados.' },
+  { value: 'sesame', title: 'Sésamo', detail: 'Evitar sésamo y productos derivados.' },
 ];
+
+function nextStepFor(profile: NutritionProfile): number {
+  if (!profile.dateOfBirth || !profile.biologicalSex || profile.heightFeet == null || profile.heightInches == null || profile.currentWeightPounds == null) return 1;
+  if (!profile.activityLevel) return 2;
+  if (!profile.goalType) return 3;
+  return 4;
+}
 
 export default function NutritionalOnboardingScreen() {
   const { session } = useAuth();
@@ -54,10 +71,44 @@ export default function NutritionalOnboardingScreen() {
   const [dietaryRestrictions, setDietaryRestrictions] = useState<DietaryRestrictionCode[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [initializing, setInitializing] = useState(true);
 
-  if (!session) return null;
+  const accessToken = session?.accessToken;
 
-  const accessToken = session.accessToken;
+  useEffect(() => {
+    if (!accessToken) return;
+    let mounted = true;
+    setInitializing(true);
+    setError(null);
+
+    void onboardingApi.get(accessToken)
+      .then((profile) => {
+        if (!mounted) return;
+        setDateOfBirth(profile.dateOfBirth ?? '');
+        setSex(profile.biologicalSex ?? 'Male');
+        setHeightFeet(profile.heightFeet?.toString() ?? '5');
+        setHeightInches(profile.heightInches?.toString() ?? '8');
+        setWeight(profile.currentWeightPounds?.toString() ?? '');
+        setActivity(profile.activityLevel ?? 'Moderate');
+        setGoal(profile.goalType ?? 'MaintainWeight');
+        setTargetWeight(profile.goalType === 'MaintainWeight' ? '' : profile.targetWeightPounds?.toString() ?? '');
+        setPreferences(profile.foodPreferenceCodes ?? []);
+        setDietaryRestrictions(profile.dietaryRestrictionCodes ?? []);
+        setStep(profile.isCompleted ? 1 : nextStepFor(profile));
+      })
+      .catch((cause) => {
+        if (mounted) setError(toUserFacingError(cause, 'No pudimos cargar tu perfil nutricional.'));
+      })
+      .finally(() => {
+        if (mounted) setInitializing(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [accessToken]);
+
+  if (!session || !accessToken) return null;
 
   function togglePreference(value: FoodPreferenceCode) {
     setPreferences((current) => current.includes(value)
@@ -71,7 +122,37 @@ export default function NutritionalOnboardingScreen() {
       : [...current, value]);
   }
 
+  function validateCurrentStep(): string | null {
+    if (step === 1) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOfBirth)) return 'Ingresa tu fecha de nacimiento con el formato AAAA-MM-DD.';
+      const birth = new Date(`${dateOfBirth}T00:00:00`);
+      if (Number.isNaN(birth.getTime()) || birth >= new Date()) return 'Ingresa una fecha de nacimiento válida.';
+
+      const feet = Number(heightFeet);
+      const inches = Number(heightInches);
+      const pounds = Number(weight);
+      const totalInches = (feet * 12) + inches;
+      if (!Number.isInteger(feet) || !Number.isInteger(inches) || inches < 0 || inches > 11 || totalInches < 36 || totalInches > 96) {
+        return 'Ingresa una altura válida entre 3 y 8 pies.';
+      }
+      if (!Number.isFinite(pounds) || pounds < 60 || pounds > 800) return 'Ingresa un peso válido entre 60 y 800 lb.';
+    }
+
+    if (step === 3 && goal !== 'MaintainWeight') {
+      const target = Number(targetWeight);
+      if (!Number.isFinite(target) || target < 60 || target > 800) return 'Ingresa un peso objetivo entre 60 y 800 lb.';
+    }
+
+    return null;
+  }
+
   async function continueFlow() {
+    const validationError = validateCurrentStep();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setError(null);
     setSaving(true);
     try {
@@ -97,13 +178,24 @@ export default function NutritionalOnboardingScreen() {
       } else if (step === 5) {
         await onboardingApi.saveRestrictions(accessToken, dietaryRestrictions);
         await onboardingApi.complete(accessToken);
-        router.replace('/');
+        router.replace('/(app)');
       }
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible guardar tus datos.');
+      setError(toUserFacingError(cause, 'No fue posible guardar tus datos.'));
     } finally {
       setSaving(false);
     }
+  }
+
+  if (initializing) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator color="#62E62C" size="large" />
+          <Text style={styles.helper}>Cargando tu perfil…</Text>
+        </View>
+      </SafeAreaView>
+    );
   }
 
   return (
@@ -124,10 +216,10 @@ export default function NutritionalOnboardingScreen() {
           <>
             <Text style={styles.eyebrow}>SOBRE TI</Text>
             <Text style={styles.title}>Tus medidas</Text>
-            <Text style={styles.subtitle}>Usaremos pies, pulgadas y libras. Las conversiones necesarias ocurren únicamente dentro del motor nutricional.</Text>
+            <Text style={styles.subtitle}>Usaremos pies, pulgadas y libras para personalizar tus objetivos nutricionales.</Text>
 
             <Text style={styles.label}>Fecha de nacimiento</Text>
-            <TextInput value={dateOfBirth} onChangeText={setDateOfBirth} placeholder="YYYY-MM-DD" placeholderTextColor="#637268" style={styles.input} />
+            <TextInput value={dateOfBirth} onChangeText={setDateOfBirth} placeholder="AAAA-MM-DD" placeholderTextColor="#637268" style={styles.input} />
 
             <Text style={styles.label}>Sexo para cálculo metabólico</Text>
             <View style={styles.row}>
@@ -156,7 +248,7 @@ export default function NutritionalOnboardingScreen() {
           <>
             <Text style={styles.eyebrow}>ACTIVIDAD FÍSICA</Text>
             <Text style={styles.title}>¿Cuánto te mueves?</Text>
-            <Text style={styles.subtitle}>Conservamos los cuatro niveles definidos en el prototipo académico y modernizamos su presentación.</Text>
+            <Text style={styles.subtitle}>Selecciona el nivel que mejor represente tu actividad habitual.</Text>
             {activities.map((item) => (
               <SelectCard key={item.value} selected={activity === item.value} title={item.title} detail={item.detail} onPress={() => setActivity(item.value)} />
             ))}
@@ -167,7 +259,7 @@ export default function NutritionalOnboardingScreen() {
           <>
             <Text style={styles.eyebrow}>OBJETIVO</Text>
             <Text style={styles.title}>¿Qué quieres lograr?</Text>
-            <Text style={styles.subtitle}>Este objetivo alimentará el motor nutricional de la siguiente fase.</Text>
+            <Text style={styles.subtitle}>Tu objetivo se usará para calcular calorías y macronutrientes diarios.</Text>
             {goals.map((item) => (
               <SelectCard key={item.value} selected={goal === item.value} title={item.title} detail={item.detail} onPress={() => setGoal(item.value)} />
             ))}
@@ -187,7 +279,7 @@ export default function NutritionalOnboardingScreen() {
           <>
             <Text style={styles.eyebrow}>ALIMENTOS</Text>
             <Text style={styles.title}>¿Qué deseas incluir?</Text>
-            <Text style={styles.subtitle}>Esta selección conserva las categorías principales del mockup original y servirá para personalizar el catálogo y las recomendaciones futuras.</Text>
+            <Text style={styles.subtitle}>Estas preferencias ayudan a personalizar tu experiencia y futuras recomendaciones.</Text>
             <View style={styles.chipGrid}>
               {foodPreferences.map((item) => (
                 <ChoiceChip key={item.value} selected={preferences.includes(item.value)} title={item.title} onPress={() => togglePreference(item.value)} />
@@ -198,9 +290,9 @@ export default function NutritionalOnboardingScreen() {
 
         {step === 5 && (
           <>
-            <Text style={styles.eyebrow}>RESTRICCIONES</Text>
+            <Text style={styles.eyebrow}>SEGURIDAD ALIMENTARIA</Text>
             <Text style={styles.title}>¿Qué debemos evitar?</Text>
-            <Text style={styles.subtitle}>El prototipo original contemplaba gluten y mariscos. Por ahora registramos estas restricciones como preferencias del perfil; las advertencias avanzadas llegarán en la Fase 9.</Text>
+            <Text style={styles.subtitle}>Selecciona alergias o restricciones. NutriFlow nunca bloquea estas advertencias por suscripción.</Text>
             {restrictions.map((item) => (
               <SelectCard key={item.value} selected={dietaryRestrictions.includes(item.value)} title={item.title} detail={item.detail} onPress={() => toggleRestriction(item.value)} />
             ))}
@@ -211,7 +303,7 @@ export default function NutritionalOnboardingScreen() {
         {error && <Text style={styles.error}>{error}</Text>}
 
         <Pressable disabled={saving} onPress={() => void continueFlow()} style={[styles.primaryButton, saving && styles.disabled]}>
-          <Text style={styles.primaryText}>{saving ? 'Guardando…' : step === 5 ? 'Completar onboarding' : 'Continuar'}</Text>
+          <Text style={styles.primaryText}>{saving ? 'Guardando…' : step === 5 ? 'Finalizar configuración' : 'Continuar'}</Text>
         </Pressable>
       </ScrollView>
     </SafeAreaView>
@@ -238,6 +330,7 @@ function SelectCard({ selected, title, detail, onPress }: { selected: boolean; t
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#07110B' },
   container: { padding: 24, paddingBottom: 48 },
+  loadingContainer: { alignItems: 'center', flex: 1, justifyContent: 'center', padding: 24 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   back: { color: '#DDE5DF', fontWeight: '700' },
   muted: { color: '#526158' },
