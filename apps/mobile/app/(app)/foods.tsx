@@ -10,6 +10,7 @@ import { toUserFacingError } from '../../src/features/shared/errors';
 
 export default function FoodCatalogScreen() {
   const { session } = useAuth();
+  const accessToken = session?.accessToken;
   const [query, setQuery] = useState('');
   const [foods, setFoods] = useState<Food[]>([]);
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
@@ -17,8 +18,7 @@ export default function FoodCatalogScreen() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!session) return;
-    const accessToken = session.accessToken;
+    if (!accessToken) return;
     const timeout = setTimeout(() => {
       setLoading(true);
       setError(null);
@@ -29,23 +29,24 @@ export default function FoodCatalogScreen() {
     }, 250);
 
     return () => clearTimeout(timeout);
-  }, [query, session]);
+  }, [query, accessToken]);
 
   useEffect(() => {
-    if (!session) return;
-    void engagementApi.getFavorites(session.accessToken)
+    if (!accessToken) return;
+    void engagementApi.getFavorites(accessToken)
       .then((favorites) => setFavoriteIds(favorites.map((favorite) => favorite.foodId)))
       .catch(() => undefined);
-  }, [session]);
+  }, [accessToken]);
 
-  if (!session) return null;
+  if (!session || !accessToken) return null;
 
   async function toggleFavorite(foodId: string) {
+    if (!accessToken) return;
     setError(null);
     try {
       const favorites = favoriteIds.includes(foodId)
-        ? await engagementApi.removeFavorite(session.accessToken, foodId)
-        : await engagementApi.addFavorite(session.accessToken, foodId);
+        ? await engagementApi.removeFavorite(accessToken, foodId)
+        : await engagementApi.addFavorite(accessToken, foodId);
       setFavoriteIds(favorites.map((favorite) => favorite.foodId));
     } catch (cause) {
       setError(toUserFacingError(cause, 'No fue posible actualizar favoritos.'));
