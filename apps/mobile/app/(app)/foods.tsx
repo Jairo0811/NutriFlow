@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { engagementApi } from '../../src/features/engagement/api';
 import { foodCatalogApi, type Food } from '../../src/features/foods/api';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
 export default function FoodCatalogScreen() {
   const { session } = useAuth();
@@ -23,7 +24,7 @@ export default function FoodCatalogScreen() {
       setError(null);
       void foodCatalogApi.search(accessToken, query)
         .then(setFoods)
-        .catch((cause) => setError(cause instanceof Error ? cause.message : 'No fue posible cargar el catálogo.'))
+        .catch((cause) => setError(toUserFacingError(cause, 'No fue posible cargar el catálogo.')))
         .finally(() => setLoading(false));
     }, 250);
 
@@ -40,13 +41,14 @@ export default function FoodCatalogScreen() {
   if (!session) return null;
 
   async function toggleFavorite(foodId: string) {
+    setError(null);
     try {
       const favorites = favoriteIds.includes(foodId)
-        ? await engagementApi.removeFavorite(session!.accessToken, foodId)
-        : await engagementApi.addFavorite(session!.accessToken, foodId);
+        ? await engagementApi.removeFavorite(session.accessToken, foodId)
+        : await engagementApi.addFavorite(session.accessToken, foodId);
       setFavoriteIds(favorites.map((favorite) => favorite.foodId));
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible actualizar favoritos.');
+      setError(toUserFacingError(cause, 'No fue posible actualizar favoritos.'));
     }
   }
 
@@ -54,7 +56,7 @@ export default function FoodCatalogScreen() {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 4 + 13</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · ALIMENTOS</Text>
         <Text style={styles.title}>Catálogo de alimentos</Text>
         <Text style={styles.subtitle}>Busca alimentos por nombre, marca o código de barras. Guarda tus preferidos para reutilizarlos en recetas y accesos rápidos.</Text>
 
@@ -72,7 +74,7 @@ export default function FoodCatalogScreen() {
         {!loading && !error && foods.length === 0 && (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyTitle}>Aún no hay resultados</Text>
-            <Text style={styles.helper}>El catálogo puede poblarse mediante la API con alimentos estructurados. La integración con fuentes externas se mantiene desacoplada.</Text>
+            <Text style={styles.helper}>Prueba con otro nombre, marca o registra alimentos en el catálogo.</Text>
           </View>
         )}
 
