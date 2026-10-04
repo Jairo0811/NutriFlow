@@ -40,11 +40,11 @@ export default function AuthenticatedLayout() {
     return () => {
       mounted = false;
     };
-  }, [session?.accessToken, segments.join('/')]);
+  }, [session?.accessToken]);
 
   if (!isLoading && !session) return <Redirect href="/login" />;
 
-  if (isLoading || checkingProfile) {
+  if (isLoading || checkingProfile || (session && profileCompleted === null && !error)) {
     return (
       <View style={styles.loading}>
         <ActivityIndicator color="#62E62C" size="large" />
