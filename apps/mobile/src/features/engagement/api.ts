@@ -1,3 +1,5 @@
+import { toUserFacingError } from '../shared/errors';
+
 const apiUrl = (process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:5000').replace(/\/$/, '');
 
 export type WaterEntry = {
@@ -68,18 +70,24 @@ export type CreateRecipeInput = {
 };
 
 async function request<T>(path: string, accessToken: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${apiUrl}${path}`, {
-    ...init,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-      ...init?.headers,
-    },
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${apiUrl}${path}`, {
+      ...init,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        ...init?.headers,
+      },
+    });
+  } catch (cause) {
+    throw new Error(toUserFacingError(cause, 'No pudimos conectar con NutriFlow.'));
+  }
 
   if (!response.ok) {
     const problem = await response.json().catch(() => null) as { error?: string; detail?: string; title?: string } | null;
-    throw new Error(problem?.error ?? problem?.detail ?? problem?.title ?? 'No fue posible actualizar tus hábitos.');
+    const rawMessage = problem?.error ?? problem?.detail ?? problem?.title ?? 'No fue posible actualizar tus hábitos.';
+    throw new Error(toUserFacingError(new Error(rawMessage), 'No fue posible actualizar tus hábitos.'));
   }
 
   if (response.status === 204) return undefined as T;
