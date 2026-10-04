@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { getDailyDashboard, type DailyDashboard, type MacroProgress } from '../../src/features/dashboard/api';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -15,9 +16,10 @@ export default function DashboardScreen() {
 
   useEffect(() => {
     if (!session?.accessToken) return;
+    setError(null);
     getDailyDashboard(session.accessToken, today)
       .then(setData)
-      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No fue posible cargar el dashboard.'));
+      .catch((cause) => setError(toUserFacingError(cause, 'No fue posible cargar tu resumen nutricional.')));
   }, [session?.accessToken]);
 
   if (!session) return null;
@@ -33,7 +35,7 @@ export default function DashboardScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 6</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · HOY</Text>
         <Text style={styles.title}>Tu día nutricional</Text>
         <Text style={styles.subtitle}>{today} · objetivos y consumo en una sola vista.</Text>
 

@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { progressApi, type ProgressSummary } from '../../src/features/progress/api';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -18,9 +19,10 @@ export default function ProgressScreen() {
 
   useEffect(() => {
     if (!accessToken) return;
+    setError(null);
     progressApi.get(accessToken)
       .then(setSummary)
-      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No fue posible cargar tu progreso.'));
+      .catch((cause) => setError(toUserFacingError(cause, 'No fue posible cargar tu progreso.')));
   }, [accessToken]);
 
   const chartMax = useMemo(() => Math.max(...(summary?.entries.map((entry) => entry.weightPounds) ?? [1])), [summary]);
@@ -42,7 +44,7 @@ export default function ProgressScreen() {
       setWeight('');
       setNote('');
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible guardar el peso.');
+      setError(toUserFacingError(cause, 'No fue posible guardar el peso.'));
     } finally {
       setSaving(false);
     }
@@ -50,24 +52,27 @@ export default function ProgressScreen() {
 
   async function removeWeight(date: string) {
     if (!accessToken) return;
+    setError(null);
     try {
       setSummary(await progressApi.removeWeight(accessToken, date));
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible eliminar el registro.');
+      setError(toUserFacingError(cause, 'No fue posible eliminar el registro.'));
     }
   }
+
+  const formatPounds = (value?: number | null) => value == null ? '—' : `${value} lb`;
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 8</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · PROGRESO</Text>
         <Text style={styles.title}>Tu progreso</Text>
         <Text style={styles.subtitle}>Registra tu peso en libras y observa la tendencia hacia tu objetivo.</Text>
 
         <View style={styles.summaryRow}>
-          <View style={styles.summaryCard}><Text style={styles.label}>Actual</Text><Text style={styles.value}>{summary?.currentWeightPounds ?? '—'} lb</Text></View>
-          <View style={styles.summaryCard}><Text style={styles.label}>Objetivo</Text><Text style={styles.value}>{summary?.targetWeightPounds ?? '—'} lb</Text></View>
-          <View style={styles.summaryCard}><Text style={styles.label}>Cambio</Text><Text style={styles.value}>{summary?.changePounds ?? '—'} lb</Text></View>
+          <View style={styles.summaryCard}><Text style={styles.label}>Actual</Text><Text style={styles.value}>{formatPounds(summary?.currentWeightPounds)}</Text></View>
+          <View style={styles.summaryCard}><Text style={styles.label}>Objetivo</Text><Text style={styles.value}>{formatPounds(summary?.targetWeightPounds)}</Text></View>
+          <View style={styles.summaryCard}><Text style={styles.label}>Cambio</Text><Text style={styles.value}>{formatPounds(summary?.changePounds)}</Text></View>
         </View>
 
         <Text style={styles.sectionTitle}>Registrar peso de hoy</Text>

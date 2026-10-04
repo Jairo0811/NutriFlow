@@ -2,8 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NutriFlow.Application.Abstractions;
+using NutriFlow.Application.Ai;
 using NutriFlow.Application.Billing;
 using NutriFlow.Application.Engagement;
+using NutriFlow.Infrastructure.Ai;
 using NutriFlow.Infrastructure.Persistence;
 using NutriFlow.Infrastructure.Persistence.Repositories;
 using NutriFlow.Infrastructure.Security;
@@ -35,6 +37,7 @@ public static class DependencyInjection
         services.AddSingleton<IOpaqueTokenGenerator, OpaqueTokenGenerator>();
         services.AddSingleton<IAccessTokenIssuer, JwtTokenIssuer>();
         services.AddSingleton<IGoogleIdentityVerifier, GoogleIdentityVerifier>();
+        services.AddSingleton<INutritionAiProvider, OpenAiNutritionProvider>();
 
         return services;
     }

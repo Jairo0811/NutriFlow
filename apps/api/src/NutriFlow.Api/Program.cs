@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NutriFlow.Api.Endpoints;
 using NutriFlow.Application.Abstractions;
+using NutriFlow.Application.Ai;
 using NutriFlow.Application.Analytics;
 using NutriFlow.Application.Billing;
 using NutriFlow.Application.Dashboard;
@@ -43,6 +44,7 @@ builder.Services.AddScoped<IProgressService, ProgressService>();
 builder.Services.AddScoped<IFoodCompatibilityService, FoodCompatibilityService>();
 builder.Services.AddScoped<IEngagementService, EngagementService>();
 builder.Services.AddScoped<IPremiumAnalyticsService, PremiumAnalyticsService>();
+builder.Services.AddScoped<INutriFlowAiService, NutriFlowAiService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
@@ -139,12 +141,13 @@ app.MapProgressEndpoints();
 app.MapPreferenceEndpoints();
 app.MapEngagementEndpoints();
 app.MapAnalyticsEndpoints();
+app.MapAiEndpoints();
 
 app.MapGet("/", () => Results.Ok(new
 {
     name = "NutriFlow API",
     status = "running",
-    version = "1.3.0-dev"
+    version = "1.4.0-dev"
 }));
 
 app.Run();

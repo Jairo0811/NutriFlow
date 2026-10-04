@@ -21,7 +21,9 @@ export type NutritionProfile = {
   isCompleted: boolean;
 };
 
-async function request<T>(path: string, accessToken: string, init?: RequestInit): Promise<T> {
+async function request<T>(path: string, accessToken: string | undefined, init?: RequestInit): Promise<T> {
+  if (!accessToken) throw new Error('Tu sesión no está disponible. Inicia sesión nuevamente.');
+
   const response = await fetch(`${apiUrl}${path}`, {
     ...init,
     headers: {
@@ -33,23 +35,23 @@ async function request<T>(path: string, accessToken: string, init?: RequestInit)
 
   if (!response.ok) {
     const problem = await response.json().catch(() => null) as { error?: string; detail?: string; title?: string } | null;
-    throw new Error(problem?.error ?? problem?.detail ?? problem?.title ?? 'No fue posible guardar el onboarding.');
+    throw new Error(problem?.error ?? problem?.detail ?? problem?.title ?? 'No fue posible guardar tu perfil nutricional.');
   }
 
   return response.json() as Promise<T>;
 }
 
 export const onboardingApi = {
-  get: (accessToken: string) => request<NutritionProfile>('/api/onboarding/', accessToken),
-  savePhysicalProfile: (accessToken: string, data: { dateOfBirth: string; biologicalSex: BiologicalSex; heightFeet: number; heightInches: number; currentWeightPounds: number }) =>
+  get: (accessToken: string | undefined) => request<NutritionProfile>('/api/onboarding/', accessToken),
+  savePhysicalProfile: (accessToken: string | undefined, data: { dateOfBirth: string; biologicalSex: BiologicalSex; heightFeet: number; heightInches: number; currentWeightPounds: number }) =>
     request<NutritionProfile>('/api/onboarding/physical-profile', accessToken, { method: 'PUT', body: JSON.stringify(data) }),
-  saveActivity: (accessToken: string, activityLevel: ActivityLevel) =>
+  saveActivity: (accessToken: string | undefined, activityLevel: ActivityLevel) =>
     request<NutritionProfile>('/api/onboarding/activity', accessToken, { method: 'PUT', body: JSON.stringify({ activityLevel }) }),
-  saveGoal: (accessToken: string, goalType: NutritionGoalType, targetWeightPounds: number | null) =>
+  saveGoal: (accessToken: string | undefined, goalType: NutritionGoalType, targetWeightPounds: number | null) =>
     request<NutritionProfile>('/api/onboarding/goal', accessToken, { method: 'PUT', body: JSON.stringify({ goalType, targetWeightPounds }) }),
-  savePreferences: (accessToken: string, codes: FoodPreferenceCode[]) =>
+  savePreferences: (accessToken: string | undefined, codes: FoodPreferenceCode[]) =>
     request<NutritionProfile>('/api/onboarding/preferences', accessToken, { method: 'PUT', body: JSON.stringify({ codes }) }),
-  saveRestrictions: (accessToken: string, codes: DietaryRestrictionCode[]) =>
+  saveRestrictions: (accessToken: string | undefined, codes: DietaryRestrictionCode[]) =>
     request<NutritionProfile>('/api/onboarding/restrictions', accessToken, { method: 'PUT', body: JSON.stringify({ codes }) }),
-  complete: (accessToken: string) => request<NutritionProfile>('/api/onboarding/complete', accessToken, { method: 'POST' }),
+  complete: (accessToken: string | undefined) => request<NutritionProfile>('/api/onboarding/complete', accessToken, { method: 'POST' }),
 };
