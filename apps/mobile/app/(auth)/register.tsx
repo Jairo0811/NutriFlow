@@ -6,6 +6,7 @@ import { useAuth } from '../../src/features/auth/AuthProvider';
 import { AuthButton } from '../../src/features/auth/components/AuthButton';
 import { AuthField } from '../../src/features/auth/components/AuthField';
 import { AuthScaffold } from '../../src/features/auth/components/AuthScaffold';
+import { toUserFacingError } from '../../src/features/shared/errors';
 
 export default function RegisterScreen() {
   const { register } = useAuth();
@@ -23,7 +24,7 @@ export default function RegisterScreen() {
       await register({ displayName, email, password });
       router.replace('/(app)');
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'No fue posible crear la cuenta.');
+      setError(toUserFacingError(caught, 'No fue posible crear la cuenta.'));
     } finally {
       setLoading(false);
     }
