@@ -12,7 +12,7 @@ export default function AuthenticatedHomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · v1.4 DEV</Text>
+        <Text style={styles.eyebrow}>NUTRIFLOW · v1.4</Text>
         <Text style={styles.title}>Hola, {session?.displayName ?? 'NutriFlow'}</Text>
         <Text style={styles.subtitle}>
           Controla tu nutrición, construye hábitos, analiza tendencias y usa asistencia inteligente desde un solo lugar.
@@ -54,7 +54,7 @@ export default function AuthenticatedHomeScreen() {
           <Text style={styles.secondaryText}>Objetivos nutricionales</Text>
         </Pressable>
         <Pressable onPress={() => router.push('/onboarding')} style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>Editar perfil nutricional</Text>
+          <Text style={styles.secondaryText}>Perfil nutricional</Text>
         </Pressable>
         <Pressable onPress={() => void logout()} style={styles.logoutButton}>
           <Text style={styles.logoutText}>Cerrar sesión</Text>
