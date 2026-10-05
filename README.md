@@ -108,9 +108,16 @@ Cuotas configuradas:
 
 ---
 
-## Stack tecnológico
+## 🧱 Stack tecnológico
 
-### Mobile
+### 📱 Mobile / Frontend
+
+<p>
+  <img src="https://skillicons.dev/icons?i=react,ts" alt="React Native y TypeScript" />
+  <img src="https://img.shields.io/badge/Expo-SDK%2057-000020?style=flat-square&logo=expo&logoColor=white" alt="Expo SDK 57" />
+  <img src="https://img.shields.io/badge/Expo%20Router-Navegación-000020?style=flat-square&logo=expo&logoColor=white" alt="Expo Router" />
+  <img src="https://img.shields.io/badge/EAS-Build-4630EB?style=flat-square&logo=expo&logoColor=white" alt="EAS Build" />
+</p>
 
 | Área | Tecnología |
 |---|---|
@@ -124,7 +131,14 @@ Cuotas configuradas:
 | Iconos | `@expo/vector-icons` |
 | Builds | EAS Build |
 
-### Backend
+### ⚙️ Backend / API
+
+<p>
+  <img src="https://skillicons.dev/icons?i=cs,dotnet" alt="C# y .NET" />
+  <img src="https://img.shields.io/badge/ASP.NET%20Core-Web%20API-512BD4?style=flat-square&logo=dotnet&logoColor=white" alt="ASP.NET Core Web API" />
+  <img src="https://img.shields.io/badge/EF%20Core-Persistencia-512BD4?style=flat-square&logo=dotnet&logoColor=white" alt="Entity Framework Core" />
+  <img src="https://img.shields.io/badge/OpenAPI-Contrato%20HTTP-85EA2D?style=flat-square&logo=swagger&logoColor=black" alt="OpenAPI" />
+</p>
 
 | Área | Tecnología |
 |---|---|
@@ -136,14 +150,45 @@ Cuotas configuradas:
 | IA | OpenAI Responses API vía proveedor server-side |
 | Contrato HTTP | OpenAPI |
 
-### Datos e infraestructura
+### 🤖 IA e integraciones
+
+<p>
+  <img src="https://img.shields.io/badge/OpenAI-Responses%20API-412991?style=flat-square&logo=openai&logoColor=white" alt="OpenAI Responses API" />
+  <img src="https://img.shields.io/badge/JWT-Authentication-000000?style=flat-square&logo=jsonwebtokens&logoColor=white" alt="JWT" />
+  <img src="https://img.shields.io/badge/Google-OAuth-4285F4?style=flat-square&logo=google&logoColor=white" alt="Google OAuth" />
+</p>
+
+- OpenAI Responses API integrada exclusivamente desde el backend;
+- AI Coach, Meal Photo y Voice Logging;
+- Google authentication con validación server-side;
+- JWT + refresh tokens rotativos;
+- feature gates y cuotas de uso por plan.
+
+### 🗄️ Datos
+
+<p>
+  <img src="https://skillicons.dev/icons?i=postgres" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Npgsql-EF%20Core-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="Npgsql" />
+</p>
 
 - PostgreSQL 17;
+- Entity Framework Core + Npgsql;
+- migraciones EF Core;
+- persistencia de identidad, nutrición, comidas, progreso, engagement, analytics, micronutrientes y cuotas.
+
+### 🧰 Infraestructura, builds y CI
+
+<p>
+  <img src="https://skillicons.dev/icons?i=docker,git,github,githubactions" alt="Docker, Git, GitHub y GitHub Actions" />
+  <img src="https://img.shields.io/badge/Docker%20Compose-Orquestación-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker Compose" />
+  <img src="https://img.shields.io/badge/EAS-Mobile%20Builds-4630EB?style=flat-square&logo=expo&logoColor=white" alt="EAS mobile builds" />
+</p>
+
 - Docker Compose;
 - Git + GitHub;
 - GitHub Actions;
-- configuración por variables de entorno;
-- EAS para builds móviles.
+- configuración mediante variables de entorno;
+- EAS `preview` y `production` para builds móviles.
 
 ---
 
