@@ -51,7 +51,7 @@ export default function BarcodeScannerScreen() {
 
   if (!permission?.granted) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
         <View style={styles.center}>
           <Text style={styles.title}>Escanea tus alimentos</Text>
           <Text style={styles.subtitle}>NutriFlow necesita acceso a la cámara para leer códigos de barras.</Text>
@@ -64,7 +64,7 @@ export default function BarcodeScannerScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <View style={styles.container}>
         <Text style={styles.eyebrow}>NUTRIFLOW · ESCÁNER</Text>
         <Text style={styles.title}>Escanea tus alimentos</Text>

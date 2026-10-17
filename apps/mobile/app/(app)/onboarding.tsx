@@ -189,7 +189,7 @@ export default function NutritionalOnboardingScreen() {
 
   if (initializing) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator color="#62E62C" size="large" />
           <Text style={styles.helper}>Cargando tu perfil…</Text>
@@ -199,7 +199,7 @@ export default function NutritionalOnboardingScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         <View style={styles.headerRow}>
           <Pressable disabled={step === 1 || saving} onPress={() => setStep((current) => Math.max(1, current - 1))}>

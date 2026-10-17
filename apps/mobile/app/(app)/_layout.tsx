@@ -1,13 +1,13 @@
 import { Redirect, Stack, useSegments } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { onboardingApi } from '../../src/features/onboarding/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
 
 export default function AuthenticatedLayout() {
-  const { session, isLoading } = useAuth();
+  const { session, isLoading, logout } = useAuth();
   const segments = useSegments();
   const isOnboardingRoute = segments.includes('onboarding');
   const wasOnboardingRoute = useRef(isOnboardingRoute);
@@ -64,6 +64,12 @@ export default function AuthenticatedLayout() {
     return (
       <View style={styles.loading}>
         <Text style={styles.error}>{error}</Text>
+        <Pressable accessibilityRole="button" onPress={() => void refreshProfile()} style={styles.retryButton}>
+          <Text style={styles.retryText}>Reintentar</Text>
+        </Pressable>
+        <Pressable accessibilityRole="button" onPress={() => void logout()} style={styles.logoutButton}>
+          <Text style={styles.logoutText}>Cerrar sesión</Text>
+        </Pressable>
       </View>
     );
   }
@@ -72,7 +78,21 @@ export default function AuthenticatedLayout() {
     return <Redirect href="/onboarding" />;
   }
 
-  return <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#07110B' } }} />;
+  return (
+    <Stack
+      screenOptions={{
+        contentStyle: { backgroundColor: '#07110B' },
+        headerBackButtonDisplayMode: 'minimal',
+        headerShadowVisible: false,
+        headerStyle: { backgroundColor: '#07110B' },
+        headerTintColor: '#62E62C',
+        headerTitle: '',
+      }}
+    >
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="onboarding" options={{ gestureEnabled: false, headerBackVisible: false }} />
+    </Stack>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -85,4 +105,8 @@ const styles = StyleSheet.create({
   },
   loadingText: { color: '#95A59B', marginTop: 12 },
   error: { color: '#FF8E8E', lineHeight: 22, textAlign: 'center' },
+  retryButton: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 20, minHeight: 52, justifyContent: 'center', paddingHorizontal: 32 },
+  retryText: { color: '#07110B', fontSize: 16, fontWeight: '800' },
+  logoutButton: { alignItems: 'center', marginTop: 8, minHeight: 48, justifyContent: 'center', paddingHorizontal: 24 },
+  logoutText: { color: '#DDE5DF', fontSize: 15, fontWeight: '700' },
 });

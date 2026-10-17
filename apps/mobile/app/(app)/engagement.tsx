@@ -97,7 +97,7 @@ export default function EngagementScreen() {
   const water = overview?.water;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
         <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
         <Text style={styles.eyebrow}>NUTRIFLOW · FASE 13</Text>

@@ -5,11 +5,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { progressApi, type ProgressSummary } from '../../src/features/progress/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
-
-const today = new Date().toISOString().slice(0, 10);
+import { useToday } from '../../src/features/shared/dates';
 
 export default function ProgressScreen() {
   const { session } = useAuth();
+  const today = useToday();
   const accessToken = session?.accessToken;
   const [summary, setSummary] = useState<ProgressSummary | null>(null);
   const [weight, setWeight] = useState('');
@@ -63,7 +63,7 @@ export default function ProgressScreen() {
   const formatPounds = (value?: number | null) => value == null ? '—' : `${value} lb`;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.eyebrow}>NUTRIFLOW · PROGRESO</Text>
         <Text style={styles.title}>Tu progreso</Text>

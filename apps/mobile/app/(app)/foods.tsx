@@ -54,7 +54,7 @@ export default function FoodCatalogScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
         <Text style={styles.eyebrow}>NUTRIFLOW · ALIMENTOS</Text>

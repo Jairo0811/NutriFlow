@@ -52,7 +52,7 @@ export default function PremiumAnalyticsScreen() {
   if (!session) return null;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
         <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
         <Text style={styles.eyebrow}>NUTRIFLOW PREMIUM · v1.3</Text>

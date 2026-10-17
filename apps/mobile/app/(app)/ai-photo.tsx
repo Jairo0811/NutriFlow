@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { AiApiError, aiApi, type AiFoodProposal, type MealType } from '../../src/features/ai/api';
+import { localDate } from '../../src/features/shared/dates';
 
 const mealTypes: MealType[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
 
@@ -32,7 +33,7 @@ export default function AiMealPhotoScreen() {
 
   if (enabled === false) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
         <View style={styles.center}>
           <Text style={styles.eyebrow}>NUTRIFLOW · PREMIUM</Text>
           <Text style={styles.title}>Meal Photo AI</Text>
@@ -45,7 +46,7 @@ export default function AiMealPhotoScreen() {
 
   if (!permission?.granted) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
         <View style={styles.center}>
           <Text style={styles.title}>Meal Photo AI</Text>
           <Text style={styles.subtitle}>NutriFlow necesita acceso a la cámara para analizar tu plato.</Text>
@@ -91,7 +92,7 @@ export default function AiMealPhotoScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
         <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
         <Text style={styles.eyebrow}>NUTRIFLOW · MEAL PHOTO AI</Text>
@@ -144,12 +145,6 @@ function errorMessage(error: unknown) {
   return error instanceof Error ? error.message : 'No fue posible analizar la foto.';
 }
 
-function localDate(date: Date) {
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  const day = `${date.getDate()}`.padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#07110B' },

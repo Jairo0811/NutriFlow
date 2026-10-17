@@ -76,7 +76,7 @@ export default function PreferencesScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.eyebrow}>NUTRIFLOW · SEGURIDAD ALIMENTARIA</Text>
         <Text style={styles.title}>Alergias y preferencias</Text>

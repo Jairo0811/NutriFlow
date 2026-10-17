@@ -33,7 +33,7 @@ export default function NutritionTargetsScreen() {
   if (!isLoading && !session) return <Redirect href="/login" />;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.eyebrow}>NUTRIFLOW · PLAN NUTRICIONAL</Text>
         <Text style={styles.title}>Tus objetivos diarios</Text>

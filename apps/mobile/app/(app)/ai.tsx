@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { AiApiError, aiApi, type AiFoodProposal, type AiStatus, type MealType } from '../../src/features/ai/api';
+import { localDate } from '../../src/features/shared/dates';
 
 const mealTypes: MealType[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
 
@@ -83,7 +84,7 @@ export default function NutriFlowAiScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
         <Text style={styles.eyebrow}>NUTRIFLOW · AI</Text>
@@ -217,12 +218,6 @@ function errorMessage(error: unknown) {
   return 'NutriFlow AI no pudo completar la solicitud.';
 }
 
-function localDate(date: Date) {
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  const day = `${date.getDate()}`.padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#07110B' },

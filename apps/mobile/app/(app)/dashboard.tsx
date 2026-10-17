@@ -6,11 +6,11 @@ import { router } from 'expo-router';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { getDailyDashboard, type DailyDashboard, type MacroProgress } from '../../src/features/dashboard/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
-
-const today = new Date().toISOString().slice(0, 10);
+import { formatLongDate, useToday } from '../../src/features/shared/dates';
 
 export default function DashboardScreen() {
   const { session } = useAuth();
+  const today = useToday();
   const [data, setData] = useState<DailyDashboard | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +20,7 @@ export default function DashboardScreen() {
     getDailyDashboard(session.accessToken, today)
       .then(setData)
       .catch((cause) => setError(toUserFacingError(cause, 'No fue posible cargar tu resumen nutricional.')));
-  }, [session?.accessToken]);
+  }, [session?.accessToken, today]);
 
   if (!session) return null;
 
@@ -33,11 +33,11 @@ export default function DashboardScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.eyebrow}>NUTRIFLOW · HOY</Text>
         <Text style={styles.title}>Tu día nutricional</Text>
-        <Text style={styles.subtitle}>{today} · objetivos y consumo en una sola vista.</Text>
+        <Text style={styles.subtitle}>{formatLongDate(today)} · objetivos y consumo en una sola vista.</Text>
 
         <View style={styles.hero}>
           <Text style={styles.heroLabel}>Calorías restantes</Text>
