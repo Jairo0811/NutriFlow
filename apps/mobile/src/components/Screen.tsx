@@ -5,6 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, spacing, typography } from '../theme';
 
 type Props = PropsWithChildren<{
+  /** Contenido sobre el eyebrow (p. ej. barra de pasos). */
+  header?: ReactNode;
   eyebrow?: string;
   title?: string;
   subtitle?: string;
@@ -22,7 +24,7 @@ type Props = PropsWithChildren<{
  * Las pantallas dentro de `(app)` ya tienen encabezado nativo con botón de volver,
  * por eso solo se respetan los bordes inferior/laterales.
  */
-export function Screen({ eyebrow, title, subtitle, onRefresh, refreshing = false, footer, withTopInset = false, children }: Props) {
+export function Screen({ header, eyebrow, title, subtitle, onRefresh, refreshing = false, footer, withTopInset = false, children }: Props) {
   return (
     <SafeAreaView edges={withTopInset ? ['top', 'bottom', 'left', 'right'] : ['bottom', 'left', 'right']} style={styles.safeArea}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
@@ -33,6 +35,7 @@ export function Screen({ eyebrow, title, subtitle, onRefresh, refreshing = false
             ? <RefreshControl colors={[colors.primary]} onRefresh={() => void onRefresh()} refreshing={refreshing} tintColor={colors.primary} />
             : undefined}
         >
+          {header}
           {eyebrow ? <Text style={typography.eyebrow}>{eyebrow}</Text> : null}
           {title ? <Text accessibilityRole="header" style={[typography.title, styles.title]}>{title}</Text> : null}
           {subtitle ? <Text style={[typography.body, styles.subtitle]}>{subtitle}</Text> : null}

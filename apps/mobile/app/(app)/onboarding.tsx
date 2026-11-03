@@ -1,8 +1,13 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { Button } from '../../src/components/Button';
+import { Chip } from '../../src/components/Chip';
+import { DateField } from '../../src/components/DateField';
+import { Input } from '../../src/components/Input';
+import { ProgressBar } from '../../src/components/ProgressBar';
+import { Screen } from '../../src/components/Screen';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import {
   onboardingApi,
@@ -13,8 +18,9 @@ import {
   type NutritionGoalType,
   type NutritionProfile,
 } from '../../src/features/onboarding/api';
+import { isValidPastDate } from '../../src/features/shared/dateValidation';
 import { toUserFacingError } from '../../src/features/shared/errors';
-import { colors } from '../../src/theme';
+import { colors, radius, spacing, typography } from '../../src/theme';
 
 const activities: { value: ActivityLevel; title: string; detail: string }[] = [
   { value: 'Sedentary', title: 'Sedentaria', detail: 'Nada o poco ejercicio' },
@@ -49,6 +55,14 @@ const restrictions: { value: DietaryRestrictionCode; title: string; detail: stri
   { value: 'soy', title: 'Soya', detail: 'Evitar soya y productos derivados.' },
   { value: 'sesame', title: 'Sésamo', detail: 'Evitar sésamo y productos derivados.' },
 ];
+
+const stepMeta: Record<number, { eyebrow: string; title: string; subtitle: string }> = {
+  1: { eyebrow: 'SOBRE TI', title: 'Tus medidas', subtitle: 'Usaremos pies, pulgadas y libras para personalizar tus objetivos nutricionales.' },
+  2: { eyebrow: 'ACTIVIDAD FÍSICA', title: '¿Cuánto te mueves?', subtitle: 'Selecciona el nivel que mejor represente tu actividad habitual.' },
+  3: { eyebrow: 'OBJETIVO', title: '¿Qué quieres lograr?', subtitle: 'Tu objetivo se usará para calcular calorías y macronutrientes diarios.' },
+  4: { eyebrow: 'ALIMENTOS', title: '¿Qué deseas incluir?', subtitle: 'Estas preferencias ayudan a personalizar tu experiencia y futuras recomendaciones.' },
+  5: { eyebrow: 'SEGURIDAD ALIMENTARIA', title: '¿Qué debemos evitar?', subtitle: 'Selecciona alergias o restricciones. NutriFlow nunca bloquea estas advertencias por suscripción.' },
+};
 
 function nextStepFor(profile: NutritionProfile): number {
   if (!profile.dateOfBirth || !profile.biologicalSex || profile.heightFeet == null || profile.heightInches == null || profile.currentWeightPounds == null) return 1;
@@ -125,9 +139,8 @@ export default function NutritionalOnboardingScreen() {
 
   function validateCurrentStep(): string | null {
     if (step === 1) {
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOfBirth)) return 'Ingresa tu fecha de nacimiento con el formato AAAA-MM-DD.';
-      const birth = new Date(`${dateOfBirth}T00:00:00`);
-      if (Number.isNaN(birth.getTime()) || birth >= new Date()) return 'Ingresa una fecha de nacimiento válida.';
+      if (!dateOfBirth) return 'Ingresa tu fecha de nacimiento completa: día, mes y año.';
+      if (!isValidPastDate(dateOfBirth)) return 'Ingresa una fecha de nacimiento válida.';
 
       const feet = Number(heightFeet);
       const inches = Number(heightInches);
@@ -188,140 +201,150 @@ export default function NutritionalOnboardingScreen() {
     }
   }
 
+  const meta = stepMeta[step];
+
   if (initializing) {
     return (
-      <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator color={colors.primary} size="large" />
-          <Text style={styles.helper}>Cargando tu perfil…</Text>
-        </View>
-      </SafeAreaView>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator color={colors.primary} size="large" />
+        <Text style={typography.caption}>Cargando tu perfil…</Text>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <View style={styles.headerRow}>
-          <Pressable disabled={step === 1 || saving} onPress={() => setStep((current) => Math.max(1, current - 1))}>
-            <Text style={[styles.back, step === 1 && styles.muted]}>Atrás</Text>
-          </Pressable>
-          <Text style={styles.progress}>Paso {step} de 5</Text>
+    <Screen
+      eyebrow={meta.eyebrow}
+      footer={(
+        <View style={styles.footer}>
+          {error ? <Text accessibilityLiveRegion="polite" style={styles.error}>{error}</Text> : null}
+          <Button
+            label={step === 5 ? 'Finalizar configuración' : 'Continuar'}
+            loading={saving}
+            onPress={() => void continueFlow()}
+          />
         </View>
-
-        <View style={styles.progressTrack}>
-          <View style={[styles.progressFill, { width: `${step * 20}%` }]} />
+      )}
+      header={(
+        <View style={styles.stepHeader}>
+          <View style={styles.headerRow}>
+            <Pressable
+              accessibilityLabel="Paso anterior"
+              accessibilityRole="button"
+              accessibilityState={{ disabled: step === 1 || saving }}
+              disabled={step === 1 || saving}
+              hitSlop={12}
+              onPress={() => { setError(null); setStep((current) => Math.max(1, current - 1)); }}
+            >
+              <Text style={[styles.back, step === 1 && styles.muted]}>Atrás</Text>
+            </Pressable>
+            <Text style={styles.progress}>Paso {step} de 5</Text>
+          </View>
+          <ProgressBar percent={step * 20} />
         </View>
-
+      )}
+      subtitle={meta.subtitle}
+      title={meta.title}
+    >
+      <View style={styles.body}>
         {step === 1 && (
           <>
-            <Text style={styles.eyebrow}>SOBRE TI</Text>
-            <Text style={styles.title}>Tus medidas</Text>
-            <Text style={styles.subtitle}>Usaremos pies, pulgadas y libras para personalizar tus objetivos nutricionales.</Text>
+            <DateField label="Fecha de nacimiento" onChange={setDateOfBirth} value={dateOfBirth} />
 
-            <Text style={styles.label}>Fecha de nacimiento</Text>
-            <TextInput value={dateOfBirth} onChangeText={setDateOfBirth} placeholder="AAAA-MM-DD" placeholderTextColor={colors.placeholder} style={styles.input} />
-
-            <Text style={styles.label}>Sexo para cálculo metabólico</Text>
-            <View style={styles.row}>
-              {(['Female', 'Male'] as BiologicalSex[]).map((value) => (
-                <Choice key={value} selected={sex === value} title={value === 'Female' ? 'Mujer' : 'Hombre'} onPress={() => setSex(value)} />
-              ))}
+            <View style={styles.group}>
+              <Text style={typography.label}>Sexo para cálculo metabólico</Text>
+              <View style={styles.row}>
+                {(['Female', 'Male'] as BiologicalSex[]).map((value) => (
+                  <Choice key={value} onPress={() => setSex(value)} selected={sex === value} title={value === 'Female' ? 'Mujer' : 'Hombre'} />
+                ))}
+              </View>
             </View>
 
-            <Text style={styles.label}>Altura</Text>
-            <View style={styles.row}>
-              <TextInput value={heightFeet} onChangeText={setHeightFeet} keyboardType="number-pad" style={[styles.input, styles.flex]} />
-              <Text style={styles.unit}>ft</Text>
-              <TextInput value={heightInches} onChangeText={setHeightInches} keyboardType="number-pad" style={[styles.input, styles.flex]} />
-              <Text style={styles.unit}>in</Text>
+            <View style={styles.group}>
+              <Text style={typography.label}>Altura</Text>
+              <View style={styles.row}>
+                <Input accessibilityLabel="Altura en pies" containerStyle={styles.flex} keyboardType="number-pad" maxLength={1} onChangeText={setHeightFeet} value={heightFeet} />
+                <Text style={styles.unit}>ft</Text>
+                <Input accessibilityLabel="Altura en pulgadas" containerStyle={styles.flex} keyboardType="number-pad" maxLength={2} onChangeText={setHeightInches} value={heightInches} />
+                <Text style={styles.unit}>in</Text>
+              </View>
             </View>
 
-            <Text style={styles.label}>Peso actual</Text>
-            <View style={styles.row}>
-              <TextInput value={weight} onChangeText={setWeight} keyboardType="decimal-pad" placeholder="220" placeholderTextColor={colors.placeholder} style={[styles.input, styles.flex]} />
-              <Text style={styles.unit}>lb</Text>
+            <View style={styles.group}>
+              <Text style={typography.label}>Peso actual</Text>
+              <View style={styles.row}>
+                <Input accessibilityLabel="Peso actual en libras" containerStyle={styles.flex} keyboardType="decimal-pad" onChangeText={setWeight} placeholder="220" value={weight} />
+                <Text style={styles.unit}>lb</Text>
+              </View>
             </View>
           </>
         )}
 
-        {step === 2 && (
-          <>
-            <Text style={styles.eyebrow}>ACTIVIDAD FÍSICA</Text>
-            <Text style={styles.title}>¿Cuánto te mueves?</Text>
-            <Text style={styles.subtitle}>Selecciona el nivel que mejor represente tu actividad habitual.</Text>
-            {activities.map((item) => (
-              <SelectCard key={item.value} selected={activity === item.value} title={item.title} detail={item.detail} onPress={() => setActivity(item.value)} />
-            ))}
-          </>
-        )}
+        {step === 2 && activities.map((item) => (
+          <SelectCard detail={item.detail} key={item.value} onPress={() => setActivity(item.value)} role="radio" selected={activity === item.value} title={item.title} />
+        ))}
 
         {step === 3 && (
           <>
-            <Text style={styles.eyebrow}>OBJETIVO</Text>
-            <Text style={styles.title}>¿Qué quieres lograr?</Text>
-            <Text style={styles.subtitle}>Tu objetivo se usará para calcular calorías y macronutrientes diarios.</Text>
             {goals.map((item) => (
-              <SelectCard key={item.value} selected={goal === item.value} title={item.title} detail={item.detail} onPress={() => setGoal(item.value)} />
+              <SelectCard detail={item.detail} key={item.value} onPress={() => setGoal(item.value)} role="radio" selected={goal === item.value} title={item.title} />
             ))}
             {goal !== 'MaintainWeight' && (
-              <>
-                <Text style={styles.label}>Peso objetivo</Text>
+              <View style={styles.group}>
+                <Text style={typography.label}>Peso objetivo</Text>
                 <View style={styles.row}>
-                  <TextInput value={targetWeight} onChangeText={setTargetWeight} keyboardType="decimal-pad" placeholder="185" placeholderTextColor={colors.placeholder} style={[styles.input, styles.flex]} />
+                  <Input accessibilityLabel="Peso objetivo en libras" containerStyle={styles.flex} keyboardType="decimal-pad" onChangeText={setTargetWeight} placeholder="185" value={targetWeight} />
                   <Text style={styles.unit}>lb</Text>
                 </View>
-              </>
+              </View>
             )}
           </>
         )}
 
         {step === 4 && (
-          <>
-            <Text style={styles.eyebrow}>ALIMENTOS</Text>
-            <Text style={styles.title}>¿Qué deseas incluir?</Text>
-            <Text style={styles.subtitle}>Estas preferencias ayudan a personalizar tu experiencia y futuras recomendaciones.</Text>
-            <View style={styles.chipGrid}>
-              {foodPreferences.map((item) => (
-                <ChoiceChip key={item.value} selected={preferences.includes(item.value)} title={item.title} onPress={() => togglePreference(item.value)} />
-              ))}
-            </View>
-          </>
+          <View style={styles.chipGrid}>
+            {foodPreferences.map((item) => (
+              <Chip key={item.value} label={item.title} onPress={() => togglePreference(item.value)} selected={preferences.includes(item.value)} />
+            ))}
+          </View>
         )}
 
         {step === 5 && (
           <>
-            <Text style={styles.eyebrow}>SEGURIDAD ALIMENTARIA</Text>
-            <Text style={styles.title}>¿Qué debemos evitar?</Text>
-            <Text style={styles.subtitle}>Selecciona alergias o restricciones. NutriFlow nunca bloquea estas advertencias por suscripción.</Text>
             {restrictions.map((item) => (
-              <SelectCard key={item.value} selected={dietaryRestrictions.includes(item.value)} title={item.title} detail={item.detail} onPress={() => toggleRestriction(item.value)} />
+              <SelectCard detail={item.detail} key={item.value} onPress={() => toggleRestriction(item.value)} role="checkbox" selected={dietaryRestrictions.includes(item.value)} title={item.title} />
             ))}
-            <Text style={styles.helper}>Si ninguna aplica, puedes continuar sin seleccionar opciones.</Text>
+            <Text style={typography.caption}>Si ninguna aplica, puedes continuar sin seleccionar opciones.</Text>
           </>
         )}
-
-        {error && <Text style={styles.error}>{error}</Text>}
-
-        <Pressable disabled={saving} onPress={() => void continueFlow()} style={[styles.primaryButton, saving && styles.disabled]}>
-          <Text style={styles.primaryText}>{saving ? 'Guardando…' : step === 5 ? 'Finalizar configuración' : 'Continuar'}</Text>
-        </Pressable>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </Screen>
   );
 }
 
 function Choice({ selected, title, onPress }: { selected: boolean; title: string; onPress: () => void }) {
-  return <Pressable onPress={onPress} style={[styles.choice, selected && styles.selected]}><Text style={styles.choiceText}>{title}</Text></Pressable>;
-}
-
-function ChoiceChip({ selected, title, onPress }: { selected: boolean; title: string; onPress: () => void }) {
-  return <Pressable onPress={onPress} style={[styles.chip, selected && styles.selected]}><Text style={styles.choiceText}>{title}</Text></Pressable>;
-}
-
-function SelectCard({ selected, title, detail, onPress }: { selected: boolean; title: string; detail: string; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} style={[styles.card, selected && styles.selected]}>
+    <Pressable
+      accessibilityLabel={title}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: selected }}
+      onPress={onPress}
+      style={[styles.choice, selected && styles.selected]}
+    >
+      <Text style={styles.choiceText}>{title}</Text>
+    </Pressable>
+  );
+}
+
+function SelectCard({ selected, title, detail, role, onPress }: { selected: boolean; title: string; detail: string; role: 'radio' | 'checkbox'; onPress: () => void }) {
+  return (
+    <Pressable
+      accessibilityLabel={`${title}. ${detail}`}
+      accessibilityRole={role}
+      accessibilityState={{ checked: selected }}
+      onPress={onPress}
+      style={[styles.card, selected && styles.selected]}
+    >
       <Text style={styles.cardTitle}>{title}</Text>
       <Text style={styles.cardDetail}>{detail}</Text>
     </Pressable>
@@ -329,34 +352,24 @@ function SelectCard({ selected, title, detail, onPress }: { selected: boolean; t
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: colors.background },
-  container: { padding: 24, paddingBottom: 48 },
-  loadingContainer: { alignItems: 'center', flex: 1, justifyContent: 'center', padding: 24 },
-  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  loadingContainer: { alignItems: 'center', backgroundColor: colors.background, flex: 1, gap: spacing.md, justifyContent: 'center', padding: spacing.xl },
+  stepHeader: { gap: spacing.md + 2, marginBottom: spacing.xl + 4 },
+  headerRow: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
   back: { color: colors.textSoft, fontWeight: '700' },
   muted: { color: '#526158' },
   progress: { color: colors.textMuted, fontWeight: '700' },
-  progressTrack: { backgroundColor: '#18251D', height: 6, borderRadius: 999, marginTop: 18, overflow: 'hidden' },
-  progressFill: { backgroundColor: colors.primary, height: 6 },
-  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4, marginTop: 38 },
-  title: { color: colors.text, fontSize: 32, fontWeight: '800', marginTop: 10 },
-  subtitle: { color: colors.textSecondary, fontSize: 15, lineHeight: 23, marginTop: 10, marginBottom: 22 },
-  label: { color: colors.textSoft, fontSize: 14, fontWeight: '700', marginTop: 18, marginBottom: 8 },
-  input: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 14, color: colors.text, fontSize: 16, paddingHorizontal: 16, paddingVertical: 14 },
-  row: { flexDirection: 'row', gap: 10, alignItems: 'center' },
+  body: { gap: spacing.md, marginTop: spacing.xl },
+  group: { gap: spacing.sm },
+  row: { alignItems: 'center', flexDirection: 'row', gap: 10 },
   flex: { flex: 1 },
   unit: { color: colors.textSecondary, fontSize: 15, fontWeight: '700' },
-  choice: { flex: 1, backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 14, padding: 16, alignItems: 'center' },
-  selected: { borderColor: colors.primary, backgroundColor: colors.surfaceRaised },
+  choice: { alignItems: 'center', backgroundColor: colors.surface, borderColor: colors.borderInput, borderRadius: radius.md, borderWidth: 1, flex: 1, justifyContent: 'center', minHeight: 52, padding: spacing.lg },
+  selected: { backgroundColor: colors.surfaceRaised, borderColor: colors.primary },
   choiceText: { color: colors.text, fontWeight: '700' },
   chipGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  chip: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 12 },
-  card: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 18, padding: 18, marginBottom: 12 },
+  card: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderRadius: radius.lg, borderWidth: 1, padding: spacing.lg + 2 },
   cardTitle: { color: colors.text, fontSize: 17, fontWeight: '800' },
   cardDetail: { color: colors.textSecondary, fontSize: 14, lineHeight: 20, marginTop: 5 },
-  helper: { color: colors.textMuted, fontSize: 13, lineHeight: 19, marginTop: 8 },
-  error: { color: colors.danger, marginTop: 18, lineHeight: 20 },
-  primaryButton: { backgroundColor: colors.primary, borderRadius: 16, alignItems: 'center', paddingVertical: 17, marginTop: 28 },
-  primaryText: { color: colors.background, fontSize: 16, fontWeight: '900' },
-  disabled: { opacity: 0.6 },
+  footer: { backgroundColor: colors.background, borderTopColor: colors.border, borderTopWidth: 1, gap: spacing.sm + 2, paddingHorizontal: spacing.xl, paddingTop: spacing.md + 2, paddingBottom: spacing.sm },
+  error: { color: colors.danger, lineHeight: 20 },
 });

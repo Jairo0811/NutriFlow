@@ -1,5 +1,5 @@
 import { forwardRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View, type StyleProp, type TextInputProps, type ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { colors, minTouchSize, radius, spacing, typography } from '../theme';
@@ -7,15 +7,16 @@ import { colors, minTouchSize, radius, spacing, typography } from '../theme';
 type Props = TextInputProps & {
   label?: string;
   error?: string | null;
+  containerStyle?: StyleProp<ViewStyle>;
 };
 
 /** Campo de texto con etiqueta, mensaje de error y mostrar/ocultar para contraseñas. */
-export const Input = forwardRef<TextInput, Props>(function Input({ label, error, secureTextEntry, style, ...rest }, ref) {
+export const Input = forwardRef<TextInput, Props>(function Input({ label, error, secureTextEntry, style, containerStyle, ...rest }, ref) {
   const [hidden, setHidden] = useState(true);
   const isPassword = Boolean(secureTextEntry);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       {label ? <Text style={typography.label}>{label}</Text> : null}
       <View>
         <TextInput
