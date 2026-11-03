@@ -14,6 +14,7 @@ import {
   type NutritionProfile,
 } from '../../src/features/onboarding/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
+import { colors } from '../../src/theme';
 
 const activities: { value: ActivityLevel; title: string; detail: string }[] = [
   { value: 'Sedentary', title: 'Sedentaria', detail: 'Nada o poco ejercicio' },
@@ -191,7 +192,7 @@ export default function NutritionalOnboardingScreen() {
     return (
       <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator color="#62E62C" size="large" />
+          <ActivityIndicator color={colors.primary} size="large" />
           <Text style={styles.helper}>Cargando tu perfil…</Text>
         </View>
       </SafeAreaView>
@@ -219,7 +220,7 @@ export default function NutritionalOnboardingScreen() {
             <Text style={styles.subtitle}>Usaremos pies, pulgadas y libras para personalizar tus objetivos nutricionales.</Text>
 
             <Text style={styles.label}>Fecha de nacimiento</Text>
-            <TextInput value={dateOfBirth} onChangeText={setDateOfBirth} placeholder="AAAA-MM-DD" placeholderTextColor="#637268" style={styles.input} />
+            <TextInput value={dateOfBirth} onChangeText={setDateOfBirth} placeholder="AAAA-MM-DD" placeholderTextColor={colors.placeholder} style={styles.input} />
 
             <Text style={styles.label}>Sexo para cálculo metabólico</Text>
             <View style={styles.row}>
@@ -238,7 +239,7 @@ export default function NutritionalOnboardingScreen() {
 
             <Text style={styles.label}>Peso actual</Text>
             <View style={styles.row}>
-              <TextInput value={weight} onChangeText={setWeight} keyboardType="decimal-pad" placeholder="220" placeholderTextColor="#637268" style={[styles.input, styles.flex]} />
+              <TextInput value={weight} onChangeText={setWeight} keyboardType="decimal-pad" placeholder="220" placeholderTextColor={colors.placeholder} style={[styles.input, styles.flex]} />
               <Text style={styles.unit}>lb</Text>
             </View>
           </>
@@ -267,7 +268,7 @@ export default function NutritionalOnboardingScreen() {
               <>
                 <Text style={styles.label}>Peso objetivo</Text>
                 <View style={styles.row}>
-                  <TextInput value={targetWeight} onChangeText={setTargetWeight} keyboardType="decimal-pad" placeholder="185" placeholderTextColor="#637268" style={[styles.input, styles.flex]} />
+                  <TextInput value={targetWeight} onChangeText={setTargetWeight} keyboardType="decimal-pad" placeholder="185" placeholderTextColor={colors.placeholder} style={[styles.input, styles.flex]} />
                   <Text style={styles.unit}>lb</Text>
                 </View>
               </>
@@ -328,34 +329,34 @@ function SelectCard({ selected, title, detail, onPress }: { selected: boolean; t
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
   loadingContainer: { alignItems: 'center', flex: 1, justifyContent: 'center', padding: 24 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  back: { color: '#DDE5DF', fontWeight: '700' },
+  back: { color: colors.textSoft, fontWeight: '700' },
   muted: { color: '#526158' },
-  progress: { color: '#7E8E84', fontWeight: '700' },
+  progress: { color: colors.textMuted, fontWeight: '700' },
   progressTrack: { backgroundColor: '#18251D', height: 6, borderRadius: 999, marginTop: 18, overflow: 'hidden' },
-  progressFill: { backgroundColor: '#62E62C', height: 6 },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '800', letterSpacing: 1.4, marginTop: 38 },
-  title: { color: '#F6FAF7', fontSize: 32, fontWeight: '800', marginTop: 10 },
-  subtitle: { color: '#95A59B', fontSize: 15, lineHeight: 23, marginTop: 10, marginBottom: 22 },
-  label: { color: '#DDE5DF', fontSize: 14, fontWeight: '700', marginTop: 18, marginBottom: 8 },
-  input: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 14, color: '#F6FAF7', fontSize: 16, paddingHorizontal: 16, paddingVertical: 14 },
+  progressFill: { backgroundColor: colors.primary, height: 6 },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4, marginTop: 38 },
+  title: { color: colors.text, fontSize: 32, fontWeight: '800', marginTop: 10 },
+  subtitle: { color: colors.textSecondary, fontSize: 15, lineHeight: 23, marginTop: 10, marginBottom: 22 },
+  label: { color: colors.textSoft, fontSize: 14, fontWeight: '700', marginTop: 18, marginBottom: 8 },
+  input: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 14, color: colors.text, fontSize: 16, paddingHorizontal: 16, paddingVertical: 14 },
   row: { flexDirection: 'row', gap: 10, alignItems: 'center' },
   flex: { flex: 1 },
-  unit: { color: '#95A59B', fontSize: 15, fontWeight: '700' },
-  choice: { flex: 1, backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 14, padding: 16, alignItems: 'center' },
-  selected: { borderColor: '#62E62C', backgroundColor: '#132718' },
-  choiceText: { color: '#F6FAF7', fontWeight: '700' },
+  unit: { color: colors.textSecondary, fontSize: 15, fontWeight: '700' },
+  choice: { flex: 1, backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 14, padding: 16, alignItems: 'center' },
+  selected: { borderColor: colors.primary, backgroundColor: colors.surfaceRaised },
+  choiceText: { color: colors.text, fontWeight: '700' },
   chipGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  chip: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 12 },
-  card: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 18, padding: 18, marginBottom: 12 },
-  cardTitle: { color: '#F6FAF7', fontSize: 17, fontWeight: '800' },
-  cardDetail: { color: '#95A59B', fontSize: 14, lineHeight: 20, marginTop: 5 },
-  helper: { color: '#7E8E84', fontSize: 13, lineHeight: 19, marginTop: 8 },
-  error: { color: '#FF8E8E', marginTop: 18, lineHeight: 20 },
-  primaryButton: { backgroundColor: '#62E62C', borderRadius: 16, alignItems: 'center', paddingVertical: 17, marginTop: 28 },
-  primaryText: { color: '#07110B', fontSize: 16, fontWeight: '900' },
+  chip: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 12 },
+  card: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 18, padding: 18, marginBottom: 12 },
+  cardTitle: { color: colors.text, fontSize: 17, fontWeight: '800' },
+  cardDetail: { color: colors.textSecondary, fontSize: 14, lineHeight: 20, marginTop: 5 },
+  helper: { color: colors.textMuted, fontSize: 13, lineHeight: 19, marginTop: 8 },
+  error: { color: colors.danger, marginTop: 18, lineHeight: 20 },
+  primaryButton: { backgroundColor: colors.primary, borderRadius: 16, alignItems: 'center', paddingVertical: 17, marginTop: 28 },
+  primaryText: { color: colors.background, fontSize: 16, fontWeight: '900' },
   disabled: { opacity: 0.6 },
 });

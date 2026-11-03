@@ -7,6 +7,7 @@ import { useAuth } from '../../src/features/auth/AuthProvider';
 import { engagementApi } from '../../src/features/engagement/api';
 import { foodCatalogApi, type Food } from '../../src/features/foods/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
+import { colors } from '../../src/theme';
 
 export default function FoodCatalogScreen() {
   const { session } = useAuth();
@@ -65,7 +66,7 @@ export default function FoodCatalogScreen() {
           value={query}
           onChangeText={setQuery}
           placeholder="Buscar alimento…"
-          placeholderTextColor="#637268"
+          placeholderTextColor={colors.placeholder}
           style={styles.input}
           autoCapitalize="none"
         />
@@ -119,31 +120,31 @@ function Macro({ label, value }: { label: string; value: number }) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
-  back: { color: '#DDE5DF', fontWeight: '700' },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '800', letterSpacing: 1.4, marginTop: 30 },
-  title: { color: '#F6FAF7', fontSize: 32, fontWeight: '800', marginTop: 10 },
-  subtitle: { color: '#95A59B', fontSize: 15, lineHeight: 23, marginTop: 10 },
-  input: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 14, color: '#F6FAF7', fontSize: 16, marginTop: 24, paddingHorizontal: 16, paddingVertical: 14 },
-  helper: { color: '#7E8E84', fontSize: 14, lineHeight: 20, marginTop: 16 },
-  error: { color: '#FF8E8E', marginTop: 16 },
-  emptyCard: { backgroundColor: '#101C14', borderColor: '#223228', borderWidth: 1, borderRadius: 18, marginTop: 18, padding: 20 },
-  emptyTitle: { color: '#F6FAF7', fontSize: 18, fontWeight: '800' },
-  card: { backgroundColor: '#101C14', borderColor: '#223228', borderWidth: 1, borderRadius: 18, marginTop: 14, padding: 18 },
+  back: { color: colors.textSoft, fontWeight: '700' },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4, marginTop: 30 },
+  title: { color: colors.text, fontSize: 32, fontWeight: '800', marginTop: 10 },
+  subtitle: { color: colors.textSecondary, fontSize: 15, lineHeight: 23, marginTop: 10 },
+  input: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 14, color: colors.text, fontSize: 16, marginTop: 24, paddingHorizontal: 16, paddingVertical: 14 },
+  helper: { color: colors.textMuted, fontSize: 14, lineHeight: 20, marginTop: 16 },
+  error: { color: colors.danger, marginTop: 16 },
+  emptyCard: { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 18, marginTop: 18, padding: 20 },
+  emptyTitle: { color: colors.text, fontSize: 18, fontWeight: '800' },
+  card: { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 18, marginTop: 14, padding: 18 },
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', gap: 12 },
   cardHeading: { flex: 1 },
-  foodName: { color: '#F6FAF7', fontSize: 17, fontWeight: '800' },
-  meta: { color: '#95A59B', fontSize: 13, marginTop: 5 },
-  calories: { color: '#62E62C', fontSize: 16, fontWeight: '900' },
+  foodName: { color: colors.text, fontSize: 17, fontWeight: '800' },
+  meta: { color: colors.textSecondary, fontSize: 13, marginTop: 5 },
+  calories: { color: colors.primary, fontSize: 16, fontWeight: '900' },
   macrosRow: { flexDirection: 'row', gap: 10, marginTop: 18 },
   macro: { flex: 1, backgroundColor: '#0B160F', borderRadius: 12, padding: 10 },
-  macroValue: { color: '#F6FAF7', fontSize: 14, fontWeight: '800' },
-  macroLabel: { color: '#7E8E84', fontSize: 11, marginTop: 4 },
+  macroValue: { color: colors.text, fontSize: 14, fontWeight: '800' },
+  macroLabel: { color: colors.textMuted, fontSize: 11, marginTop: 4 },
   footerRow: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginTop: 14 },
-  category: { color: '#62E62C', fontSize: 11, fontWeight: '800', textTransform: 'uppercase' },
-  favoriteButton: { borderColor: '#36503E', borderRadius: 10, borderWidth: 1, paddingHorizontal: 10, paddingVertical: 7 },
-  favoriteButtonActive: { backgroundColor: '#17331D', borderColor: '#62E62C' },
-  favoriteText: { color: '#DDE5DF', fontSize: 12, fontWeight: '800' },
-  favoriteTextActive: { color: '#62E62C' },
+  category: { color: colors.primary, fontSize: 11, fontWeight: '800', textTransform: 'uppercase' },
+  favoriteButton: { borderColor: colors.borderButton, borderRadius: 10, borderWidth: 1, paddingHorizontal: 10, paddingVertical: 7 },
+  favoriteButtonActive: { backgroundColor: '#17331D', borderColor: colors.primary },
+  favoriteText: { color: colors.textSoft, fontSize: 12, fontWeight: '800' },
+  favoriteTextActive: { color: colors.primary },
 });

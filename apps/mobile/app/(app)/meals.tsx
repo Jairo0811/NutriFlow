@@ -8,6 +8,7 @@ import { foodCatalogApi, type Food } from '../../src/features/foods/api';
 import { mealTrackingApi, type DailyMealSummary, type MealType } from '../../src/features/meals/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
 import { formatLongDate, useToday } from '../../src/features/shared/dates';
+import { colors } from '../../src/theme';
 
 type MealIconName = ComponentProps<typeof Ionicons>['name'];
 
@@ -133,7 +134,7 @@ export default function MealTrackingScreen() {
                 style={[styles.mealTypeChip, isSelected && styles.selected]}
               >
                 <View style={styles.chipContent}>
-                  <Ionicons name={item.icon} size={18} color={isSelected ? '#62E62C' : '#DDE5DF'} />
+                  <Ionicons name={item.icon} size={18} color={isSelected ? colors.primary : colors.textSoft} />
                   <Text style={[styles.chipText, isSelected && styles.selectedChipText]}>{item.label}</Text>
                 </View>
               </Pressable>
@@ -145,7 +146,7 @@ export default function MealTrackingScreen() {
           value={query}
           onChangeText={(value) => { setQuery(value); setSelectedFood(null); }}
           placeholder="Buscar alimento o marca"
-          placeholderTextColor="#637268"
+          placeholderTextColor={colors.placeholder}
           style={styles.input}
         />
 
@@ -182,7 +183,7 @@ export default function MealTrackingScreen() {
             <View style={styles.mealHeader}>
               <View style={styles.mealHeading}>
                 <View style={styles.mealIconBadge}>
-                  <Ionicons name={icon} size={20} color="#62E62C" />
+                  <Ionicons name={icon} size={20} color={colors.primary} />
                 </View>
                 <Text style={styles.mealTitle}>{label}</Text>
               </View>
@@ -210,43 +211,43 @@ export default function MealTrackingScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
-  title: { color: '#F6FAF7', fontSize: 34, fontWeight: '800', marginTop: 10 },
-  subtitle: { color: '#95A59B', fontSize: 15, lineHeight: 23, marginTop: 8 },
-  totalCard: { backgroundColor: '#132718', borderColor: '#31533A', borderWidth: 1, borderRadius: 20, padding: 20, marginTop: 24 },
-  totalLabel: { color: '#95A59B', fontWeight: '700' },
-  totalCalories: { color: '#F6FAF7', fontSize: 34, fontWeight: '900', marginTop: 6 },
-  totalMacros: { color: '#62E62C', marginTop: 8, fontWeight: '700' },
-  sectionTitle: { color: '#F6FAF7', fontSize: 21, fontWeight: '800', marginTop: 30, marginBottom: 12 },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
+  title: { color: colors.text, fontSize: 34, fontWeight: '800', marginTop: 10 },
+  subtitle: { color: colors.textSecondary, fontSize: 15, lineHeight: 23, marginTop: 8 },
+  totalCard: { backgroundColor: colors.surfaceRaised, borderColor: colors.borderAccent, borderWidth: 1, borderRadius: 20, padding: 20, marginTop: 24 },
+  totalLabel: { color: colors.textSecondary, fontWeight: '700' },
+  totalCalories: { color: colors.text, fontSize: 34, fontWeight: '900', marginTop: 6 },
+  totalMacros: { color: colors.primary, marginTop: 8, fontWeight: '700' },
+  sectionTitle: { color: colors.text, fontSize: 21, fontWeight: '800', marginTop: 30, marginBottom: 12 },
   mealTypeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  mealTypeChip: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 10 },
-  selected: { backgroundColor: '#132718', borderColor: '#62E62C' },
+  mealTypeChip: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 10 },
+  selected: { backgroundColor: colors.surfaceRaised, borderColor: colors.primary },
   chipContent: { alignItems: 'center', flexDirection: 'row', gap: 7 },
-  chipText: { color: '#F6FAF7', fontWeight: '700' },
-  selectedChipText: { color: '#62E62C' },
-  input: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 14, color: '#F6FAF7', fontSize: 16, paddingHorizontal: 16, paddingVertical: 14, marginTop: 12 },
+  chipText: { color: colors.text, fontWeight: '700' },
+  selectedChipText: { color: colors.primary },
+  input: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 14, color: colors.text, fontSize: 16, paddingHorizontal: 16, paddingVertical: 14, marginTop: 12 },
   searchResult: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 13, borderBottomColor: '#18251D', borderBottomWidth: 1 },
   flex: { flex: 1 },
-  foodName: { color: '#F6FAF7', fontWeight: '800', fontSize: 15 },
-  foodMeta: { color: '#95A59B', marginTop: 4, fontSize: 13 },
-  foodCalories: { color: '#62E62C', fontWeight: '800' },
-  selectedFoodCard: { backgroundColor: '#101C14', borderColor: '#31533A', borderWidth: 1, borderRadius: 18, padding: 16, marginTop: 12 },
-  selectedLabel: { color: '#62E62C', fontSize: 12, fontWeight: '800', marginBottom: 6 },
+  foodName: { color: colors.text, fontWeight: '800', fontSize: 15 },
+  foodMeta: { color: colors.textSecondary, marginTop: 4, fontSize: 13 },
+  foodCalories: { color: colors.primary, fontWeight: '800' },
+  selectedFoodCard: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderWidth: 1, borderRadius: 18, padding: 16, marginTop: 12 },
+  selectedLabel: { color: colors.primary, fontSize: 12, fontWeight: '800', marginBottom: 6 },
   servingRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10 },
   servingInput: { width: 80, marginTop: 0 },
-  addButton: { marginLeft: 'auto', backgroundColor: '#62E62C', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 13 },
-  addButtonText: { color: '#07110B', fontWeight: '900' },
+  addButton: { marginLeft: 'auto', backgroundColor: colors.primary, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 13 },
+  addButtonText: { color: colors.background, fontWeight: '900' },
   disabled: { opacity: 0.6 },
-  error: { color: '#FF8E8E', marginTop: 14 },
-  helper: { color: '#7E8E84', lineHeight: 20 },
-  mealCard: { backgroundColor: '#101C14', borderColor: '#223228', borderWidth: 1, borderRadius: 18, padding: 16, marginBottom: 12 },
+  error: { color: colors.danger, marginTop: 14 },
+  helper: { color: colors.textMuted, lineHeight: 20 },
+  mealCard: { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 18, padding: 16, marginBottom: 12 },
   mealHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   mealHeading: { alignItems: 'center', flexDirection: 'row', gap: 10 },
-  mealIconBadge: { alignItems: 'center', backgroundColor: '#17331D', borderColor: '#31533A', borderRadius: 11, borderWidth: 1, height: 38, justifyContent: 'center', width: 38 },
-  mealTitle: { color: '#F6FAF7', fontSize: 18, fontWeight: '800' },
-  mealCalories: { color: '#62E62C', fontWeight: '800' },
+  mealIconBadge: { alignItems: 'center', backgroundColor: '#17331D', borderColor: colors.borderAccent, borderRadius: 11, borderWidth: 1, height: 38, justifyContent: 'center', width: 38 },
+  mealTitle: { color: colors.text, fontSize: 18, fontWeight: '800' },
+  mealCalories: { color: colors.primary, fontWeight: '800' },
   entryRow: { flexDirection: 'row', gap: 12, alignItems: 'center', paddingVertical: 12, borderTopColor: '#18251D', borderTopWidth: 1 },
   remove: { color: '#FF9A9A', fontWeight: '800' },
 });

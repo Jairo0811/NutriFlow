@@ -1,8 +1,44 @@
-import { Redirect, router } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import { Redirect, router, type Href } from 'expo-router';
+import type { ComponentProps } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { Button } from '../../src/components/Button';
+import { Card } from '../../src/components/Card';
+import { Screen } from '../../src/components/Screen';
 import { useAuth } from '../../src/features/auth/AuthProvider';
+import { colors, radius, spacing, typography } from '../../src/theme';
+
+type IconName = ComponentProps<typeof Ionicons>['name'];
+type MenuItem = { label: string; detail: string; icon: IconName; href: Href };
+
+const sections: { title: string; items: MenuItem[] }[] = [
+  {
+    title: 'Registrar',
+    items: [
+      { label: 'Diario de comidas', detail: 'Agrega y revisa lo que comes', icon: 'restaurant-outline', href: '/meals' },
+      { label: 'Escanear código de barras', detail: 'Encuentra un producto con la cámara', icon: 'barcode-outline', href: '/scanner' },
+      { label: 'Catálogo de alimentos', detail: 'Busca alimentos y porciones', icon: 'search-outline', href: '/foods' },
+    ],
+  },
+  {
+    title: 'Asistente y análisis',
+    items: [
+      { label: 'NutriFlow AI', detail: 'Coach, foto de comida y voz', icon: 'sparkles-outline', href: '/ai' },
+      { label: 'Analíticas premium', detail: 'Tendencias de 7, 30 y 90 días', icon: 'stats-chart-outline', href: '/analytics' },
+      { label: 'Hábitos y recetas', detail: 'Agua, rachas y recetas', icon: 'water-outline', href: '/engagement' },
+      { label: 'Mi progreso', detail: 'Historial de peso', icon: 'trending-down-outline', href: '/progress' },
+    ],
+  },
+  {
+    title: 'Mi perfil',
+    items: [
+      { label: 'Objetivos nutricionales', detail: 'Calorías y macros diarios', icon: 'flag-outline', href: '/targets' },
+      { label: 'Alergias y preferencias', detail: 'Restricciones alimentarias', icon: 'shield-checkmark-outline', href: '/preferences' },
+      { label: 'Perfil nutricional', detail: 'Datos, actividad y meta', icon: 'person-outline', href: '/onboarding' },
+    ],
+  },
+];
 
 export default function AuthenticatedHomeScreen() {
   const { session, isLoading, logout } = useAuth();
@@ -10,77 +46,66 @@ export default function AuthenticatedHomeScreen() {
   if (!isLoading && !session) return <Redirect href="/login" />;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · v1.4</Text>
-        <Text style={styles.title}>Hola, {session?.displayName ?? 'NutriFlow'}</Text>
-        <Text style={styles.subtitle}>
-          Controla tu nutrición, construye hábitos, analiza tendencias y usa asistencia inteligente desde un solo lugar.
-        </Text>
+    <Screen
+      eyebrow="NUTRIFLOW"
+      subtitle="Controla tu nutrición, construye hábitos y analiza tendencias desde un solo lugar."
+      title={`Hola, ${session?.displayName ?? 'NutriFlow'}`}
+      withTopInset
+    >
+      <Button label="Ver mi día" onPress={() => router.push('/dashboard')} style={styles.cta} />
 
-        <View style={styles.card}>
-          <Text style={styles.cardLabel}>Cuenta activa</Text>
-          <Text style={styles.cardValue}>{session?.email ?? 'Cargando...'}</Text>
+      {sections.map((section) => (
+        <View key={section.title} style={styles.section}>
+          <Text accessibilityRole="header" style={styles.sectionTitle}>{section.title}</Text>
+          <Card style={styles.list}>
+            {section.items.map((item, index) => (
+              <Pressable
+                accessibilityHint={item.detail}
+                accessibilityLabel={item.label}
+                accessibilityRole="button"
+                key={item.label}
+                onPress={() => router.push(item.href)}
+                style={({ pressed }) => [styles.row, index > 0 && styles.rowDivider, pressed && styles.pressed]}
+              >
+                <View style={styles.iconBadge}>
+                  <Ionicons color={colors.primary} name={item.icon} size={20} />
+                </View>
+                <View style={styles.rowText}>
+                  <Text style={styles.rowLabel}>{item.label}</Text>
+                  <Text style={typography.caption}>{item.detail}</Text>
+                </View>
+                <Ionicons color={colors.textMuted} name="chevron-forward" size={18} />
+              </Pressable>
+            ))}
+          </Card>
         </View>
+      ))}
 
-        <Pressable onPress={() => router.push('/dashboard')} style={styles.primaryButton}>
-          <Text style={styles.primaryText}>Abrir dashboard diario</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/ai')} style={styles.aiButton}>
-          <Text style={styles.aiText}>✦ NutriFlow AI · Coach, foto y voz</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/analytics')} style={styles.premiumButton}>
-          <Text style={styles.premiumText}>✦ Premium Analytics · 7/30/90 días</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/engagement')} style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>💧 Engagement Hub · hábitos y recetas</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/meals')} style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>Diario de comidas</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/scanner')} style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>Escanear código de barras</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/progress')} style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>Ver mi progreso</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/preferences')} style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>Alergias y preferencias</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/foods')} style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>Catálogo de alimentos</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/targets')} style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>Objetivos nutricionales</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/onboarding')} style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>Perfil nutricional</Text>
-        </Pressable>
-        <Pressable onPress={() => void logout()} style={styles.logoutButton}>
-          <Text style={styles.logoutText}>Cerrar sesión</Text>
-        </Pressable>
-      </ScrollView>
-    </SafeAreaView>
+      <Text style={styles.account}>{session?.email}</Text>
+      <Button label="Cerrar sesión" onPress={() => void logout()} variant="secondary" />
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { backgroundColor: '#07110B', flex: 1 },
-  container: { padding: 24, paddingBottom: 48, paddingTop: 48 },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
-  title: { color: '#F6FAF7', fontSize: 34, fontWeight: '900', marginTop: 12 },
-  subtitle: { color: '#95A59B', fontSize: 16, lineHeight: 24, marginTop: 10 },
-  card: { backgroundColor: '#101C14', borderColor: '#223228', borderRadius: 18, borderWidth: 1, marginTop: 28, padding: 20 },
-  cardLabel: { color: '#7E8E84', fontSize: 13, fontWeight: '600' },
-  cardValue: { color: '#F6FAF7', fontSize: 17, fontWeight: '700', marginTop: 8 },
-  primaryButton: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 22, padding: 16 },
-  primaryText: { color: '#07110B', fontSize: 15, fontWeight: '900' },
-  aiButton: { alignItems: 'center', backgroundColor: '#15251B', borderColor: '#8CF65D', borderRadius: 14, borderWidth: 1, marginTop: 10, padding: 16 },
-  aiText: { color: '#8CF65D', fontSize: 15, fontWeight: '900' },
-  premiumButton: { alignItems: 'center', backgroundColor: '#17241B', borderColor: '#62E62C', borderRadius: 14, borderWidth: 1, marginTop: 10, padding: 16 },
-  premiumText: { color: '#62E62C', fontSize: 15, fontWeight: '900' },
-  secondaryButton: { alignItems: 'center', backgroundColor: '#132718', borderColor: '#36503E', borderRadius: 14, borderWidth: 1, marginTop: 10, padding: 16 },
-  secondaryText: { color: '#DDE5DF', fontSize: 15, fontWeight: '800' },
-  logoutButton: { alignItems: 'center', borderColor: '#36503E', borderRadius: 14, borderWidth: 1, marginTop: 18, padding: 16 },
-  logoutText: { color: '#DDE5DF', fontSize: 15, fontWeight: '700' },
+  cta: { marginTop: spacing.xl },
+  section: { marginTop: spacing.xl },
+  sectionTitle: { ...typography.heading, fontSize: 18, marginBottom: spacing.sm + 2 },
+  list: { padding: 0, overflow: 'hidden' },
+  row: { alignItems: 'center', flexDirection: 'row', gap: spacing.md, minHeight: 64, paddingHorizontal: spacing.lg, paddingVertical: spacing.md },
+  rowDivider: { borderTopColor: colors.border, borderTopWidth: 1 },
+  pressed: { backgroundColor: colors.surfaceRaised },
+  iconBadge: {
+    alignItems: 'center',
+    backgroundColor: '#17331D',
+    borderColor: colors.borderAccent,
+    borderRadius: radius.sm - 1,
+    borderWidth: 1,
+    height: 40,
+    justifyContent: 'center',
+    width: 40,
+  },
+  rowText: { flex: 1, gap: 2 },
+  rowLabel: { color: colors.text, fontSize: 15, fontWeight: '800' },
+  account: { ...typography.caption, marginBottom: spacing.sm + 2, marginTop: spacing.xl, textAlign: 'center' },
 });

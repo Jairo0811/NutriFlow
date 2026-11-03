@@ -7,6 +7,7 @@ import { router } from 'expo-router';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { AiApiError, aiApi, type AiFoodProposal, type MealType } from '../../src/features/ai/api';
 import { localDate } from '../../src/features/shared/dates';
+import { colors } from '../../src/theme';
 
 const mealTypes: MealType[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
 
@@ -147,24 +148,24 @@ function errorMessage(error: unknown) {
 
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
   center: { flex: 1, justifyContent: 'center', padding: 24 },
-  back: { color: '#DDE5DF', fontWeight: '700' },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '900', letterSpacing: 1.3, marginTop: 24 },
-  title: { color: '#F6FAF7', fontSize: 30, fontWeight: '900', marginTop: 10 },
-  subtitle: { color: '#95A59B', fontSize: 15, lineHeight: 22, marginTop: 9 },
+  back: { color: colors.textSoft, fontWeight: '700' },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '900', letterSpacing: 1.3, marginTop: 24 },
+  title: { color: colors.text, fontSize: 30, fontWeight: '900', marginTop: 10 },
+  subtitle: { color: colors.textSecondary, fontSize: 15, lineHeight: 22, marginTop: 9 },
   camera: { height: 430, borderRadius: 22, marginTop: 20, overflow: 'hidden' },
-  button: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 14, padding: 16 },
-  buttonText: { color: '#07110B', fontWeight: '900' },
-  card: { backgroundColor: '#101C14', borderColor: '#31533A', borderRadius: 16, borderWidth: 1, marginTop: 12, padding: 16 },
-  foodName: { color: '#F6FAF7', fontSize: 16, fontWeight: '900' },
-  meta: { color: '#95A59B', fontSize: 13, marginTop: 5 },
+  button: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, marginTop: 14, padding: 16 },
+  buttonText: { color: colors.background, fontWeight: '900' },
+  card: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 16, borderWidth: 1, marginTop: 12, padding: 16 },
+  foodName: { color: colors.text, fontSize: 16, fontWeight: '900' },
+  meta: { color: colors.textSecondary, fontSize: 13, marginTop: 5 },
   warning: { color: '#FFB1B1', fontSize: 12, fontWeight: '800', marginTop: 7 },
   mealRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 16 },
-  chip: { borderColor: '#36503E', borderRadius: 999, borderWidth: 1, paddingHorizontal: 12, paddingVertical: 9 },
-  chipActive: { backgroundColor: '#62E62C', borderColor: '#62E62C' },
-  chipText: { color: '#DDE5DF', fontSize: 12, fontWeight: '800' },
-  chipTextActive: { color: '#07110B' },
+  chip: { borderColor: colors.borderButton, borderRadius: 999, borderWidth: 1, paddingHorizontal: 12, paddingVertical: 9 },
+  chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  chipText: { color: colors.textSoft, fontSize: 12, fontWeight: '800' },
+  chipTextActive: { color: colors.background },
   message: { color: '#FFCC80', fontWeight: '800', marginTop: 16, textAlign: 'center' },
 });

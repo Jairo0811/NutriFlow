@@ -6,6 +6,7 @@ import { authApi } from '../../src/features/auth/api';
 import { AuthButton } from '../../src/features/auth/components/AuthButton';
 import { AuthField } from '../../src/features/auth/components/AuthField';
 import { AuthScaffold } from '../../src/features/auth/components/AuthScaffold';
+import { colors } from '../../src/theme';
 
 export default function ResetPasswordScreen() {
   const params = useLocalSearchParams<{ token?: string }>();
@@ -60,6 +61,6 @@ export default function ResetPasswordScreen() {
 }
 
 const styles = StyleSheet.create({
-  hint: { color: '#7E8E84', fontSize: 12, lineHeight: 18 },
+  hint: { color: colors.textMuted, fontSize: 12, lineHeight: 18 },
   error: { color: '#FF827C', fontSize: 14, lineHeight: 20 },
 });

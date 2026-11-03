@@ -9,6 +9,7 @@ import { AuthButton } from '../../src/features/auth/components/AuthButton';
 import { AuthField } from '../../src/features/auth/components/AuthField';
 import { AuthScaffold } from '../../src/features/auth/components/AuthScaffold';
 import { toUserFacingError } from '../../src/features/shared/errors';
+import { colors } from '../../src/theme';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -133,11 +134,11 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  forgot: { alignSelf: 'flex-end', color: '#62E62C', fontSize: 14 },
+  forgot: { alignSelf: 'flex-end', color: colors.primary, fontSize: 14 },
   error: { color: '#FF827C', fontSize: 14, lineHeight: 20 },
-  footerText: { color: '#95A59B', textAlign: 'center' },
-  link: { color: '#62E62C', fontWeight: '700' },
+  footerText: { color: colors.textSecondary, textAlign: 'center' },
+  link: { color: colors.primary, fontWeight: '700' },
   dividerRow: { alignItems: 'center', flexDirection: 'row', gap: 12, marginVertical: 2 },
-  divider: { backgroundColor: '#223228', flex: 1, height: 1 },
+  divider: { backgroundColor: colors.border, flex: 1, height: 1 },
   dividerText: { color: '#748078' },
 });

@@ -10,6 +10,7 @@ import {
   type NutritionProfile,
 } from '../../src/features/onboarding/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
+import { colors } from '../../src/theme';
 
 const preferenceOptions: { code: FoodPreferenceCode; label: string }[] = [
   { code: 'protein', label: 'Proteínas' },
@@ -115,22 +116,22 @@ export default function PreferencesScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
-  title: { color: '#F6FAF7', fontSize: 32, fontWeight: '900', marginTop: 10 },
-  subtitle: { color: '#95A59B', fontSize: 15, lineHeight: 23, marginTop: 8 },
-  sectionTitle: { color: '#F6FAF7', fontSize: 20, fontWeight: '900', marginTop: 28, marginBottom: 12 },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
+  title: { color: colors.text, fontSize: 32, fontWeight: '900', marginTop: 10 },
+  subtitle: { color: colors.textSecondary, fontSize: 15, lineHeight: 23, marginTop: 8 },
+  sectionTitle: { color: colors.text, fontSize: 20, fontWeight: '900', marginTop: 28, marginBottom: 12 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 9 },
-  chip: { backgroundColor: '#101C14', borderColor: '#25372B', borderRadius: 999, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 11 },
-  selected: { backgroundColor: '#132718', borderColor: '#62E62C' },
-  warningSelected: { backgroundColor: '#2A1818', borderColor: '#FF8E8E' },
-  chipText: { color: '#F6FAF7', fontWeight: '800' },
-  infoCard: { backgroundColor: '#101C14', borderColor: '#31533A', borderRadius: 18, borderWidth: 1, marginTop: 28, padding: 18 },
-  infoTitle: { color: '#62E62C', fontWeight: '900' },
-  infoText: { color: '#95A59B', lineHeight: 21, marginTop: 6 },
-  button: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 18, padding: 16 },
-  buttonText: { color: '#07110B', fontWeight: '900' },
+  chip: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderRadius: 999, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 11 },
+  selected: { backgroundColor: colors.surfaceRaised, borderColor: colors.primary },
+  warningSelected: { backgroundColor: '#2A1818', borderColor: colors.danger },
+  chipText: { color: colors.text, fontWeight: '800' },
+  infoCard: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 18, borderWidth: 1, marginTop: 28, padding: 18 },
+  infoTitle: { color: colors.primary, fontWeight: '900' },
+  infoText: { color: colors.textSecondary, lineHeight: 21, marginTop: 6 },
+  button: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, marginTop: 18, padding: 16 },
+  buttonText: { color: colors.background, fontWeight: '900' },
   disabled: { opacity: 0.6 },
-  message: { color: '#DDE5DF', marginTop: 14, textAlign: 'center' },
+  message: { color: colors.textSoft, marginTop: 14, textAlign: 'center' },
 });

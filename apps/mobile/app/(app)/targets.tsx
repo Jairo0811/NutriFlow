@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { getNutritionTargets, type NutritionTargets } from '../../src/features/nutrition/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
+import { colors } from '../../src/theme';
 
 export default function NutritionTargetsScreen() {
   const { session, isLoading } = useAuth();
@@ -80,20 +81,20 @@ function MacroCard({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '800', letterSpacing: 1.4, marginTop: 24 },
-  title: { color: '#F6FAF7', fontSize: 32, fontWeight: '800', marginTop: 10 },
-  subtitle: { color: '#95A59B', fontSize: 15, lineHeight: 23, marginTop: 10, marginBottom: 24 },
-  heroCard: { backgroundColor: '#132718', borderColor: '#62E62C', borderWidth: 1, borderRadius: 20, padding: 22 },
-  cardLabel: { color: '#95A59B', fontSize: 13, fontWeight: '700' },
-  calories: { color: '#F6FAF7', fontSize: 38, fontWeight: '900', marginTop: 8 },
-  cardHint: { color: '#7E8E84', fontSize: 13, marginTop: 8 },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4, marginTop: 24 },
+  title: { color: colors.text, fontSize: 32, fontWeight: '800', marginTop: 10 },
+  subtitle: { color: colors.textSecondary, fontSize: 15, lineHeight: 23, marginTop: 10, marginBottom: 24 },
+  heroCard: { backgroundColor: colors.surfaceRaised, borderColor: colors.primary, borderWidth: 1, borderRadius: 20, padding: 22 },
+  cardLabel: { color: colors.textSecondary, fontSize: 13, fontWeight: '700' },
+  calories: { color: colors.text, fontSize: 38, fontWeight: '900', marginTop: 8 },
+  cardHint: { color: colors.textMuted, fontSize: 13, marginTop: 8 },
   grid: { gap: 12, marginTop: 16 },
-  macroCard: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 18, padding: 18 },
-  macroValue: { color: '#F6FAF7', fontSize: 24, fontWeight: '800', marginTop: 6 },
-  infoCard: { backgroundColor: '#101C14', borderColor: '#25372B', borderWidth: 1, borderRadius: 18, padding: 18, marginTop: 16 },
-  infoValue: { color: '#F6FAF7', fontSize: 22, fontWeight: '800', marginTop: 6 },
-  loading: { color: '#95A59B', marginTop: 20 },
-  error: { color: '#FF8E8E', lineHeight: 20, marginTop: 12 },
+  macroCard: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 18, padding: 18 },
+  macroValue: { color: colors.text, fontSize: 24, fontWeight: '800', marginTop: 6 },
+  infoCard: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 18, padding: 18, marginTop: 16 },
+  infoValue: { color: colors.text, fontSize: 22, fontWeight: '800', marginTop: 6 },
+  loading: { color: colors.textSecondary, marginTop: 20 },
+  error: { color: colors.danger, lineHeight: 20, marginTop: 12 },
 });

@@ -1,6 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors } from '../../../theme';
 
 type Props = PropsWithChildren<{
   title: string;
@@ -29,7 +30,7 @@ export function AuthScaffold({ title, subtitle, children, footer }: Props) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   content: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -39,23 +40,23 @@ const styles = StyleSheet.create({
   brandMark: {
     alignItems: 'center',
     alignSelf: 'center',
-    backgroundColor: '#62E62C',
+    backgroundColor: colors.primary,
     borderRadius: 24,
     height: 48,
     justifyContent: 'center',
     width: 48,
   },
-  brandInitial: { color: '#07110B', fontSize: 28, fontWeight: '900' },
+  brandInitial: { color: colors.background, fontSize: 28, fontWeight: '900' },
   brand: {
     alignSelf: 'center',
-    color: '#62E62C',
+    color: colors.primary,
     fontSize: 28,
     fontWeight: '800',
     marginBottom: 28,
     marginTop: 10,
   },
-  title: { color: '#F6FAF7', fontSize: 30, fontWeight: '800' },
-  subtitle: { color: '#95A59B', fontSize: 16, lineHeight: 23, marginTop: 8 },
+  title: { color: colors.text, fontSize: 30, fontWeight: '800' },
+  subtitle: { color: colors.textSecondary, fontSize: 16, lineHeight: 23, marginTop: 8 },
   form: { gap: 14, marginTop: 28 },
   footer: { marginTop: 24 },
 });

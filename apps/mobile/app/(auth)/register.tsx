@@ -7,6 +7,7 @@ import { AuthButton } from '../../src/features/auth/components/AuthButton';
 import { AuthField } from '../../src/features/auth/components/AuthField';
 import { AuthScaffold } from '../../src/features/auth/components/AuthScaffold';
 import { toUserFacingError } from '../../src/features/shared/errors';
+import { colors } from '../../src/theme';
 
 export default function RegisterScreen() {
   const { register } = useAuth();
@@ -77,8 +78,8 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  hint: { color: '#7E8E84', fontSize: 12, lineHeight: 18 },
+  hint: { color: colors.textMuted, fontSize: 12, lineHeight: 18 },
   error: { color: '#FF827C', fontSize: 14, lineHeight: 20 },
-  footerText: { color: '#95A59B', textAlign: 'center' },
-  link: { color: '#62E62C', fontWeight: '700' },
+  footerText: { color: colors.textSecondary, textAlign: 'center' },
+  link: { color: colors.primary, fontWeight: '700' },
 });

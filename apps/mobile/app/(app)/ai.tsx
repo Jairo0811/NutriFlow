@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { AiApiError, aiApi, type AiFoodProposal, type AiStatus, type MealType } from '../../src/features/ai/api';
 import { localDate } from '../../src/features/shared/dates';
+import { colors } from '../../src/theme';
 
 const mealTypes: MealType[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
 
@@ -108,7 +109,7 @@ export default function NutriFlowAiScreen() {
           value={coachMessage}
           onChangeText={setCoachMessage}
           placeholder="Ej.: ¿Qué me conviene cenar para acercarme a mi meta de proteína?"
-          placeholderTextColor="#637268"
+          placeholderTextColor={colors.placeholder}
           style={styles.textArea}
           maxLength={1200}
         />
@@ -144,7 +145,7 @@ export default function NutriFlowAiScreen() {
           value={voiceTranscript}
           onChangeText={setVoiceTranscript}
           placeholder="Ej.: comí dos huevos, una porción de mangú y queso de freír"
-          placeholderTextColor="#637268"
+          placeholderTextColor={colors.placeholder}
           style={[styles.textArea, !status?.voiceLoggingEnabled && styles.disabled]}
           maxLength={2000}
         />
@@ -220,34 +221,34 @@ function errorMessage(error: unknown) {
 
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
-  back: { color: '#DDE5DF', fontWeight: '700' },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '900', letterSpacing: 1.4, marginTop: 28 },
-  title: { color: '#F6FAF7', fontSize: 32, fontWeight: '900', marginTop: 10 },
-  subtitle: { color: '#95A59B', fontSize: 15, lineHeight: 23, marginTop: 10 },
-  sectionTitle: { color: '#F6FAF7', fontSize: 19, fontWeight: '900', marginTop: 26 },
-  statusCard: { backgroundColor: '#101C14', borderColor: '#31533A', borderRadius: 18, borderWidth: 1, marginTop: 22, padding: 18 },
-  statusTitle: { color: '#62E62C', fontSize: 16, fontWeight: '900' },
-  helper: { color: '#95A59B', fontSize: 13, lineHeight: 19, marginTop: 6 },
-  textArea: { backgroundColor: '#101C14', borderColor: '#25372B', borderRadius: 14, borderWidth: 1, color: '#F6FAF7', fontSize: 15, minHeight: 100, marginTop: 12, padding: 14, textAlignVertical: 'top' },
-  primaryButton: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 14, padding: 16 },
-  primaryText: { color: '#07110B', fontWeight: '900' },
-  secondaryButton: { alignItems: 'center', backgroundColor: '#132718', borderColor: '#36503E', borderRadius: 14, borderWidth: 1, marginTop: 12, padding: 15 },
-  secondaryText: { color: '#DDE5DF', fontWeight: '800' },
+  back: { color: colors.textSoft, fontWeight: '700' },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '900', letterSpacing: 1.4, marginTop: 28 },
+  title: { color: colors.text, fontSize: 32, fontWeight: '900', marginTop: 10 },
+  subtitle: { color: colors.textSecondary, fontSize: 15, lineHeight: 23, marginTop: 10 },
+  sectionTitle: { color: colors.text, fontSize: 19, fontWeight: '900', marginTop: 26 },
+  statusCard: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 18, borderWidth: 1, marginTop: 22, padding: 18 },
+  statusTitle: { color: colors.primary, fontSize: 16, fontWeight: '900' },
+  helper: { color: colors.textSecondary, fontSize: 13, lineHeight: 19, marginTop: 6 },
+  textArea: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderRadius: 14, borderWidth: 1, color: colors.text, fontSize: 15, minHeight: 100, marginTop: 12, padding: 14, textAlignVertical: 'top' },
+  primaryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, marginTop: 14, padding: 16 },
+  primaryText: { color: colors.background, fontWeight: '900' },
+  secondaryButton: { alignItems: 'center', backgroundColor: colors.surfaceRaised, borderColor: colors.borderButton, borderRadius: 14, borderWidth: 1, marginTop: 12, padding: 15 },
+  secondaryText: { color: colors.textSoft, fontWeight: '800' },
   disabled: { opacity: 0.48 },
-  replyCard: { backgroundColor: '#101C14', borderColor: '#31533A', borderRadius: 18, borderWidth: 1, marginTop: 14, padding: 18 },
-  replyLabel: { color: '#62E62C', fontSize: 12, fontWeight: '900', textTransform: 'uppercase' },
-  replyText: { color: '#F6FAF7', fontSize: 15, lineHeight: 23, marginTop: 9 },
-  disclaimer: { color: '#7E8E84', fontSize: 12, lineHeight: 18, marginTop: 12 },
-  proposalsCard: { backgroundColor: '#101C14', borderColor: '#31533A', borderRadius: 18, borderWidth: 1, marginTop: 20, padding: 18 },
-  proposalRow: { borderBottomColor: '#223228', borderBottomWidth: 1, paddingBottom: 12, paddingTop: 12 },
-  proposalName: { color: '#F6FAF7', fontSize: 16, fontWeight: '900' },
+  replyCard: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 18, borderWidth: 1, marginTop: 14, padding: 18 },
+  replyLabel: { color: colors.primary, fontSize: 12, fontWeight: '900', textTransform: 'uppercase' },
+  replyText: { color: colors.text, fontSize: 15, lineHeight: 23, marginTop: 9 },
+  disclaimer: { color: colors.textMuted, fontSize: 12, lineHeight: 18, marginTop: 12 },
+  proposalsCard: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 18, borderWidth: 1, marginTop: 20, padding: 18 },
+  proposalRow: { borderBottomColor: colors.border, borderBottomWidth: 1, paddingBottom: 12, paddingTop: 12 },
+  proposalName: { color: colors.text, fontSize: 16, fontWeight: '900' },
   warning: { color: '#FFB1B1', fontSize: 12, fontWeight: '800', marginTop: 6 },
   mealRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
-  mealChip: { backgroundColor: '#0B160F', borderColor: '#36503E', borderRadius: 999, borderWidth: 1, paddingHorizontal: 12, paddingVertical: 9 },
-  mealChipActive: { backgroundColor: '#62E62C', borderColor: '#62E62C' },
-  mealChipText: { color: '#DDE5DF', fontSize: 12, fontWeight: '800' },
-  mealChipTextActive: { color: '#07110B' },
+  mealChip: { backgroundColor: '#0B160F', borderColor: colors.borderButton, borderRadius: 999, borderWidth: 1, paddingHorizontal: 12, paddingVertical: 9 },
+  mealChipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  mealChipText: { color: colors.textSoft, fontSize: 12, fontWeight: '800' },
+  mealChipTextActive: { color: colors.background },
   message: { color: '#FFCC80', fontSize: 13, fontWeight: '800', marginTop: 16, textAlign: 'center' },
 });

@@ -7,6 +7,7 @@ import { useAuth } from '../../src/features/auth/AuthProvider';
 import { FoodCatalogApiError, foodCatalogApi, type Food } from '../../src/features/foods/api';
 import { checkFoodCompatibility, type FoodCompatibility } from '../../src/features/preferences/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
+import { colors } from '../../src/theme';
 
 export default function BarcodeScannerScreen() {
   const { session } = useAuth();
@@ -101,22 +102,22 @@ export default function BarcodeScannerScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   container: { flex: 1, padding: 24 },
   center: { flex: 1, justifyContent: 'center', padding: 24 },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
-  title: { color: '#F6FAF7', fontSize: 32, fontWeight: '900', marginTop: 10 },
-  subtitle: { color: '#95A59B', fontSize: 16, lineHeight: 24, marginTop: 10 },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
+  title: { color: colors.text, fontSize: 32, fontWeight: '900', marginTop: 10 },
+  subtitle: { color: colors.textSecondary, fontSize: 16, lineHeight: 24, marginTop: 10 },
   camera: { borderRadius: 24, flex: 1, marginTop: 22, overflow: 'hidden' },
-  card: { backgroundColor: '#101C14', borderColor: '#31533A', borderRadius: 18, borderWidth: 1, marginTop: 16, padding: 18 },
-  foodName: { color: '#F6FAF7', fontSize: 18, fontWeight: '900' },
-  calories: { color: '#62E62C', fontSize: 24, fontWeight: '900', marginTop: 8 },
-  meta: { color: '#95A59B', marginTop: 5 },
-  warning: { backgroundColor: '#2A1818', borderColor: '#FF8E8E', borderRadius: 12, borderWidth: 1, marginTop: 14, padding: 12 },
+  card: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 18, borderWidth: 1, marginTop: 16, padding: 18 },
+  foodName: { color: colors.text, fontSize: 18, fontWeight: '900' },
+  calories: { color: colors.primary, fontSize: 24, fontWeight: '900', marginTop: 8 },
+  meta: { color: colors.textSecondary, marginTop: 5 },
+  warning: { backgroundColor: '#2A1818', borderColor: colors.danger, borderRadius: 12, borderWidth: 1, marginTop: 14, padding: 12 },
   warningTitle: { color: '#FFB1B1', fontWeight: '900' },
   warningText: { color: '#FFD4D4', marginTop: 4 },
-  message: { color: '#DDE5DF', marginTop: 16, textAlign: 'center' },
+  message: { color: colors.textSoft, marginTop: 16, textAlign: 'center' },
   quotaMessage: { color: '#FFCC80', marginTop: 16, textAlign: 'center', fontWeight: '800' },
-  button: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 16, padding: 16 },
-  buttonText: { color: '#07110B', fontWeight: '900' },
+  button: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, marginTop: 16, padding: 16 },
+  buttonText: { color: colors.background, fontWeight: '900' },
 });

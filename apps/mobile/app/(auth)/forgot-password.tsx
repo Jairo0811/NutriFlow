@@ -6,6 +6,7 @@ import { authApi } from '../../src/features/auth/api';
 import { AuthButton } from '../../src/features/auth/components/AuthButton';
 import { AuthField } from '../../src/features/auth/components/AuthField';
 import { AuthScaffold } from '../../src/features/auth/components/AuthScaffold';
+import { colors } from '../../src/theme';
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState('');
@@ -59,7 +60,7 @@ export default function ForgotPasswordScreen() {
 }
 
 const styles = StyleSheet.create({
-  link: { color: '#62E62C', fontWeight: '700', textAlign: 'center' },
+  link: { color: colors.primary, fontWeight: '700', textAlign: 'center' },
   success: { color: '#91F26A', fontSize: 14, lineHeight: 20 },
   error: { color: '#FF827C', fontSize: 14, lineHeight: 20 },
 });

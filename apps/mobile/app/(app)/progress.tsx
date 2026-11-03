@@ -6,6 +6,7 @@ import { useAuth } from '../../src/features/auth/AuthProvider';
 import { progressApi, type ProgressSummary } from '../../src/features/progress/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
 import { useToday } from '../../src/features/shared/dates';
+import { colors } from '../../src/theme';
 
 export default function ProgressScreen() {
   const { session } = useAuth();
@@ -76,8 +77,8 @@ export default function ProgressScreen() {
         </View>
 
         <Text style={styles.sectionTitle}>Registrar peso de hoy</Text>
-        <TextInput value={weight} onChangeText={setWeight} keyboardType="decimal-pad" placeholder="Ej. 218.5" placeholderTextColor="#637268" style={styles.input} />
-        <TextInput value={note} onChangeText={setNote} placeholder="Nota opcional" placeholderTextColor="#637268" style={styles.input} />
+        <TextInput value={weight} onChangeText={setWeight} keyboardType="decimal-pad" placeholder="Ej. 218.5" placeholderTextColor={colors.placeholder} style={styles.input} />
+        <TextInput value={note} onChangeText={setNote} placeholder="Nota opcional" placeholderTextColor={colors.placeholder} style={styles.input} />
         <Pressable disabled={saving} onPress={() => void saveWeight()} style={[styles.button, saving && styles.disabled]}>
           <Text style={styles.buttonText}>{saving ? 'Guardando…' : 'Guardar peso'}</Text>
         </Pressable>
@@ -107,27 +108,27 @@ export default function ProgressScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
-  title: { color: '#F6FAF7', fontSize: 34, fontWeight: '900', marginTop: 10 },
-  subtitle: { color: '#95A59B', fontSize: 15, lineHeight: 23, marginTop: 8 },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
+  title: { color: colors.text, fontSize: 34, fontWeight: '900', marginTop: 10 },
+  subtitle: { color: colors.textSecondary, fontSize: 15, lineHeight: 23, marginTop: 8 },
   summaryRow: { gap: 10, marginTop: 24 },
-  summaryCard: { backgroundColor: '#101C14', borderColor: '#223228', borderRadius: 16, borderWidth: 1, padding: 16 },
-  label: { color: '#95A59B', fontWeight: '700' },
-  value: { color: '#F6FAF7', fontSize: 22, fontWeight: '900', marginTop: 5 },
-  sectionTitle: { color: '#F6FAF7', fontSize: 20, fontWeight: '900', marginTop: 28 },
-  input: { backgroundColor: '#101C14', borderColor: '#25372B', borderRadius: 14, borderWidth: 1, color: '#F6FAF7', fontSize: 16, marginTop: 12, padding: 14 },
-  button: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 12, padding: 16 },
-  buttonText: { color: '#07110B', fontWeight: '900' },
+  summaryCard: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 16, borderWidth: 1, padding: 16 },
+  label: { color: colors.textSecondary, fontWeight: '700' },
+  value: { color: colors.text, fontSize: 22, fontWeight: '900', marginTop: 5 },
+  sectionTitle: { color: colors.text, fontSize: 20, fontWeight: '900', marginTop: 28 },
+  input: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderRadius: 14, borderWidth: 1, color: colors.text, fontSize: 16, marginTop: 12, padding: 14 },
+  button: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, marginTop: 12, padding: 16 },
+  buttonText: { color: colors.background, fontWeight: '900' },
   disabled: { opacity: 0.6 },
-  error: { color: '#FF8E8E', marginTop: 12 },
+  error: { color: colors.danger, marginTop: 12 },
   entry: { alignItems: 'center', borderBottomColor: '#18251D', borderBottomWidth: 1, flexDirection: 'row', gap: 12, paddingVertical: 14 },
   flex: { flex: 1 },
-  entryDate: { color: '#95A59B', fontSize: 12 },
-  entryWeight: { color: '#F6FAF7', fontSize: 17, fontWeight: '900', marginTop: 3 },
-  entryNote: { color: '#95A59B', marginTop: 3 },
-  bar: { backgroundColor: '#62E62C', borderRadius: 999, height: 4, marginTop: 8 },
+  entryDate: { color: colors.textSecondary, fontSize: 12 },
+  entryWeight: { color: colors.text, fontSize: 17, fontWeight: '900', marginTop: 3 },
+  entryNote: { color: colors.textSecondary, marginTop: 3 },
+  bar: { backgroundColor: colors.primary, borderRadius: 999, height: 4, marginTop: 8 },
   remove: { color: '#FF9A9A', fontWeight: '800' },
-  helper: { color: '#7E8E84', marginTop: 12 },
+  helper: { color: colors.textMuted, marginTop: 12 },
 });

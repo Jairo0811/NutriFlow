@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { engagementApi, type EngagementOverview, type FavoriteFood, type Recipe } from '../../src/features/engagement/api';
+import { colors } from '../../src/theme';
 
 export default function EngagementScreen() {
   const { session } = useAuth();
@@ -161,7 +162,7 @@ export default function EngagementScreen() {
             value={recipeName}
             onChangeText={setRecipeName}
             placeholder="Nombre de la receta"
-            placeholderTextColor="#637268"
+            placeholderTextColor={colors.placeholder}
             style={styles.input}
           />
           <Text style={styles.helper}>Selecciona favoritos como ingredientes:</Text>
@@ -204,37 +205,37 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#07110B' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
-  back: { color: '#DDE5DF', fontWeight: '700' },
-  eyebrow: { color: '#62E62C', fontSize: 12, fontWeight: '800', letterSpacing: 1.4, marginTop: 30 },
-  title: { color: '#F6FAF7', fontSize: 32, fontWeight: '900', marginTop: 10 },
-  subtitle: { color: '#95A59B', fontSize: 15, lineHeight: 23, marginTop: 10 },
-  helper: { color: '#7E8E84', fontSize: 14, lineHeight: 20, marginTop: 10 },
-  error: { color: '#FF8E8E', marginTop: 14 },
+  back: { color: colors.textSoft, fontWeight: '700' },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4, marginTop: 30 },
+  title: { color: colors.text, fontSize: 32, fontWeight: '900', marginTop: 10 },
+  subtitle: { color: colors.textSecondary, fontSize: 15, lineHeight: 23, marginTop: 10 },
+  helper: { color: colors.textMuted, fontSize: 14, lineHeight: 20, marginTop: 10 },
+  error: { color: colors.danger, marginTop: 14 },
   statsRow: { flexDirection: 'row', gap: 8, marginTop: 20 },
-  stat: { flex: 1, backgroundColor: '#101C14', borderColor: '#223228', borderWidth: 1, borderRadius: 14, padding: 12 },
-  statValue: { color: '#F6FAF7', fontWeight: '900', fontSize: 16 },
-  statLabel: { color: '#7E8E84', fontSize: 11, marginTop: 4 },
-  card: { backgroundColor: '#101C14', borderColor: '#223228', borderWidth: 1, borderRadius: 18, marginTop: 16, padding: 18 },
-  cardTitle: { color: '#F6FAF7', fontSize: 18, fontWeight: '900' },
-  cardText: { color: '#DDE5DF', marginTop: 10 },
-  progressTrack: { backgroundColor: '#223228', borderRadius: 999, height: 10, marginTop: 12, overflow: 'hidden' },
-  progressFill: { backgroundColor: '#62E62C', height: '100%' },
+  stat: { flex: 1, backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 14, padding: 12 },
+  statValue: { color: colors.text, fontWeight: '900', fontSize: 16 },
+  statLabel: { color: colors.textMuted, fontSize: 11, marginTop: 4 },
+  card: { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 18, marginTop: 16, padding: 18 },
+  cardTitle: { color: colors.text, fontSize: 18, fontWeight: '900' },
+  cardText: { color: colors.textSoft, marginTop: 10 },
+  progressTrack: { backgroundColor: colors.border, borderRadius: 999, height: 10, marginTop: 12, overflow: 'hidden' },
+  progressFill: { backgroundColor: colors.primary, height: '100%' },
   quickRow: { flexDirection: 'row', gap: 8, marginTop: 14 },
-  quickButton: { flex: 1, alignItems: 'center', backgroundColor: '#132718', borderRadius: 12, padding: 12 },
-  quickText: { color: '#62E62C', fontWeight: '900' },
+  quickButton: { flex: 1, alignItems: 'center', backgroundColor: colors.surfaceRaised, borderRadius: 12, padding: 12 },
+  quickText: { color: colors.primary, fontWeight: '900' },
   itemRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
   favoriteRow: { flexDirection: 'row', marginTop: 12 },
-  itemText: { color: '#F6FAF7', fontWeight: '800' },
-  meta: { color: '#95A59B', fontSize: 12, marginTop: 4 },
+  itemText: { color: colors.text, fontWeight: '800' },
+  meta: { color: colors.textSecondary, fontSize: 12, marginTop: 4 },
   removeText: { color: '#FF9B9B', fontSize: 12, fontWeight: '800', marginTop: 8 },
-  secondaryButton: { alignItems: 'center', borderColor: '#36503E', borderRadius: 12, borderWidth: 1, marginTop: 14, padding: 13 },
-  secondaryText: { color: '#DDE5DF', fontWeight: '800' },
-  input: { backgroundColor: '#0B160F', borderColor: '#25372B', borderWidth: 1, borderRadius: 12, color: '#F6FAF7', fontSize: 15, marginTop: 14, padding: 13 },
+  secondaryButton: { alignItems: 'center', borderColor: colors.borderButton, borderRadius: 12, borderWidth: 1, marginTop: 14, padding: 13 },
+  secondaryText: { color: colors.textSoft, fontWeight: '800' },
+  input: { backgroundColor: '#0B160F', borderColor: colors.borderInput, borderWidth: 1, borderRadius: 12, color: colors.text, fontSize: 15, marginTop: 14, padding: 13 },
   selectRow: { borderColor: '#2A3C30', borderRadius: 10, borderWidth: 1, marginTop: 8, padding: 11 },
-  selectRowActive: { backgroundColor: '#17331D', borderColor: '#62E62C' },
-  primaryButton: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 12, marginTop: 14, padding: 14 },
-  primaryText: { color: '#07110B', fontWeight: '900' },
-  recipeCard: { borderTopColor: '#223228', borderTopWidth: 1, marginTop: 14, paddingTop: 14 },
+  selectRowActive: { backgroundColor: '#17331D', borderColor: colors.primary },
+  primaryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 12, marginTop: 14, padding: 14 },
+  primaryText: { color: colors.background, fontWeight: '900' },
+  recipeCard: { borderTopColor: colors.border, borderTopWidth: 1, marginTop: 14, paddingTop: 14 },
 });

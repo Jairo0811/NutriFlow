@@ -5,6 +5,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { onboardingApi } from '../../src/features/onboarding/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
+import { colors } from '../../src/theme';
 
 export default function AuthenticatedLayout() {
   const { session, isLoading, logout } = useAuth();
@@ -54,7 +55,7 @@ export default function AuthenticatedLayout() {
   if (isLoading || checkingProfile || leavingOnboarding || (session && profileCompleted === null && !error)) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator color="#62E62C" size="large" />
+        <ActivityIndicator color={colors.primary} size="large" />
         <Text style={styles.loadingText}>Preparando NutriFlow…</Text>
       </View>
     );
@@ -81,11 +82,11 @@ export default function AuthenticatedLayout() {
   return (
     <Stack
       screenOptions={{
-        contentStyle: { backgroundColor: '#07110B' },
+        contentStyle: { backgroundColor: colors.background },
         headerBackButtonDisplayMode: 'minimal',
         headerShadowVisible: false,
-        headerStyle: { backgroundColor: '#07110B' },
-        headerTintColor: '#62E62C',
+        headerStyle: { backgroundColor: colors.background },
+        headerTintColor: colors.primary,
         headerTitle: '',
       }}
     >
@@ -98,15 +99,15 @@ export default function AuthenticatedLayout() {
 const styles = StyleSheet.create({
   loading: {
     alignItems: 'center',
-    backgroundColor: '#07110B',
+    backgroundColor: colors.background,
     flex: 1,
     justifyContent: 'center',
     padding: 24,
   },
-  loadingText: { color: '#95A59B', marginTop: 12 },
-  error: { color: '#FF8E8E', lineHeight: 22, textAlign: 'center' },
-  retryButton: { alignItems: 'center', backgroundColor: '#62E62C', borderRadius: 14, marginTop: 20, minHeight: 52, justifyContent: 'center', paddingHorizontal: 32 },
-  retryText: { color: '#07110B', fontSize: 16, fontWeight: '800' },
+  loadingText: { color: colors.textSecondary, marginTop: 12 },
+  error: { color: colors.danger, lineHeight: 22, textAlign: 'center' },
+  retryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, marginTop: 20, minHeight: 52, justifyContent: 'center', paddingHorizontal: 32 },
+  retryText: { color: colors.background, fontSize: 16, fontWeight: '800' },
   logoutButton: { alignItems: 'center', marginTop: 8, minHeight: 48, justifyContent: 'center', paddingHorizontal: 24 },
-  logoutText: { color: '#DDE5DF', fontSize: 15, fontWeight: '700' },
+  logoutText: { color: colors.textSoft, fontSize: 15, fontWeight: '700' },
 });
