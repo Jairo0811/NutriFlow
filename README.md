@@ -294,6 +294,7 @@ El pipeline de GitHub Actions valida ambos lados del sistema antes de integrar c
 - bloqueo de vulnerabilidades críticas;
 - TypeScript type-check;
 - pruebas unitarias de fechas y composición de campos;
+- pruebas con Jest/React Native Testing Library para botones, campos, fechas y barras de progreso;
 - exportación del bundle web de Expo.
 
 Los advisories conocidos del ecosistema Expo se revisan sin forzar upgrades incompatibles. Consulta [`SECURITY.md`](SECURITY.md).

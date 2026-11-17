@@ -13,6 +13,7 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 - Confirmaciones en operaciones destructivas, etiquetas de accesibilidad y acciones de recuperación de errores.
 - Edición de porciones en el diario usando el endpoint `PUT` existente, sin nuevas migraciones de backend.
 - Tests sin dependencias adicionales para calendario, validación y composición de fechas; CI también exporta Expo web.
+- Pruebas de componentes con `jest-expo` y React Native Testing Library 13, fijadas al SDK 57; validación añadida a CI.
 - Centralización de colores y refuerzo del contraste de placeholders.
 - QA presencial y decisión de versión aún pendientes; se conserva v1.4.0 como snapshot histórico.
 
