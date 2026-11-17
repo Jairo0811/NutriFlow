@@ -1,9 +1,12 @@
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace NutriFlow.Infrastructure.Persistence.Migrations;
 
+[DbContext(typeof(NutriFlowDbContext))]
+[Migration("20260817160000_AddFoodAllergens")]
 public partial class AddFoodAllergens : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)

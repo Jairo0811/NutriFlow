@@ -6,6 +6,14 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 
 ## [Unreleased]
 
+### Calidad e integración real
+
+- Smoke HTTP automatizado de 21 verificaciones contra API ASP.NET Core y PostgreSQL 17 con contenedores efímeros, incluyendo autenticación, onboarding, alérgenos, comidas, peso, agua, recetas y permisos Premium.
+- Corregido el registro de las migraciones `AddWeightProgress`, `AddFoodAllergens`, `AddEngagement` y `AddMicronutrients` en Entity Framework Core: sin los atributos `Migration` y `DbContext` no se aplicaban al iniciar una base limpia.
+- Prueba xUnit para impedir que las migraciones dejen de ser descubiertas en futuras refactorizaciones.
+- Se conserva el pendiente de QA visual y de cámara en un dispositivo o emulador real antes de liberar v1.5.0.
+
+
 ### Mejoras del frontend móvil (2026-11-17)
 
 - Migración de nueve pantallas a `Screen` con estilos y navegación coherentes.
