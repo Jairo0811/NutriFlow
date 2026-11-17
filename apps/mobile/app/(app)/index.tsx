@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   pressed: { backgroundColor: colors.surfaceRaised },
   iconBadge: {
     alignItems: 'center',
-    backgroundColor: '#17331D',
+    backgroundColor: colors.successSurface,
     borderColor: colors.borderAccent,
     borderRadius: radius.sm - 1,
     borderWidth: 1,

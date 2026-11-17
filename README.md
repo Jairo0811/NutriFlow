@@ -24,7 +24,15 @@
   <strong>React Native · Expo · TypeScript · ASP.NET Core · EF Core · PostgreSQL · Docker · GitHub Actions</strong>
 </p>
 
-> **Snapshot de portafolio:** NutriFlow v1.4.0 queda congelado como versión funcional y demostrable del proyecto. No representa un lanzamiento comercial en App Store/Google Play ni implica que billing, credenciales externas o infraestructura productiva estén conectados.
+> **Snapshot de portafolio:** NutriFlow v1.4.0 permanece como hito histórico. Las mejoras móviles posteriores todavía necesitan validación visual en dispositivo antes de publicar una versión nueva. No representa un lanzamiento comercial en App Store/Google Play ni implica que billing o credenciales externas estén conectados.
+
+---
+
+## Seguimiento de la interfaz móvil
+
+Las mejoras posteriores al snapshot v1.4.0 abarcan `Screen` y componentes reutilizables, accesibilidad, estados de carga y reintento, edición de porciones en el diario, control de fechas locales y pruebas de calendario en CI.
+
+La validación de cámara, navegación, teclado y diseño en un equipo real sigue documentada en [la lista de QA móvil](docs/mobile-qa-checklist.md). **No se ha verificado aún el funcionamiento en dispositivo real ni se incluyen capturas no realizadas**. La decisión de versión 1.5.0 y una navegación por pestañas se posponen hasta esa validación.
 
 ---
 
@@ -250,6 +258,8 @@ GET  /api/foods/
 GET  /api/foods/barcode/{barcode}
 GET  /api/meals/
 POST /api/meals/entries
+PUT  /api/meals/entries/{entryId}
+DELETE /api/meals/entries/{entryId}
 GET  /api/dashboard/?date=YYYY-MM-DD
 ```
 
@@ -282,7 +292,9 @@ El pipeline de GitHub Actions valida ambos lados del sistema antes de integrar c
 - instalación reproducible con `npm ci`;
 - reporte de advisories high del toolchain;
 - bloqueo de vulnerabilidades críticas;
-- TypeScript type-check.
+- TypeScript type-check;
+- pruebas unitarias de fechas y composición de campos;
+- exportación del bundle web de Expo.
 
 Los advisories conocidos del ecosistema Expo se revisan sin forzar upgrades incompatibles. Consulta [`SECURITY.md`](SECURITY.md).
 

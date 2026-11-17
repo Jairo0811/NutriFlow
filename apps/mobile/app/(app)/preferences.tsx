@@ -1,6 +1,9 @@
+import { Screen } from '../../src/components/Screen';
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from '../../src/components/Button';
+import { Card } from '../../src/components/Card';
+import { Chip } from '../../src/components/Chip';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import {
@@ -41,18 +44,26 @@ export default function PreferencesScreen() {
   const [restrictions, setRestrictions] = useState<DietaryRestrictionCode[]>([]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     if (!accessToken) return;
-    setMessage(null);
+    let active = true;
+    setLoading(true);
+    setLoadError(null);
     onboardingApi.get(accessToken)
       .then((value) => {
+        if (!active) return;
         setProfile(value);
         setPreferences(value.foodPreferenceCodes);
         setRestrictions(value.dietaryRestrictionCodes);
       })
-      .catch((cause) => setMessage(toUserFacingError(cause, 'No fue posible cargar tus preferencias.')));
-  }, [accessToken]);
+      .catch((cause) => { if (active) setLoadError(toUserFacingError(cause, 'No fue posible cargar tus preferencias.')); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [accessToken, reload]);
 
   if (!session || !accessToken) return null;
 
@@ -77,27 +88,22 @@ export default function PreferencesScreen() {
   }
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · SEGURIDAD ALIMENTARIA</Text>
-        <Text style={styles.title}>Alergias y preferencias</Text>
-        <Text style={styles.subtitle}>Estas reglas se usan para detectar conflictos al consultar alimentos. No sustituyen la lectura de etiquetas ni una evaluación clínica.</Text>
+    <Screen eyebrow="NUTRIFLOW · SEGURIDAD ALIMENTARIA" title="Alergias y preferencias" subtitle="Las alertas no sustituyen leer etiquetas ni una evaluación clínica." onRefresh={() => setReload((n) => n + 1)} refreshing={loading}>
+        
 
+        {loading && <Text style={styles.message}>Cargando preferencias…</Text>}
+        {loadError && <Card><Text style={styles.message}>{loadError}</Text><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
         <Text style={styles.sectionTitle}>Preferencias</Text>
         <View style={styles.chips}>
           {preferenceOptions.map((item) => (
-            <Pressable key={item.code} onPress={() => toggle(item.code, preferences, setPreferences)} style={[styles.chip, preferences.includes(item.code) && styles.selected]}>
-              <Text style={styles.chipText}>{item.label}</Text>
-            </Pressable>
+            <Chip key={item.code} label={item.label} selected={preferences.includes(item.code)} onPress={() => toggle(item.code, preferences, setPreferences)} />
           ))}
         </View>
 
         <Text style={styles.sectionTitle}>Restricciones y alérgenos</Text>
         <View style={styles.chips}>
           {restrictionOptions.map((item) => (
-            <Pressable key={item.code} onPress={() => toggle(item.code, restrictions, setRestrictions)} style={[styles.chip, restrictions.includes(item.code) && styles.warningSelected]}>
-              <Text style={styles.chipText}>{item.label}</Text>
-            </Pressable>
+            <Chip key={item.code} label={item.label} selected={restrictions.includes(item.code)} onPress={() => toggle(item.code, restrictions, setRestrictions)} />
           ))}
         </View>
 
@@ -106,16 +112,14 @@ export default function PreferencesScreen() {
           <Text style={styles.infoText}>{profile?.dietaryRestrictionCodes.length ?? 0} restricciones configuradas. NutriFlow mostrará advertencias cuando un alimento tenga alérgenos coincidentes.</Text>
         </View>
 
-        <Pressable disabled={saving} onPress={() => void save()} style={[styles.button, saving && styles.disabled]}>
-          <Text style={styles.buttonText}>{saving ? 'Guardando…' : 'Guardar cambios'}</Text>
-        </Pressable>
-        {message && <Text style={styles.message}>{message}</Text>}
-      </ScrollView>
-    </SafeAreaView>
+        <Button label="Guardar cambios" loading={saving} disabled={loading || Boolean(loadError) || !profile} onPress={() => void save()} style={styles.saveButton} />
+        {message && <Text accessibilityLiveRegion="polite" style={styles.message}>{message}</Text>}
+      </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  saveButton: { marginTop: 18 },
   safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
   eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 9 },
   chip: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderRadius: 999, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 11 },
   selected: { backgroundColor: colors.surfaceRaised, borderColor: colors.primary },
-  warningSelected: { backgroundColor: '#2A1818', borderColor: colors.danger },
+  warningSelected: { backgroundColor: colors.dangerSurface, borderColor: colors.danger },
   chipText: { color: colors.text, fontWeight: '800' },
   infoCard: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 18, borderWidth: 1, marginTop: 28, padding: 18 },
   infoTitle: { color: colors.primary, fontWeight: '900' },

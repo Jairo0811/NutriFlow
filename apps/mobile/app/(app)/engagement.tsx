@@ -1,7 +1,11 @@
+import { Screen } from '../../src/components/Screen';
 import { useCallback, useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button } from '../../src/components/Button';
+import { Card } from '../../src/components/Card';
+import { confirmAction } from '../../src/features/shared/confirm';
+import { toUserFacingError } from '../../src/features/shared/errors';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { engagementApi, type EngagementOverview, type FavoriteFood, type Recipe } from '../../src/features/engagement/api';
@@ -20,6 +24,7 @@ export default function EngagementScreen() {
   const load = useCallback(async () => {
     if (!session) return;
     setError(null);
+    setLoading(true);
     try {
       const [nextOverview, nextFavorites, nextRecipes] = await Promise.all([
         engagementApi.getOverview(session.accessToken),
@@ -30,7 +35,7 @@ export default function EngagementScreen() {
       setFavorites(nextFavorites);
       setRecipes(nextRecipes);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible cargar Engagement.');
+      setError(toUserFacingError(cause, 'No fue posible cargar Engagement.'));
     } finally {
       setLoading(false);
     }
@@ -45,7 +50,7 @@ export default function EngagementScreen() {
       const water = await engagementApi.addWater(session!.accessToken, amount);
       setOverview((current) => current ? { ...current, water } : current);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible registrar agua.');
+      setError(toUserFacingError(cause, 'No fue posible registrar agua.'));
     }
   }
 
@@ -54,7 +59,7 @@ export default function EngagementScreen() {
       const water = await engagementApi.removeWater(session!.accessToken, entryId);
       setOverview((current) => current ? { ...current, water } : current);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible eliminar el registro.');
+      setError(toUserFacingError(cause, 'No fue posible eliminar el registro.'));
     }
   }
 
@@ -81,7 +86,7 @@ export default function EngagementScreen() {
       setRecipes(await engagementApi.getRecipes(session!.accessToken));
       setOverview(await engagementApi.getOverview(session!.accessToken));
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible crear la receta.');
+      setError(toUserFacingError(cause, 'No fue posible crear la receta.'));
     }
   }
 
@@ -91,22 +96,18 @@ export default function EngagementScreen() {
       setRecipes(await engagementApi.getRecipes(session!.accessToken));
       setOverview(await engagementApi.getOverview(session!.accessToken));
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No fue posible eliminar la receta.');
+      setError(toUserFacingError(cause, 'No fue posible eliminar la receta.'));
     }
   }
 
   const water = overview?.water;
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
-        <Text style={styles.eyebrow}>NUTRIFLOW · FASE 13</Text>
-        <Text style={styles.title}>Engagement Hub</Text>
-        <Text style={styles.subtitle}>Construye consistencia con hidratación, favoritos, recetas y rachas basadas en actividad real.</Text>
+    <Screen eyebrow="NUTRIFLOW · HÁBITOS" title="Hábitos y recetas" subtitle="Hidratación, favoritos, recetas y rachas de actividad." onRefresh={load} refreshing={loading}>
+        
 
         {loading && <Text style={styles.helper}>Cargando tus hábitos…</Text>}
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error && <Card><Text style={styles.error}>{error}</Text><Button label="Reintentar" variant="secondary" onPress={() => void load()} /></Card>}
 
         {overview && (
           <View style={styles.statsRow}>
@@ -126,7 +127,7 @@ export default function EngagementScreen() {
           </View>
           <View style={styles.quickRow}>
             {[8, 16, 24].map((amount) => (
-              <Pressable key={amount} onPress={() => void addWater(amount)} style={styles.quickButton}>
+              <Pressable accessibilityRole="button" key={amount} onPress={() => void addWater(amount)} style={styles.quickButton}>
                 <Text style={styles.quickText}>+{amount} oz</Text>
               </Pressable>
             ))}
@@ -134,7 +135,7 @@ export default function EngagementScreen() {
           {water?.entries.map((entry) => (
             <View key={entry.id} style={styles.itemRow}>
               <Text style={styles.itemText}>{entry.amountOunces.toFixed(0)} oz</Text>
-              <Pressable onPress={() => void removeWater(entry.id)}><Text style={styles.removeText}>Eliminar</Text></Pressable>
+              <Pressable accessibilityRole="button" accessibilityLabel={`Eliminar agua ${entry.amountOunces} onzas`} onPress={() => confirmAction({ title: 'Eliminar agua', message: '¿Eliminar este registro?', confirmLabel: 'Eliminar', onConfirm: () => void removeWater(entry.id) })}><Text style={styles.removeText}>Eliminar</Text></Pressable>
             </View>
           ))}
         </View>
@@ -151,7 +152,7 @@ export default function EngagementScreen() {
               </View>
             </View>
           ))}
-          <Pressable onPress={() => router.push('/foods')} style={styles.secondaryButton}>
+          <Pressable accessibilityRole="button" onPress={() => router.push('/foods')} style={styles.secondaryButton}>
             <Text style={styles.secondaryText}>Abrir catálogo</Text>
           </Pressable>
         </View>
@@ -159,6 +160,7 @@ export default function EngagementScreen() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>🥗 Crear receta rápida</Text>
           <TextInput
+            accessibilityLabel="Nombre de la receta"
             value={recipeName}
             onChangeText={setRecipeName}
             placeholder="Nombre de la receta"
@@ -169,12 +171,12 @@ export default function EngagementScreen() {
           {favorites.map((food) => {
             const selected = selectedFoodIds.includes(food.foodId);
             return (
-              <Pressable key={food.foodId} onPress={() => toggleIngredient(food.foodId)} style={[styles.selectRow, selected && styles.selectRowActive]}>
+              <Pressable accessibilityRole="button" key={food.foodId} onPress={() => toggleIngredient(food.foodId)} style={[styles.selectRow, selected && styles.selectRowActive]}>
                 <Text style={styles.itemText}>{selected ? '✓ ' : ''}{food.name}</Text>
               </Pressable>
             );
           })}
-          <Pressable onPress={() => void createRecipe()} style={styles.primaryButton}>
+          <Pressable accessibilityRole="button" onPress={() => void createRecipe()} style={styles.primaryButton}>
             <Text style={styles.primaryText}>Guardar receta</Text>
           </Pressable>
         </View>
@@ -186,12 +188,11 @@ export default function EngagementScreen() {
               <Text style={styles.itemText}>{recipe.name}</Text>
               <Text style={styles.meta}>{Math.round(recipe.caloriesPerServing)} kcal · P {recipe.proteinGramsPerServing.toFixed(1)} g · C {recipe.carbohydrateGramsPerServing.toFixed(1)} g · G {recipe.fatGramsPerServing.toFixed(1)} g</Text>
               <Text style={styles.meta}>{recipe.ingredients.length} ingredientes</Text>
-              <Pressable onPress={() => void removeRecipe(recipe.id)}><Text style={styles.removeText}>Eliminar receta</Text></Pressable>
+              <Pressable accessibilityRole="button" accessibilityLabel={`Eliminar receta ${recipe.name}`} onPress={() => confirmAction({ title: 'Eliminar receta', message: `¿Eliminar ${recipe.name}?`, confirmLabel: 'Eliminar', onConfirm: () => void removeRecipe(recipe.id) })}><Text style={styles.removeText}>Eliminar receta</Text></Pressable>
             </View>
           ))}
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </Screen>
   );
 }
 
@@ -229,12 +230,12 @@ const styles = StyleSheet.create({
   favoriteRow: { flexDirection: 'row', marginTop: 12 },
   itemText: { color: colors.text, fontWeight: '800' },
   meta: { color: colors.textSecondary, fontSize: 12, marginTop: 4 },
-  removeText: { color: '#FF9B9B', fontSize: 12, fontWeight: '800', marginTop: 8 },
+  removeText: { color: colors.dangerText, fontSize: 12, fontWeight: '800', marginTop: 8 },
   secondaryButton: { alignItems: 'center', borderColor: colors.borderButton, borderRadius: 12, borderWidth: 1, marginTop: 14, padding: 13 },
   secondaryText: { color: colors.textSoft, fontWeight: '800' },
-  input: { backgroundColor: '#0B160F', borderColor: colors.borderInput, borderWidth: 1, borderRadius: 12, color: colors.text, fontSize: 15, marginTop: 14, padding: 13 },
-  selectRow: { borderColor: '#2A3C30', borderRadius: 10, borderWidth: 1, marginTop: 8, padding: 11 },
-  selectRowActive: { backgroundColor: '#17331D', borderColor: colors.primary },
+  input: { backgroundColor: colors.surfaceDeep, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 12, color: colors.text, fontSize: 15, marginTop: 14, padding: 13 },
+  selectRow: { borderColor: colors.borderSoft, borderRadius: 10, borderWidth: 1, marginTop: 8, padding: 11 },
+  selectRowActive: { backgroundColor: colors.successSurface, borderColor: colors.primary },
   primaryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 12, marginTop: 14, padding: 14 },
   primaryText: { color: colors.background, fontWeight: '900' },
   recipeCard: { borderTopColor: colors.border, borderTopWidth: 1, marginTop: 14, paddingTop: 14 },

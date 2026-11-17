@@ -1,7 +1,9 @@
+import { Screen } from '../../src/components/Screen';
 import { useEffect, useState } from 'react';
+import { Button } from '../../src/components/Button';
+import { Card } from '../../src/components/Card';
 import { Redirect } from 'expo-router';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { getNutritionTargets, type NutritionTargets } from '../../src/features/nutrition/api';
@@ -12,12 +14,14 @@ export default function NutritionTargetsScreen() {
   const { session, isLoading } = useAuth();
   const [targets, setTargets] = useState<NutritionTargets | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     if (!session) return;
 
     let mounted = true;
     setError(null);
+    setTargets(null);
     void getNutritionTargets(session.accessToken)
       .then((result) => {
         if (mounted) setTargets(result);
@@ -29,20 +33,15 @@ export default function NutritionTargetsScreen() {
     return () => {
       mounted = false;
     };
-  }, [session]);
+  }, [session, reload]);
 
   if (!isLoading && !session) return <Redirect href="/login" />;
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · PLAN NUTRICIONAL</Text>
-        <Text style={styles.title}>Tus objetivos diarios</Text>
-        <Text style={styles.subtitle}>
-          Estimaciones calculadas de forma determinística a partir de tu perfil. No sustituyen una evaluación nutricional profesional.
-        </Text>
+    <Screen eyebrow="NUTRIFLOW · PLAN NUTRICIONAL" title="Tus objetivos diarios" subtitle="Estimaciones de tu perfil, no sustituyen la evaluación profesional." onRefresh={() => setReload((n) => n + 1)} refreshing={!targets && !error}>
+        
 
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error && <Card><Text style={styles.error}>{error}</Text><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
         {!targets && !error && <Text style={styles.loading}>Calculando…</Text>}
 
         {targets && (
@@ -66,8 +65,7 @@ export default function NutritionTargetsScreen() {
             </View>
           </>
         )}
-      </ScrollView>
-    </SafeAreaView>
+      </Screen>
   );
 }
 

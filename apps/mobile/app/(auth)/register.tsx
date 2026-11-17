@@ -79,7 +79,7 @@ export default function RegisterScreen() {
 
 const styles = StyleSheet.create({
   hint: { color: colors.textMuted, fontSize: 12, lineHeight: 18 },
-  error: { color: '#FF827C', fontSize: 14, lineHeight: 20 },
+  error: { color: colors.danger, fontSize: 14, lineHeight: 20 },
   footerText: { color: colors.textSecondary, textAlign: 'center' },
   link: { color: colors.primary, fontWeight: '700' },
 });

@@ -61,6 +61,6 @@ export default function ForgotPasswordScreen() {
 
 const styles = StyleSheet.create({
   link: { color: colors.primary, fontWeight: '700', textAlign: 'center' },
-  success: { color: '#91F26A', fontSize: 14, lineHeight: 20 },
-  error: { color: '#FF827C', fontSize: 14, lineHeight: 20 },
+  success: { color: colors.primary, fontSize: 14, lineHeight: 20 },
+  error: { color: colors.danger, fontSize: 14, lineHeight: 20 },
 });

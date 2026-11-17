@@ -64,3 +64,9 @@ jobs:
 
       - name: Type check
         run: npm run typecheck
+
+      - name: Frontend unit tests
+        run: npm test
+
+      - name: Export web bundle
+        run: CI=1 npx expo export --platform web

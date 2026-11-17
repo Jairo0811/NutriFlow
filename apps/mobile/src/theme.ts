@@ -13,7 +13,7 @@ export const colors = {
   textSoft: '#DDE5DF',
   textSecondary: '#95A59B',
   textMuted: '#7E8E84',
-  placeholder: '#637268',
+  placeholder: '#95A59B',
 
   border: '#223228',
   borderInput: '#25372B',
@@ -21,6 +21,15 @@ export const colors = {
   borderButton: '#36503E',
 
   danger: '#FF8E8E',
+  dangerText: '#FF9A9A',
+  dangerLight: '#FFB1B1',
+  dangerPale: '#FFD4D4',
+  dangerSurface: '#2A1818',
+  warning: '#FFCC80',
+  surfaceDeep: '#0B160F',
+  successSurface: '#17331D',
+  dividerSubtle: '#18251D',
+  borderSoft: '#2A3C30',
 } as const;
 
 export const spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 } as const;

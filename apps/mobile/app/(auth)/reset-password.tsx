@@ -62,5 +62,5 @@ export default function ResetPasswordScreen() {
 
 const styles = StyleSheet.create({
   hint: { color: colors.textMuted, fontSize: 12, lineHeight: 18 },
-  error: { color: '#FF827C', fontSize: 14, lineHeight: 20 },
+  error: { color: colors.danger, fontSize: 14, lineHeight: 20 },
 });

@@ -1,11 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Screen } from '../../src/components/Screen';
+import { useEffect, useState } from 'react';
+import { Button } from '../../src/components/Button';
+import { Card } from '../../src/components/Card';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { AiApiError, aiApi, type AiFoodProposal, type AiStatus, type MealType } from '../../src/features/ai/api';
-import { localDate } from '../../src/features/shared/dates';
+import { useToday } from '../../src/features/shared/dates';
 import { colors } from '../../src/theme';
 
 const mealTypes: MealType[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
@@ -22,14 +24,21 @@ export default function NutriFlowAiScreen() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  const today = useMemo(() => localDate(new Date()), []);
+  const today = useToday();
+  const [statusLoading, setStatusLoading] = useState(true);
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     if (!accessToken) return;
+    let active = true;
+    setStatusLoading(true);
+    setMessage(null);
     void aiApi.getStatus(accessToken)
-      .then(setStatus)
-      .catch(() => setMessage('No fue posible cargar el estado de NutriFlow AI.'));
-  }, [accessToken]);
+      .then((next) => { if (active) setStatus(next); })
+      .catch(() => { if (active) setMessage('No fue posible cargar el estado de NutriFlow AI.'); })
+      .finally(() => { if (active) setStatusLoading(false); });
+    return () => { active = false; };
+  }, [accessToken, reload]);
 
   if (!session || !accessToken) return null;
 
@@ -85,15 +94,11 @@ export default function NutriFlowAiScreen() {
   }
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
-        <Text style={styles.eyebrow}>NUTRIFLOW · AI</Text>
-        <Text style={styles.title}>NutriFlow AI Coach</Text>
-        <Text style={styles.subtitle}>
-          Usa tu progreso del día, metas y restricciones guardadas para darte orientación práctica. Las estimaciones de IA siempre deben confirmarse antes de registrar una comida.
-        </Text>
+    <Screen eyebrow="NUTRIFLOW · IA" title="NutriFlow AI Coach" subtitle="Consulta tus metas y confirma los alimentos antes de registrarlos." onRefresh={() => setReload((n) => n + 1)} refreshing={statusLoading}>
+        
 
+        {statusLoading && <Text style={styles.helper}>Comprobando disponibilidad…</Text>}
+        {!statusLoading && !status && <Card><Text style={styles.helper}>No se pudo cargar la IA.</Text><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
         <View style={styles.statusCard}>
           <Text style={styles.statusTitle}>{status?.providerConfigured ? 'IA conectada' : 'IA pendiente de configuración'}</Text>
           <Text style={styles.helper}>Proveedor: {status?.provider ?? 'cargando…'}</Text>
@@ -106,6 +111,7 @@ export default function NutriFlowAiScreen() {
         <Text style={styles.sectionTitle}>Pregúntale al Coach</Text>
         <TextInput
           multiline
+          accessibilityLabel="Pregunta para el Coach"
           value={coachMessage}
           onChangeText={setCoachMessage}
           placeholder="Ej.: ¿Qué me conviene cenar para acercarme a mi meta de proteína?"
@@ -113,7 +119,7 @@ export default function NutriFlowAiScreen() {
           style={styles.textArea}
           maxLength={1200}
         />
-        <Pressable disabled={busy} onPress={() => void askCoach()} style={styles.primaryButton}>
+        <Pressable accessibilityRole="button" disabled={busy} onPress={() => void askCoach()} style={styles.primaryButton}>
           <Text style={styles.primaryText}>{busy ? 'Procesando…' : 'Consultar Coach'}</Text>
         </Pressable>
 
@@ -127,7 +133,7 @@ export default function NutriFlowAiScreen() {
 
         <Text style={styles.sectionTitle}>Analizar comida por foto</Text>
         <Text style={styles.helper}>Premium · La IA propone alimentos y porciones; tú decides qué se registra.</Text>
-        <Pressable
+        <Pressable accessibilityRole="button"
           disabled={!status?.mealPhotoEnabled}
           onPress={() => router.push('/ai-photo')}
           style={[styles.secondaryButton, !status?.mealPhotoEnabled && styles.disabled]}
@@ -142,6 +148,7 @@ export default function NutriFlowAiScreen() {
         <TextInput
           multiline
           editable={status?.voiceLoggingEnabled}
+          accessibilityLabel="Texto de comida dictada"
           value={voiceTranscript}
           onChangeText={setVoiceTranscript}
           placeholder="Ej.: comí dos huevos, una porción de mangú y queso de freír"
@@ -149,7 +156,7 @@ export default function NutriFlowAiScreen() {
           style={[styles.textArea, !status?.voiceLoggingEnabled && styles.disabled]}
           maxLength={2000}
         />
-        <Pressable
+        <Pressable accessibilityRole="button"
           disabled={busy || !status?.voiceLoggingEnabled}
           onPress={() => void analyzeVoiceTranscript()}
           style={[styles.secondaryButton, !status?.voiceLoggingEnabled && styles.disabled]}
@@ -162,14 +169,13 @@ export default function NutriFlowAiScreen() {
         )}
 
         {usableProposals.length > 0 && (
-          <Pressable disabled={busy} onPress={() => void confirmMeal()} style={styles.primaryButton}>
+          <Pressable accessibilityRole="button" disabled={busy} onPress={() => void confirmMeal()} style={styles.primaryButton}>
             <Text style={styles.primaryText}>Confirmar y agregar al diario</Text>
           </Pressable>
         )}
 
         {message && <Text style={styles.message}>{message}</Text>}
-      </ScrollView>
-    </SafeAreaView>
+      </Screen>
   );
 }
 
@@ -199,7 +205,7 @@ function ProposalList({
       <Text style={styles.helper}>¿En qué comida quieres registrar los elementos válidos?</Text>
       <View style={styles.mealRow}>
         {mealTypes.map(type => (
-          <Pressable key={type} onPress={() => setMealType(type)} style={[styles.mealChip, mealType === type && styles.mealChipActive]}>
+          <Pressable accessibilityRole="button" key={type} onPress={() => setMealType(type)} style={[styles.mealChip, mealType === type && styles.mealChipActive]}>
             <Text style={[styles.mealChipText, mealType === type && styles.mealChipTextActive]}>{type}</Text>
           </Pressable>
         ))}
@@ -244,11 +250,11 @@ const styles = StyleSheet.create({
   proposalsCard: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 18, borderWidth: 1, marginTop: 20, padding: 18 },
   proposalRow: { borderBottomColor: colors.border, borderBottomWidth: 1, paddingBottom: 12, paddingTop: 12 },
   proposalName: { color: colors.text, fontSize: 16, fontWeight: '900' },
-  warning: { color: '#FFB1B1', fontSize: 12, fontWeight: '800', marginTop: 6 },
+  warning: { color: colors.dangerLight, fontSize: 12, fontWeight: '800', marginTop: 6 },
   mealRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
-  mealChip: { backgroundColor: '#0B160F', borderColor: colors.borderButton, borderRadius: 999, borderWidth: 1, paddingHorizontal: 12, paddingVertical: 9 },
+  mealChip: { backgroundColor: colors.surfaceDeep, borderColor: colors.borderButton, borderRadius: 999, borderWidth: 1, paddingHorizontal: 12, paddingVertical: 9 },
   mealChipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   mealChipText: { color: colors.textSoft, fontSize: 12, fontWeight: '800' },
   mealChipTextActive: { color: colors.background },
-  message: { color: '#FFCC80', fontSize: 13, fontWeight: '800', marginTop: 16, textAlign: 'center' },
+  message: { color: colors.warning, fontSize: 13, fontWeight: '800', marginTop: 16, textAlign: 'center' },
 });

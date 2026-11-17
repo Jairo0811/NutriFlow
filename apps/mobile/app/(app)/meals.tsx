@@ -37,6 +37,8 @@ export default function MealTrackingScreen() {
   const [noResults, setNoResults] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
   const [servings, setServings] = useState('1');
+  const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
+  const [editedServings, setEditedServings] = useState('1');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -126,6 +128,26 @@ export default function MealTrackingScreen() {
       setServings('1');
     } catch (cause) {
       setError(toUserFacingError(cause, 'No fue posible registrar el alimento.'));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function saveEditedEntry(entryId: string, type: MealType) {
+    if (!accessToken) return;
+    const parsed = Number(editedServings.replace(',', '.'));
+    if (!Number.isFinite(parsed) || parsed <= 0 || parsed > 100) {
+      setError('Ingresa una cantidad de porciones entre 0 y 100, sin incluir cero.');
+      return;
+    }
+    setSaving(true);
+    setError(null);
+    try {
+      setSummary(await mealTrackingApi.updateEntry(accessToken, entryId, today, type, parsed));
+      setEditingEntryId(null);
+      setEditedServings('1');
+    } catch (cause) {
+      setError(toUserFacingError(cause, 'No fue posible editar las porciones.'));
     } finally {
       setSaving(false);
     }
@@ -247,21 +269,46 @@ export default function MealTrackingScreen() {
           {!meal?.entries.length ? <Text style={typography.caption}>Aún no has registrado alimentos.</Text> : null}
 
           {meal?.entries.map((entry) => (
-            <View key={entry.id} style={styles.entryRow}>
-              <View style={styles.flex}>
-                <Text style={styles.foodName}>{entry.foodName}</Text>
-                <Text style={styles.foodMeta}>{entry.servings} × {entry.servingSize} {entry.servingUnit} · {Math.round(entry.calories)} kcal</Text>
+            <View key={entry.id}>
+              <View style={styles.entryRow}>
+                <View style={styles.flex}>
+                  <Text style={styles.foodName}>{entry.foodName}</Text>
+                  <Text style={styles.foodMeta}>{entry.servings} × {entry.servingSize} {entry.servingUnit} · {Math.round(entry.calories)} kcal</Text>
+                </View>
+                <Pressable
+                  accessibilityLabel={`Editar porciones de ${entry.foodName}`}
+                  accessibilityRole="button"
+                  disabled={saving}
+                  hitSlop={10}
+                  onPress={() => { setEditingEntryId(entry.id); setEditedServings(String(entry.servings)); }}
+                  style={styles.removeButton}
+                >
+                  <Ionicons color={colors.primary} name="create-outline" size={20} />
+                </Pressable>
+                <Pressable
+                  accessibilityLabel={`Eliminar ${entry.foodName}`}
+                  accessibilityRole="button"
+                  disabled={saving}
+                  hitSlop={10}
+                  onPress={() => confirmRemove(entry, value)}
+                  style={styles.removeButton}
+                >
+                  <Ionicons color={colors.danger} name="trash-outline" size={20} />
+                </Pressable>
               </View>
-              <Pressable
-                accessibilityLabel={`Eliminar ${entry.foodName}`}
-                accessibilityRole="button"
-                disabled={saving}
-                hitSlop={10}
-                onPress={() => confirmRemove(entry, value)}
-                style={styles.removeButton}
-              >
-                <Ionicons color={colors.danger} name="trash-outline" size={20} />
-              </Pressable>
+              {editingEntryId === entry.id ? (
+                <View style={styles.editRow}>
+                  <Input
+                    accessibilityLabel={`Nuevas porciones de ${entry.foodName}`}
+                    containerStyle={styles.editInput}
+                    keyboardType="decimal-pad"
+                    onChangeText={setEditedServings}
+                    value={editedServings}
+                  />
+                  <Button label="Guardar" loading={saving} onPress={() => void saveEditedEntry(entry.id, value)} style={styles.editSave} />
+                  <Button label="Cancelar" disabled={saving} onPress={() => setEditingEntryId(null)} variant="secondary" style={styles.editCancel} />
+                </View>
+              ) : null}
             </View>
           ))}
         </Card>
@@ -295,9 +342,13 @@ const styles = StyleSheet.create({
   mealCard: { marginBottom: spacing.md },
   mealHeader: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
   mealHeading: { alignItems: 'center', flexDirection: 'row', gap: 10 },
-  mealIconBadge: { alignItems: 'center', backgroundColor: '#17331D', borderColor: colors.borderAccent, borderRadius: 11, borderWidth: 1, height: 38, justifyContent: 'center', width: 38 },
+  mealIconBadge: { alignItems: 'center', backgroundColor: colors.successSurface, borderColor: colors.borderAccent, borderRadius: 11, borderWidth: 1, height: 38, justifyContent: 'center', width: 38 },
   mealTitle: { color: colors.text, fontSize: 18, fontWeight: '800' },
   mealCalories: { color: colors.primary, fontWeight: '800' },
-  entryRow: { alignItems: 'center', borderTopColor: '#18251D', borderTopWidth: 1, flexDirection: 'row', gap: spacing.md, paddingVertical: spacing.md },
+  entryRow: { alignItems: 'center', borderTopColor: colors.dividerSubtle, borderTopWidth: 1, flexDirection: 'row', gap: spacing.md, paddingVertical: spacing.md },
   removeButton: { alignItems: 'center', borderRadius: radius.sm, height: 40, justifyContent: 'center', width: 40 },
+  editRow: { alignItems: 'center', flexDirection: 'row', gap: 8, paddingBottom: spacing.md },
+  editInput: { flex: 1, minWidth: 64 },
+  editSave: { paddingHorizontal: 8 },
+  editCancel: { paddingHorizontal: 8 },
 });

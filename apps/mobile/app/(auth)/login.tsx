@@ -135,10 +135,10 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   forgot: { alignSelf: 'flex-end', color: colors.primary, fontSize: 14 },
-  error: { color: '#FF827C', fontSize: 14, lineHeight: 20 },
+  error: { color: colors.danger, fontSize: 14, lineHeight: 20 },
   footerText: { color: colors.textSecondary, textAlign: 'center' },
   link: { color: colors.primary, fontWeight: '700' },
   dividerRow: { alignItems: 'center', flexDirection: 'row', gap: 12, marginVertical: 2 },
   divider: { backgroundColor: colors.border, flex: 1, height: 1 },
-  dividerText: { color: '#748078' },
+  dividerText: { color: colors.textMuted },
 });

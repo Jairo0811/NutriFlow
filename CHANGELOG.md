@@ -6,6 +6,16 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 
 ## [Unreleased]
 
+### Mejoras del frontend móvil (2026-11-17)
+
+- Migración de nueve pantallas a `Screen` con estilos y navegación coherentes.
+- Arreglo de gráfica sin entradas, fecha local reactiva en IA, búsqueda sin respuestas obsoletas y escáner con cámara de altura definida.
+- Confirmaciones en operaciones destructivas, etiquetas de accesibilidad y acciones de recuperación de errores.
+- Edición de porciones en el diario usando el endpoint `PUT` existente, sin nuevas migraciones de backend.
+- Tests sin dependencias adicionales para calendario, validación y composición de fechas; CI también exporta Expo web.
+- Centralización de colores y refuerzo del contraste de placeholders.
+- QA presencial y decisión de versión aún pendientes; se conserva v1.4.0 como snapshot histórico.
+
 ### Added
 
 - Fase 11 — Freemium Foundation.
