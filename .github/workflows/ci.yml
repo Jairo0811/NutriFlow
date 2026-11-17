@@ -68,5 +68,8 @@ jobs:
       - name: Frontend unit tests
         run: npm test
 
+      - name: React Native component tests (Jest)
+        run: npm run test:components
+
       - name: Export web bundle
         run: CI=1 npx expo export --platform web
