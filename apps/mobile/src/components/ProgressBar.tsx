@@ -14,6 +14,7 @@ export function ProgressBar({ percent, exceeded = false }: Props) {
 
   return (
     <View
+      accessible
       accessibilityRole="progressbar"
       accessibilityValue={{ max: 100, min: 0, now: Math.round(value) }}
       style={styles.track}
