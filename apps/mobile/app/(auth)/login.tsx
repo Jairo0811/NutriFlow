@@ -38,13 +38,9 @@ export default function LoginScreen() {
 
   useEffect(() => {
     async function completeGoogleSignIn() {
-      if (response?.type !== 'success' || !request?.codeVerifier || !googleClientId) {
-        return;
-      }
-
+      if (response?.type !== 'success' || !request?.codeVerifier || !googleClientId) return;
       setGoogleLoading(true);
       setError(null);
-
       try {
         const tokenResponse = await AuthSession.exchangeCodeAsync({
           clientId: googleClientId,
@@ -52,11 +48,7 @@ export default function LoginScreen() {
           redirectUri,
           extraParams: { code_verifier: request.codeVerifier },
         }, googleDiscovery);
-
-        if (!tokenResponse.idToken) {
-          throw new Error('Google no devolvió un token de identidad válido.');
-        }
-
+        if (!tokenResponse.idToken) throw new Error('Google no devolvió un token de identidad válido.');
         await signInWithGoogle(tokenResponse.idToken);
         router.replace('/(app)');
       } catch (caught) {
@@ -65,16 +57,15 @@ export default function LoginScreen() {
         setGoogleLoading(false);
       }
     }
-
     void completeGoogleSignIn();
   }, [googleClientId, redirectUri, request?.codeVerifier, response, signInWithGoogle]);
 
   async function handleLogin() {
+    if (loading || googleLoading || !email.trim() || !password) return;
     setLoading(true);
     setError(null);
-
     try {
-      await login({ email, password });
+      await login({ email: email.trim(), password });
       router.replace('/(app)');
     } catch (caught) {
       setError(toUserFacingError(caught, 'No fue posible iniciar sesión.'));
@@ -85,60 +76,54 @@ export default function LoginScreen() {
 
   return (
     <AuthScaffold
+      featured
       title="Bienvenido de nuevo"
-      subtitle="Accede a tu cuenta para continuar con tu seguimiento nutricional."
-      footer={(
-        <Text style={styles.footerText}>
-          ¿No tienes cuenta? <Link href="/register" style={styles.link}>Crear cuenta</Link>
-        </Text>
-      )}
+      subtitle="Nutrición, hábitos y bienestar en un solo lugar"
     >
       <AuthField
-        autoComplete="email"
-        keyboardType="email-address"
-        label="Correo electrónico"
-        onChangeText={setEmail}
-        placeholder="nombre@correo.com"
-        value={email}
+        featured icon="mail-outline" autoComplete="email" autoCorrect={false}
+        keyboardType="email-address" label="Correo electrónico"
+        onChangeText={setEmail} placeholder="Correo electrónico"
+        returnKeyType="next" value={email}
       />
       <AuthField
-        autoComplete="password"
-        label="Contraseña"
-        onChangeText={setPassword}
-        placeholder="Tu contraseña"
-        secureTextEntry
-        value={password}
+        featured icon="lock-closed-outline" autoComplete="password"
+        label="Contraseña" onChangeText={setPassword}
+        placeholder="Contraseña" secureTextEntry
+        returnKeyType="done" value={password}
+        onSubmitEditing={() => void handleLogin()}
+      />
+      {error ? <Text accessibilityLiveRegion="polite" style={styles.error}>{error}</Text> : null}
+      <AuthButton
+        featured disabled={!email.trim() || !password || googleLoading}
+        label="Iniciar sesión" loading={loading} onPress={() => void handleLogin()}
       />
       <Link href="/forgot-password" style={styles.forgot}>¿Olvidaste tu contraseña?</Link>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      <AuthButton
-        disabled={!email.trim() || !password}
-        label="Iniciar sesión"
-        loading={loading}
-        onPress={() => void handleLogin()}
-      />
-      <View style={styles.dividerRow}>
+      <View style={styles.dividerRow} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
         <View style={styles.divider} />
         <Text style={styles.dividerText}>o</Text>
         <View style={styles.divider} />
       </View>
       <AuthButton
-        disabled={!googleClientId || !request}
-        label={googleClientId ? 'Continuar con Google' : 'Google requiere configuración'}
-        loading={googleLoading}
-        onPress={() => void promptAsync()}
-        variant="secondary"
+        featured icon="person-add-outline" label="Crear cuenta"
+        disabled={loading || googleLoading} variant="secondary"
+        onPress={() => router.push('/register')}
       />
+      {googleClientId ? (
+        <AuthButton
+          featured icon="logo-google" label="Continuar con Google"
+          disabled={loading || !request} loading={googleLoading}
+          onPress={() => void promptAsync()} variant="secondary"
+        />
+      ) : null}
     </AuthScaffold>
   );
 }
 
 const styles = StyleSheet.create({
-  forgot: { alignSelf: 'flex-end', color: colors.primary, fontSize: 14 },
-  error: { color: colors.danger, fontSize: 14, lineHeight: 20 },
-  footerText: { color: colors.textSecondary, textAlign: 'center' },
-  link: { color: colors.primary, fontWeight: '700' },
-  dividerRow: { alignItems: 'center', flexDirection: 'row', gap: 12, marginVertical: 2 },
-  divider: { backgroundColor: colors.border, flex: 1, height: 1 },
-  dividerText: { color: colors.textMuted },
+  forgot: { alignSelf: 'center', color: colors.primary, fontSize: 15, fontWeight: '700', marginVertical: 7 },
+  error: { color: colors.danger, fontSize: 14, lineHeight: 20, textAlign: 'center' },
+  dividerRow: { alignItems: 'center', flexDirection: 'row', gap: 14, marginVertical: 2 },
+  divider: { backgroundColor: '#415047', flex: 1, height: 1 },
+  dividerText: { color: colors.textSoft, fontSize: 16, fontWeight: '700' },
 });
