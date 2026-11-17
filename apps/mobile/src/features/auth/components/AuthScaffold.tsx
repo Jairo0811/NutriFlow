@@ -73,7 +73,7 @@ export function AuthScaffold({ title, subtitle, children, footer, featured = fal
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   safeArea: { flex: 1, backgroundColor: '#040907' },
-  decoration: { ...StyleSheet.absoluteFillObject, overflow: 'hidden' },
+  decoration: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, overflow: 'hidden' },
   glowTop: {
     backgroundColor: '#0E3015', borderRadius: 180, height: 340, left: -244,
     opacity: 0.75, position: 'absolute', top: -220, transform: [{ rotate: '-22deg' }], width: 440,
