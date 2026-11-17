@@ -1,9 +1,12 @@
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace NutriFlow.Infrastructure.Persistence.Migrations;
 
+[DbContext(typeof(NutriFlowDbContext))]
+[Migration("20260817150000_AddWeightProgress")]
 public partial class AddWeightProgress : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)
