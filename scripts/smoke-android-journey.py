@@ -192,7 +192,7 @@ def journey():
     capture("03-dashboard")
     print("PASS: dashboard Android muestra datos persistidos", flush=True)
 
-    tap("Registrar comida")
+    scroll_and_tap("Registrar comida")
     wait_for("Diario de comidas")
     wait_for("120 kcal")
     capture("04-diario")
