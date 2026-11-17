@@ -19,5 +19,6 @@
   <ItemGroup>
     <ProjectReference Include="../../apps/api/src/NutriFlow.Application/NutriFlow.Application.csproj" />
     <ProjectReference Include="../../apps/api/src/NutriFlow.Domain/NutriFlow.Domain.csproj" />
+    <ProjectReference Include="../../apps/api/src/NutriFlow.Infrastructure/NutriFlow.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
