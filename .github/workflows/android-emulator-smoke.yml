@@ -3,10 +3,10 @@ name: Android emulator smoke
 on:
   pull_request:
     branches: [main]
-    paths: ['apps/mobile/**', 'scripts/smoke-android-emulator.sh', '.github/workflows/android-emulator-smoke.yml']
+    paths: ['apps/mobile/**', 'scripts/smoke-android-emulator.sh', 'scripts/smoke-android-journey.py', '.github/workflows/android-emulator-smoke.yml']
   push:
     branches: [main]
-    paths: ['apps/mobile/**', 'scripts/smoke-android-emulator.sh', '.github/workflows/android-emulator-smoke.yml']
+    paths: ['apps/mobile/**', 'scripts/smoke-android-emulator.sh', 'scripts/smoke-android-journey.py', '.github/workflows/android-emulator-smoke.yml']
   workflow_dispatch:
 
 permissions:
@@ -34,6 +34,8 @@ jobs:
       - name: Install dependencies
         working-directory: apps/mobile
         run: npm ci
+      - name: Validar script Android E2E
+        run: python3 -m py_compile scripts/smoke-android-journey.py
       - name: Expo native prebuild
         working-directory: apps/mobile
         run: npx expo prebuild --platform android --clean --no-install
