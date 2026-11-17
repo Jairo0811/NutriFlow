@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
   stepHeader: { gap: spacing.md + 2, marginBottom: spacing.xl + 4 },
   headerRow: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
   back: { color: colors.textSoft, fontWeight: '700' },
-  muted: { color: '#526158' },
+  muted: { color: colors.textMuted },
   progress: { color: colors.textMuted, fontWeight: '700' },
   body: { gap: spacing.md, marginTop: spacing.xl },
   group: { gap: spacing.sm },

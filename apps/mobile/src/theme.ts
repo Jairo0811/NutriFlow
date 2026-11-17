@@ -13,7 +13,7 @@ export const colors = {
   textSoft: '#DDE5DF',
   textSecondary: '#95A59B',
   textMuted: '#7E8E84',
-  placeholder: '#637268',
+  placeholder: '#95A59B',
 
   border: '#223228',
   borderInput: '#25372B',

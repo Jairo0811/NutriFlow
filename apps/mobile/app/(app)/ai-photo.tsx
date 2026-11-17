@@ -38,6 +38,10 @@ export default function AiMealPhotoScreen() {
   if (enabled === null && message) {
     return <Screen eyebrow="NUTRIFLOW · IA" title="Meal Photo AI"><Text style={styles.message}>{message}</Text><Pressable accessibilityRole="button" onPress={() => { setMessage(null); setReload((n) => n + 1); }} style={styles.button}><Text style={styles.buttonText}>Reintentar</Text></Pressable></Screen>;
   }
+  if (enabled === null) {
+    return <Screen eyebrow="NUTRIFLOW · PREMIUM" title="Meal Photo AI"><Text style={styles.message}>Comprobando disponibilidad de la cámara inteligente…</Text></Screen>;
+  }
+
   if (enabled === false) {
     return (
       <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>

@@ -112,15 +112,14 @@ export default function PreferencesScreen() {
           <Text style={styles.infoText}>{profile?.dietaryRestrictionCodes.length ?? 0} restricciones configuradas. NutriFlow mostrará advertencias cuando un alimento tenga alérgenos coincidentes.</Text>
         </View>
 
-        <Pressable accessibilityRole="button" disabled={saving} onPress={() => void save()} style={[styles.button, saving && styles.disabled]}>
-          <Text style={styles.buttonText}>{saving ? 'Guardando…' : 'Guardar cambios'}</Text>
-        </Pressable>
+        <Button label="Guardar cambios" loading={saving} disabled={loading || Boolean(loadError) || !profile} onPress={() => void save()} style={styles.saveButton} />
         {message && <Text accessibilityLiveRegion="polite" style={styles.message}>{message}</Text>}
       </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  saveButton: { marginTop: 18 },
   safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
   eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },

@@ -24,9 +24,10 @@ export default function FoodCatalogScreen() {
   useEffect(() => {
     if (!accessToken) return;
     let active = true;
+    setLoading(true);
+    setFoods([]);
+    setError(null);
     const timeout = setTimeout(() => {
-      setLoading(true);
-      setError(null);
       void foodCatalogApi.search(accessToken, query)
         .then((items) => { if (active) setFoods(items); })
         .catch((cause) => { if (active) setError(toUserFacingError(cause, 'No fue posible cargar el catálogo.')); })

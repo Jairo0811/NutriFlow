@@ -32,6 +32,7 @@ export default function NutriFlowAiScreen() {
     if (!accessToken) return;
     let active = true;
     setStatusLoading(true);
+    setMessage(null);
     void aiApi.getStatus(accessToken)
       .then((next) => { if (active) setStatus(next); })
       .catch(() => { if (active) setMessage('No fue posible cargar el estado de NutriFlow AI.'); })

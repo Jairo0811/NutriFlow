@@ -32,6 +32,8 @@ export default function PremiumAnalyticsScreen() {
     let active = true;
     setLoading(true);
     setLocked(false);
+    setAdvanced(null);
+    setMicros(null);
     setError(null);
 
     void (async () => {
@@ -170,7 +172,7 @@ const styles = StyleSheet.create({
   premiumTitle: { color: colors.text, fontSize: 22, fontWeight: '900', marginTop: 14 },
   featureList: { gap: 8, marginTop: 18 },
   feature: { color: colors.textSoft, fontSize: 14, fontWeight: '700' },
-  note: { color: '#6F8075', fontSize: 12, lineHeight: 18, marginTop: 16 },
+  note: { color: colors.textMuted, fontSize: 12, lineHeight: 18, marginTop: 16 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 24 },
   metric: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 16, borderWidth: 1, minWidth: '47%', padding: 16 },
   metricValue: { color: colors.primary, fontSize: 23, fontWeight: '900' },
