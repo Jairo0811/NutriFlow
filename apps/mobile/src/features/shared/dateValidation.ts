@@ -14,5 +14,5 @@ export function isValidPastDate(iso: string, now: Date = new Date()): boolean {
     && date.getMonth() === month - 1
     && date.getDate() === day
     && year >= 1900
-    && date < now;
+    && date < new Date(now.getFullYear(), now.getMonth(), now.getDate());
 }

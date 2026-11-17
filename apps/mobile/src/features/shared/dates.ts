@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
-
-/** Fecha local del dispositivo en formato AAAA-MM-DD (no UTC). */
-export function localDate(date: Date = new Date()): string {
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  const day = `${date.getDate()}`.padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+import { localDate } from './calendar';
+export { localDate } from './calendar';
 
 /** Ej.: "sábado, 17 de octubre". */
 export function formatLongDate(isoDate: string): string {

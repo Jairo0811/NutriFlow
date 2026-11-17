@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { colors, minTouchSize, radius, spacing, typography } from '../theme';
+import { composeDateParts, digitsOnly, type DateParts } from '../features/shared/dateParts';
 
 type Props = {
   label: string;
@@ -11,16 +12,12 @@ type Props = {
   error?: string | null;
 };
 
-type Parts = { day: string; month: string; year: string };
+type Parts = DateParts;
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
-function compose({ day, month, year }: Parts): string {
-  if (year.length !== 4 || !day || !month) return '';
-  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-}
-
-const digits = (text: string, max: number) => text.replace(/\D/g, '').slice(0, max);
+const compose = composeDateParts;
+const digits = digitsOnly;
 
 /** Fecha en tres casillas (DD / MM / AAAA) con salto automático; evita teclear guiones. */
 export function DateField({ label, value, onChange, error }: Props) {
