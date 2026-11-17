@@ -1,0 +1,39 @@
+name: Bootstrap tests de componentes (temporal)
+on:
+  push:
+    branches:
+      - feat/nutriflow-pruebas-componentes-20261117
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install current lock
+        run: npm ci
+      - name: Install SDK-compatible Jest and React Native Testing Library
+        run: |
+          npx expo install jest-expo jest @types/jest --dev
+          npm install --save-dev --save-exact @testing-library/react-native@13.3.3 react-test-renderer@19.2.3
+      - name: Generate reproducible lockfile outputs
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          for (const [key, path] of [['PACKAGE', 'package.json'], ['LOCK', 'package-lock.json']]) {
+            const encoded = fs.readFileSync(path).toString('base64');
+            console.log('NUTRIFLOW_BEGIN_' + key);
+            for (let i = 0; i < encoded.length; i += 1800) {
+              console.log('NUTRIFLOW_' + key + '_B64_' + encoded.slice(i, i + 1800));
+            }
+            console.log('NUTRIFLOW_END_' + key);
+          }
+          NODE
