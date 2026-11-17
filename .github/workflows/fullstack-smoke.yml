@@ -1,0 +1,47 @@
+name: Full-stack smoke (PostgreSQL real)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  full-stack:
+    name: API real + PostgreSQL + CRUD
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      COMPOSE_PROJECT_NAME: nutriflow-smoke
+      ASPNETCORE_ENVIRONMENT: Development
+      POSTGRES_DB: nutriflow_smoke_ci
+      POSTGRES_PASSWORD: nutriflow_ci_disposable_only
+      POSTGRES_PORT: 15432
+      API_PORT: 15000
+      NUTRIFLOW_SMOKE_URL: http://127.0.0.1:15000
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Levantar API y base de datos desechable
+        run: docker compose up --detach --build --wait --wait-timeout 200
+
+      - name: Smoke de autenticación, onboarding, catálogo y CRUD real
+        run: node scripts/smoke-fullstack.mjs
+
+      - name: Diagnóstico del contenedor si falla
+        if: failure()
+        run: docker compose logs --no-color --tail=180
+
+      - name: Eliminar contenedores y volumen temporal
+        if: always()
+        run: docker compose down --volumes --remove-orphans
