@@ -286,6 +286,8 @@ El pipeline de GitHub Actions valida ambos lados del sistema antes de integrar c
 - tests automatizados;
 - validación de Docker Compose;
 - build de la imagen Docker.
+- regresión del registro de migraciones EF Core;
+- **smoke full-stack** con contenedores PostgreSQL + API, operaciones CRUD reales y revocación de sesiones. Se ejecuta en CI con una base de datos desechable; el script se niega a usar hosts remotos.
 
 ### Mobile
 
@@ -296,6 +298,8 @@ El pipeline de GitHub Actions valida ambos lados del sistema antes de integrar c
 - pruebas unitarias de fechas y composición de campos;
 - pruebas con Jest/React Native Testing Library para botones, campos, fechas y barras de progreso;
 - exportación del bundle web de Expo.
+
+La prueba de integración está definida en `.github/workflows/fullstack-smoke.yml` y `scripts/smoke-fullstack.mjs`. Comprueba el comportamiento HTTP real que consume la app. **No equivale a pruebas de interfaz o cámara en Android/iOS**.
 
 Los advisories conocidos del ecosistema Expo se revisan sin forzar upgrades incompatibles. Consulta [`SECURITY.md`](SECURITY.md).
 

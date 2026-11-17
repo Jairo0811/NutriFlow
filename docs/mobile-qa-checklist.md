@@ -10,6 +10,14 @@
 4. Iniciar backend con PostgreSQL y migraciones; preparar cuentas de prueba y datos no sensibles.
 5. Iniciar Expo con `npx expo start -c` y abrir en Android y, cuando sea posible, iOS.
 
+## Cobertura automática verificada en CI
+
+- [x] Pruebas de TypeScript, componentes React Native, fechas y exportación web.
+- [x] Smoke de API real y PostgreSQL con 21 verificaciones: login, onboarding, catálogo, alérgenos, comidas, dashboard, progreso y hábitos.
+- [x] Verificación unitaria de descubrimiento de migraciones históricas de EF Core.
+
+**Estas casillas no avalan las pruebas de interfaz en dispositivo.** Las pruebas manuales se mantienen pendientes.
+
 ## Pruebas manuales por funcionalidad
 
 - [ ] Inicio de sesión, registro, recuperación de contraseña y cierre de sesión sin bloqueos.
