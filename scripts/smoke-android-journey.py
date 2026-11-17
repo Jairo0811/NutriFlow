@@ -116,7 +116,13 @@ def tap(label, seconds=35, exact=True):
 
 
 def type_into(label, value):
-    tap(label)
+    root = hierarchy()
+    field = next((n for n in nodes(root)
+                  if n.get("class", "").endswith("EditText")
+                  and n.get("content-desc") == label), None)
+    if field is None:
+        raise AssertionError("No se encontró campo editable accesible: " + label)
+    tap_node(field)
     adb("shell", "input", "text", value, timeout=20)
     time.sleep(.5)
 
