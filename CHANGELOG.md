@@ -6,6 +6,13 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 
 ## [Unreleased]
 
+### QA móvil con backend real
+
+- Nuevo recorrido de Android emulado con servidor API y PostgreSQL de prueba: login, Home, dashboard, diario de comidas, progreso y acceso al escáner.
+- Capturas y jerarquía accesible exportadas como artefactos temporales de GitHub Actions; sin imágenes simuladas.
+- Pruebas de cámara física, permisionado avanzado, accesibilidad manual e iOS siguen fuera del alcance de ese smoke.
+
+
 ### Calidad e integración real
 
 - Smoke HTTP automatizado de 21 verificaciones contra API ASP.NET Core y PostgreSQL 17 con contenedores efímeros, incluyendo autenticación, onboarding, alérgenos, comidas, peso, agua, recetas y permisos Premium.
