@@ -1,7 +1,9 @@
+import { Screen } from '../../src/components/Screen';
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { Button } from '../../src/components/Button';
+import { Card } from '../../src/components/Card';
+import { Input } from '../../src/components/Input';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { engagementApi } from '../../src/features/engagement/api';
@@ -17,20 +19,22 @@ export default function FoodCatalogScreen() {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     if (!accessToken) return;
+    let active = true;
     const timeout = setTimeout(() => {
       setLoading(true);
       setError(null);
       void foodCatalogApi.search(accessToken, query)
-        .then(setFoods)
-        .catch((cause) => setError(toUserFacingError(cause, 'No fue posible cargar el catálogo.')))
-        .finally(() => setLoading(false));
+        .then((items) => { if (active) setFoods(items); })
+        .catch((cause) => { if (active) setError(toUserFacingError(cause, 'No fue posible cargar el catálogo.')); })
+        .finally(() => { if (active) setLoading(false); });
     }, 250);
 
-    return () => clearTimeout(timeout);
-  }, [query, accessToken]);
+    return () => { active = false; clearTimeout(timeout); };
+  }, [query, accessToken, reload]);
 
   useEffect(() => {
     if (!accessToken) return;
@@ -55,24 +59,13 @@ export default function FoodCatalogScreen() {
   }
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
-        <Text style={styles.eyebrow}>NUTRIFLOW · ALIMENTOS</Text>
-        <Text style={styles.title}>Catálogo de alimentos</Text>
-        <Text style={styles.subtitle}>Busca alimentos por nombre, marca o código de barras. Guarda tus preferidos para reutilizarlos en recetas y accesos rápidos.</Text>
+    <Screen eyebrow="NUTRIFLOW · ALIMENTOS" title="Catálogo de alimentos" subtitle="Busca alimentos por nombre, marca o código de barras. Guarda tus preferidos." onRefresh={() => setReload((n) => n + 1)} refreshing={loading}>
+        
 
-        <TextInput
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Buscar alimento…"
-          placeholderTextColor={colors.placeholder}
-          style={styles.input}
-          autoCapitalize="none"
-        />
+        <Input label="Buscar" value={query} onChangeText={setQuery} placeholder="Buscar alimento…" autoCapitalize="none" containerStyle={styles.search} />
 
         {loading && <Text style={styles.helper}>Cargando catálogo…</Text>}
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error && <Card><Text style={styles.error}>{error}</Text><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
         {!loading && !error && foods.length === 0 && (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyTitle}>Aún no hay resultados</Text>
@@ -80,7 +73,7 @@ export default function FoodCatalogScreen() {
           </View>
         )}
 
-        {foods.map((food) => {
+        {!loading && !error && foods.map((food) => {
           const isFavorite = favoriteIds.includes(food.id);
           return (
             <View key={food.id} style={styles.card}>
@@ -98,15 +91,14 @@ export default function FoodCatalogScreen() {
               </View>
               <View style={styles.footerRow}>
                 <Text style={styles.category}>{food.category}</Text>
-                <Pressable onPress={() => void toggleFavorite(food.id)} style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}>
+                <Pressable accessibilityRole="button" onPress={() => void toggleFavorite(food.id)} style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}>
                   <Text style={[styles.favoriteText, isFavorite && styles.favoriteTextActive]}>{isFavorite ? '★ Favorito' : '☆ Guardar'}</Text>
                 </Pressable>
               </View>
             </View>
           );
         })}
-      </ScrollView>
-    </SafeAreaView>
+      </Screen>
   );
 }
 
@@ -120,6 +112,7 @@ function Macro({ label, value }: { label: string; value: number }) {
 }
 
 const styles = StyleSheet.create({
+  search: { marginTop: 24 },
   safeArea: { flex: 1, backgroundColor: colors.background },
   container: { padding: 24, paddingBottom: 48 },
   back: { color: colors.textSoft, fontWeight: '700' },
@@ -138,13 +131,13 @@ const styles = StyleSheet.create({
   meta: { color: colors.textSecondary, fontSize: 13, marginTop: 5 },
   calories: { color: colors.primary, fontSize: 16, fontWeight: '900' },
   macrosRow: { flexDirection: 'row', gap: 10, marginTop: 18 },
-  macro: { flex: 1, backgroundColor: '#0B160F', borderRadius: 12, padding: 10 },
+  macro: { flex: 1, backgroundColor: colors.surfaceDeep, borderRadius: 12, padding: 10 },
   macroValue: { color: colors.text, fontSize: 14, fontWeight: '800' },
   macroLabel: { color: colors.textMuted, fontSize: 11, marginTop: 4 },
   footerRow: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginTop: 14 },
   category: { color: colors.primary, fontSize: 11, fontWeight: '800', textTransform: 'uppercase' },
   favoriteButton: { borderColor: colors.borderButton, borderRadius: 10, borderWidth: 1, paddingHorizontal: 10, paddingVertical: 7 },
-  favoriteButtonActive: { backgroundColor: '#17331D', borderColor: colors.primary },
+  favoriteButtonActive: { backgroundColor: colors.successSurface, borderColor: colors.primary },
   favoriteText: { color: colors.textSoft, fontSize: 12, fontWeight: '800' },
   favoriteTextActive: { color: colors.primary },
 });

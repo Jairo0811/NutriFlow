@@ -1,7 +1,9 @@
+import { Screen } from '../../src/components/Screen';
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { router } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from '../../src/components/Button';
+import { Card } from '../../src/components/Card';
+import { toUserFacingError } from '../../src/features/shared/errors';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import {
@@ -22,10 +24,12 @@ export default function PremiumAnalyticsScreen() {
   const [loading, setLoading] = useState(true);
   const [locked, setLocked] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     if (!session) return;
     const accessToken = session.accessToken;
+    let active = true;
     setLoading(true);
     setLocked(false);
     setError(null);
@@ -34,44 +38,41 @@ export default function PremiumAnalyticsScreen() {
       try {
         const advancedResult = await analyticsApi.getAdvanced(accessToken, period);
         const micronutrientResult = await analyticsApi.getMicronutrients(accessToken, period);
+        if (!active) return;
         setAdvanced(advancedResult);
         setMicros(micronutrientResult);
       } catch (cause) {
+        if (!active) return;
         setAdvanced(null);
         setMicros(null);
         if (cause instanceof AnalyticsApiError && cause.status === 403 && cause.code === 'premium_required') {
           setLocked(true);
         } else {
-          setError(cause instanceof Error ? cause.message : 'No fue posible cargar la analítica.');
+          setError(toUserFacingError(cause, 'No fue posible cargar la analítica.'));
         }
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     })();
-  }, [period, session]);
+    return () => { active = false; };
+  }, [period, session, reload]);
 
   if (!session) return null;
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
-        <Text style={styles.eyebrow}>NUTRIFLOW PREMIUM · v1.3</Text>
-        <Text style={styles.title}>Analítica avanzada</Text>
-        <Text style={styles.subtitle}>
-          Tendencias de adherencia, consistencia, calorías, macros y micronutrientes calculadas desde tu historial real.
-        </Text>
+    <Screen eyebrow="NUTRIFLOW · PREMIUM" title="Analítica avanzada" subtitle="Tendencias de calorías, macronutrientes y micronutrientes." onRefresh={() => setReload((n) => n + 1)} refreshing={loading}>
+        
 
         <View style={styles.periodRow}>
           {([7, 30, 90] as const).map((value) => (
-            <Pressable key={value} onPress={() => setPeriod(value)} style={[styles.periodButton, period === value && styles.periodButtonActive]}>
+            <Pressable accessibilityRole="button" key={value} accessibilityState={{ selected: period === value }} onPress={() => setPeriod(value)} style={[styles.periodButton, period === value && styles.periodButtonActive]}>
               <Text style={[styles.periodText, period === value && styles.periodTextActive]}>{value} días</Text>
             </Pressable>
           ))}
         </View>
 
         {loading && <Text style={styles.helper}>Calculando tendencias…</Text>}
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error && <Card><Text style={styles.error}>{error}</Text><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
 
         {locked && (
           <View style={styles.premiumCard}>
@@ -128,8 +129,7 @@ export default function PremiumAnalyticsScreen() {
             <Text style={styles.note}>Los resultados son métricas de seguimiento y no sustituyen una evaluación profesional.</Text>
           </>
         )}
-      </ScrollView>
-    </SafeAreaView>
+      </Screen>
   );
 }
 

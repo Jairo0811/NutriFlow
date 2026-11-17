@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Screen } from '../../src/components/Screen';
+import { Button } from '../../src/components/Button';
 import { CameraView, useCameraPermissions, type BarcodeScanningResult } from 'expo-camera';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -56,7 +58,7 @@ export default function BarcodeScannerScreen() {
         <View style={styles.center}>
           <Text style={styles.title}>Escanea tus alimentos</Text>
           <Text style={styles.subtitle}>NutriFlow necesita acceso a la cámara para leer códigos de barras.</Text>
-          <Pressable onPress={() => void requestPermission()} style={styles.button}>
+          <Pressable accessibilityRole="button" onPress={() => void requestPermission()} style={styles.button}>
             <Text style={styles.buttonText}>Permitir cámara</Text>
           </Pressable>
         </View>
@@ -65,10 +67,7 @@ export default function BarcodeScannerScreen() {
   }
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · ESCÁNER</Text>
-        <Text style={styles.title}>Escanea tus alimentos</Text>
+    <Screen eyebrow="NUTRIFLOW · ESCÁNER" title="Escanea tus alimentos" subtitle="Consulta productos por su código de barras.">
         <CameraView
           style={styles.camera}
           barcodeScannerSettings={{ barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e', 'code128'] }}
@@ -92,12 +91,11 @@ export default function BarcodeScannerScreen() {
 
         {message && <Text style={quotaReached ? styles.quotaMessage : styles.message}>{message}</Text>}
         {scanned && !quotaReached && (
-          <Pressable onPress={() => { setScanned(false); setFood(null); setCompatibility(null); setMessage(null); }} style={styles.button}>
+          <Pressable accessibilityRole="button" onPress={() => { setScanned(false); setFood(null); setCompatibility(null); setMessage(null); }} style={styles.button}>
             <Text style={styles.buttonText}>Escanear otro producto</Text>
           </Pressable>
         )}
-      </View>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
@@ -108,16 +106,16 @@ const styles = StyleSheet.create({
   eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', letterSpacing: 1.4 },
   title: { color: colors.text, fontSize: 32, fontWeight: '900', marginTop: 10 },
   subtitle: { color: colors.textSecondary, fontSize: 16, lineHeight: 24, marginTop: 10 },
-  camera: { borderRadius: 24, flex: 1, marginTop: 22, overflow: 'hidden' },
+  camera: { borderRadius: 24, height: 360, marginTop: 22, overflow: 'hidden' },
   card: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 18, borderWidth: 1, marginTop: 16, padding: 18 },
   foodName: { color: colors.text, fontSize: 18, fontWeight: '900' },
   calories: { color: colors.primary, fontSize: 24, fontWeight: '900', marginTop: 8 },
   meta: { color: colors.textSecondary, marginTop: 5 },
-  warning: { backgroundColor: '#2A1818', borderColor: colors.danger, borderRadius: 12, borderWidth: 1, marginTop: 14, padding: 12 },
-  warningTitle: { color: '#FFB1B1', fontWeight: '900' },
-  warningText: { color: '#FFD4D4', marginTop: 4 },
+  warning: { backgroundColor: colors.dangerSurface, borderColor: colors.danger, borderRadius: 12, borderWidth: 1, marginTop: 14, padding: 12 },
+  warningTitle: { color: colors.dangerLight, fontWeight: '900' },
+  warningText: { color: colors.dangerPale, marginTop: 4 },
   message: { color: colors.textSoft, marginTop: 16, textAlign: 'center' },
-  quotaMessage: { color: '#FFCC80', marginTop: 16, textAlign: 'center', fontWeight: '800' },
+  quotaMessage: { color: colors.warning, marginTop: 16, textAlign: 'center', fontWeight: '800' },
   button: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, marginTop: 16, padding: 16 },
   buttonText: { color: colors.background, fontWeight: '900' },
 });

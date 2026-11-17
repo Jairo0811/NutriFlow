@@ -1,12 +1,13 @@
+import { Screen } from '../../src/components/Screen';
 import { useEffect, useRef, useState } from 'react';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { AiApiError, aiApi, type AiFoodProposal, type MealType } from '../../src/features/ai/api';
-import { localDate } from '../../src/features/shared/dates';
+import { useToday } from '../../src/features/shared/dates';
 import { colors } from '../../src/theme';
 
 const mealTypes: MealType[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
@@ -22,24 +23,27 @@ export default function AiMealPhotoScreen() {
   const [proposals, setProposals] = useState<AiFoodProposal[]>([]);
   const [mealType, setMealType] = useState<MealType>('Lunch');
   const [message, setMessage] = useState<string | null>(null);
+  const today = useToday();
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     if (!accessToken) return;
     void aiApi.getStatus(accessToken)
       .then(status => setEnabled(status.mealPhotoEnabled))
       .catch(() => setMessage('No fue posible comprobar el acceso a Meal Photo.'));
-  }, [accessToken]);
+  }, [accessToken, reload]);
 
   if (!session || !accessToken) return null;
 
+  if (enabled === null && message) {
+    return <Screen eyebrow="NUTRIFLOW · IA" title="Meal Photo AI"><Text style={styles.message}>{message}</Text><Pressable accessibilityRole="button" onPress={() => { setMessage(null); setReload((n) => n + 1); }} style={styles.button}><Text style={styles.buttonText}>Reintentar</Text></Pressable></Screen>;
+  }
   if (enabled === false) {
     return (
       <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
         <View style={styles.center}>
-          <Text style={styles.eyebrow}>NUTRIFLOW · PREMIUM</Text>
-          <Text style={styles.title}>Meal Photo AI</Text>
-          <Text style={styles.subtitle}>El análisis de comidas por foto requiere NutriFlow Premium. La foto nunca registra alimentos automáticamente.</Text>
-          <Pressable onPress={() => router.back()} style={styles.button}><Text style={styles.buttonText}>Volver</Text></Pressable>
+          
+          <Pressable accessibilityRole="button" onPress={() => router.back()} style={styles.button}><Text style={styles.buttonText}>Volver</Text></Pressable>
         </View>
       </SafeAreaView>
     );
@@ -51,7 +55,7 @@ export default function AiMealPhotoScreen() {
         <View style={styles.center}>
           <Text style={styles.title}>Meal Photo AI</Text>
           <Text style={styles.subtitle}>NutriFlow necesita acceso a la cámara para analizar tu plato.</Text>
-          <Pressable onPress={() => void requestPermission()} style={styles.button}><Text style={styles.buttonText}>Permitir cámara</Text></Pressable>
+          <Pressable accessibilityRole="button" onPress={() => void requestPermission()} style={styles.button}><Text style={styles.buttonText}>Permitir cámara</Text></Pressable>
         </View>
       </SafeAreaView>
     );
@@ -67,7 +71,7 @@ export default function AiMealPhotoScreen() {
     try {
       const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.45 });
       if (!photo?.base64) throw new Error('La cámara no devolvió datos de imagen.');
-      const result = await aiApi.analyzeMealPhoto(accessToken!, `data:image/jpeg;base64,${photo.base64}`, localDate(new Date()));
+      const result = await aiApi.analyzeMealPhoto(accessToken!, `data:image/jpeg;base64,${photo.base64}`, today);
       setProposals(result.items);
       setMessage(result.items.length === 0 ? 'La IA no identificó alimentos con suficiente claridad.' : 'Revisa las propuestas antes de confirmar.');
     } catch (error) {
@@ -82,7 +86,7 @@ export default function AiMealPhotoScreen() {
     if (items.length === 0) return;
     setBusy(true);
     try {
-      await aiApi.confirmMeal(accessToken!, mealType, items, localDate(new Date()));
+      await aiApi.confirmMeal(accessToken!, mealType, items, today);
       setMessage('Comida confirmada y agregada al diario.');
       setProposals([]);
     } catch (error) {
@@ -93,15 +97,13 @@ export default function AiMealPhotoScreen() {
   }
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Pressable onPress={() => router.back()}><Text style={styles.back}>Atrás</Text></Pressable>
+    <Screen eyebrow="NUTRIFLOW · MEAL PHOTO AI" title="Fotografía tu comida" subtitle="Las propuestas de IA se registran solo después de tu confirmación." onRefresh={() => setReload((n) => n + 1)} refreshing={enabled === null}>
         <Text style={styles.eyebrow}>NUTRIFLOW · MEAL PHOTO AI</Text>
         <Text style={styles.title}>Fotografía tu comida</Text>
         <Text style={styles.subtitle}>La IA estima qué hay en el plato y las porciones. Nada se registra sin tu confirmación.</Text>
 
         <CameraView ref={cameraRef} facing="back" style={styles.camera} onCameraReady={() => setCameraReady(true)} />
-        <Pressable disabled={!cameraReady || busy} onPress={() => void captureAndAnalyze()} style={styles.button}>
+        <Pressable accessibilityRole="button" disabled={!cameraReady || busy} onPress={() => void captureAndAnalyze()} style={styles.button}>
           <Text style={styles.buttonText}>{busy ? 'Procesando…' : 'Tomar foto y analizar'}</Text>
         </Pressable>
 
@@ -117,7 +119,7 @@ export default function AiMealPhotoScreen() {
         {proposals.length > 0 && (
           <View style={styles.mealRow}>
             {mealTypes.map(type => (
-              <Pressable key={type} onPress={() => setMealType(type)} style={[styles.chip, mealType === type && styles.chipActive]}>
+              <Pressable accessibilityRole="button" key={type} accessibilityState={{ selected: mealType === type }} onPress={() => setMealType(type)} style={[styles.chip, mealType === type && styles.chipActive]}>
                 <Text style={[styles.chipText, mealType === type && styles.chipTextActive]}>{type}</Text>
               </Pressable>
             ))}
@@ -125,14 +127,13 @@ export default function AiMealPhotoScreen() {
         )}
 
         {valid.length > 0 && (
-          <Pressable disabled={busy} onPress={() => void confirm()} style={styles.button}>
+          <Pressable accessibilityRole="button" disabled={busy} onPress={() => void confirm()} style={styles.button}>
             <Text style={styles.buttonText}>Confirmar elementos válidos</Text>
           </Pressable>
         )}
 
         {message && <Text style={styles.message}>{message}</Text>}
-      </ScrollView>
-    </SafeAreaView>
+      </Screen>
   );
 }
 
@@ -161,11 +162,11 @@ const styles = StyleSheet.create({
   card: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 16, borderWidth: 1, marginTop: 12, padding: 16 },
   foodName: { color: colors.text, fontSize: 16, fontWeight: '900' },
   meta: { color: colors.textSecondary, fontSize: 13, marginTop: 5 },
-  warning: { color: '#FFB1B1', fontSize: 12, fontWeight: '800', marginTop: 7 },
+  warning: { color: colors.dangerLight, fontSize: 12, fontWeight: '800', marginTop: 7 },
   mealRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 16 },
   chip: { borderColor: colors.borderButton, borderRadius: 999, borderWidth: 1, paddingHorizontal: 12, paddingVertical: 9 },
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { color: colors.textSoft, fontSize: 12, fontWeight: '800' },
   chipTextActive: { color: colors.background },
-  message: { color: '#FFCC80', fontWeight: '800', marginTop: 16, textAlign: 'center' },
+  message: { color: colors.warning, fontWeight: '800', marginTop: 16, textAlign: 'center' },
 });

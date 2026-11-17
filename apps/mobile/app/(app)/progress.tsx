@@ -1,6 +1,10 @@
+import { Screen } from '../../src/components/Screen';
 import { useEffect, useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from '../../src/components/Button';
+import { Card } from '../../src/components/Card';
+import { Input } from '../../src/components/Input';
+import { confirmAction } from '../../src/features/shared/confirm';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { progressApi, type ProgressSummary } from '../../src/features/progress/api';
@@ -17,22 +21,28 @@ export default function ProgressScreen() {
   const [note, setNote] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     if (!accessToken) return;
+    let active = true;
+    setLoading(true);
     setError(null);
     progressApi.get(accessToken)
-      .then(setSummary)
-      .catch((cause) => setError(toUserFacingError(cause, 'No fue posible cargar tu progreso.')));
-  }, [accessToken]);
+      .then((next) => { if (active) setSummary(next); })
+      .catch((cause) => { if (active) setError(toUserFacingError(cause, 'No fue posible cargar tu progreso.')); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [accessToken, reload]);
 
-  const chartMax = useMemo(() => Math.max(...(summary?.entries.map((entry) => entry.weightPounds) ?? [1])), [summary]);
+  const chartMax = useMemo(() => Math.max(1, ...(summary?.entries.map((entry) => entry.weightPounds) ?? [])), [summary]);
 
   if (!session || !accessToken) return null;
 
   async function saveWeight() {
     if (!accessToken) return;
-    const value = Number(weight);
+    const value = Number(weight.replace(',', '.'));
     if (!Number.isFinite(value) || value < 60 || value > 800) {
       setError('Ingresa un peso entre 60 y 800 lb.');
       return;
@@ -64,11 +74,8 @@ export default function ProgressScreen() {
   const formatPounds = (value?: number | null) => value == null ? '—' : `${value} lb`;
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>NUTRIFLOW · PROGRESO</Text>
-        <Text style={styles.title}>Tu progreso</Text>
-        <Text style={styles.subtitle}>Registra tu peso en libras y observa la tendencia hacia tu objetivo.</Text>
+    <Screen eyebrow="NUTRIFLOW · PROGRESO" title="Tu progreso" subtitle="Registra tu peso en libras y observa la tendencia hacia tu objetivo." onRefresh={() => setReload((n) => n + 1)} refreshing={loading}>
+        
 
         <View style={styles.summaryRow}>
           <View style={styles.summaryCard}><Text style={styles.label}>Actual</Text><Text style={styles.value}>{formatPounds(summary?.currentWeightPounds)}</Text></View>
@@ -77,12 +84,13 @@ export default function ProgressScreen() {
         </View>
 
         <Text style={styles.sectionTitle}>Registrar peso de hoy</Text>
-        <TextInput value={weight} onChangeText={setWeight} keyboardType="decimal-pad" placeholder="Ej. 218.5" placeholderTextColor={colors.placeholder} style={styles.input} />
-        <TextInput value={note} onChangeText={setNote} placeholder="Nota opcional" placeholderTextColor={colors.placeholder} style={styles.input} />
-        <Pressable disabled={saving} onPress={() => void saveWeight()} style={[styles.button, saving && styles.disabled]}>
+        <Input label="Peso de hoy (lb)" value={weight} onChangeText={setWeight} keyboardType="decimal-pad" placeholder="Ej. 218,5" containerStyle={styles.field} />
+        <Input label="Nota (opcional)" value={note} onChangeText={setNote} placeholder="Nota opcional" containerStyle={styles.field} />
+        <Pressable accessibilityRole="button" disabled={saving} onPress={() => void saveWeight()} style={[styles.button, saving && styles.disabled]}>
           <Text style={styles.buttonText}>{saving ? 'Guardando…' : 'Guardar peso'}</Text>
         </Pressable>
-        {error && <Text style={styles.error}>{error}</Text>}
+        {loading && !summary && <Text style={styles.helper}>Cargando progreso…</Text>}
+        {error && <Card><Text style={styles.error}>{error}</Text><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
 
         <Text style={styles.sectionTitle}>Historial</Text>
         {summary?.entries.map((entry) => {
@@ -95,15 +103,14 @@ export default function ProgressScreen() {
                 {entry.note && <Text style={styles.entryNote}>{entry.note}</Text>}
                 <View style={[styles.bar, { width }]} />
               </View>
-              <Pressable onPress={() => void removeWeight(entry.date)}>
+              <Pressable accessibilityRole="button" accessibilityLabel={`Eliminar registro del ${entry.date}`} onPress={() => confirmAction({ title: 'Eliminar registro', message: '¿Eliminar el peso de este día?', confirmLabel: 'Eliminar', onConfirm: () => void removeWeight(entry.date) })}>
                 <Text style={styles.remove}>Eliminar</Text>
               </Pressable>
             </View>
           );
         })}
         {!summary?.entries.length && <Text style={styles.helper}>Aún no hay registros de peso.</Text>}
-      </ScrollView>
-    </SafeAreaView>
+      </Screen>
   );
 }
 
@@ -123,12 +130,13 @@ const styles = StyleSheet.create({
   buttonText: { color: colors.background, fontWeight: '900' },
   disabled: { opacity: 0.6 },
   error: { color: colors.danger, marginTop: 12 },
-  entry: { alignItems: 'center', borderBottomColor: '#18251D', borderBottomWidth: 1, flexDirection: 'row', gap: 12, paddingVertical: 14 },
+  entry: { alignItems: 'center', borderBottomColor: colors.dividerSubtle, borderBottomWidth: 1, flexDirection: 'row', gap: 12, paddingVertical: 14 },
   flex: { flex: 1 },
   entryDate: { color: colors.textSecondary, fontSize: 12 },
   entryWeight: { color: colors.text, fontSize: 17, fontWeight: '900', marginTop: 3 },
   entryNote: { color: colors.textSecondary, marginTop: 3 },
   bar: { backgroundColor: colors.primary, borderRadius: 999, height: 4, marginTop: 8 },
-  remove: { color: '#FF9A9A', fontWeight: '800' },
+  remove: { color: colors.dangerText, fontWeight: '800' },
   helper: { color: colors.textMuted, marginTop: 12 },
+  field: { marginTop: 12 },
 });
