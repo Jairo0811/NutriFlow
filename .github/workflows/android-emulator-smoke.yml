@@ -1,0 +1,67 @@
+name: Android emulator smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ['apps/mobile/**', 'scripts/smoke-android-emulator.sh', '.github/workflows/android-emulator-smoke.yml']
+  push:
+    branches: [main]
+    paths: ['apps/mobile/**', 'scripts/smoke-android-emulator.sh', '.github/workflows/android-emulator-smoke.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    name: APK + emulador Android
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: '1'
+      EXPO_NO_TELEMETRY: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: apps/mobile/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install dependencies
+        working-directory: apps/mobile
+        run: npm ci
+      - name: Expo native prebuild
+        working-directory: apps/mobile
+        run: npx expo prebuild --platform android --clean --no-install
+      - uses: gradle/actions/setup-gradle@v5
+      - name: Build debug APK
+        working-directory: apps/mobile/android
+        run: ./gradlew :app:assembleDebug --no-daemon -PreactNativeArchitectures=x86_64
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Boot emulator, launch NutriFlow, capture login
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7
+          ram-size: 4096M
+          emulator-boot-timeout: 420
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash scripts/smoke-android-emulator.sh
+      - name: Upload emulator evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nutriflow-android-emulator
+          path: artifacts/android/
+          retention-days: 7
+          if-no-files-found: warn
