@@ -18,6 +18,14 @@
 
 **Estas casillas no avalan las pruebas de interfaz en dispositivo.** Las pruebas manuales se mantienen pendientes.
 
+## Verificación UI Android con API real
+
+- [ ] Inicio de sesión en emulador con usuario de prueba aislado.
+- [ ] Comprobación visual automatizada de Home, Dashboard, Diario, Progreso y acceso al escáner.
+- [ ] Capturas Android reales de esos recorridos disponibles como artefacto temporal de GitHub Actions.
+
+**Solo marcar los tres puntos después de que finalice el workflow Android E2E con éxito.** No equivalen a un QA visual humano de accesibilidad, teclado, permisos o cámara física.
+
 ## Pruebas manuales por funcionalidad
 
 - [ ] Inicio de sesión, registro, recuperación de contraseña y cierre de sesión sin bloqueos.
