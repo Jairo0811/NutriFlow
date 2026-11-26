@@ -207,6 +207,8 @@ def journey():
     type_into("Contraseña", PASSWORD)
     # Ocultar teclado para descubrir el botón completo del formulario.
     adb("shell", "input", "keyevent", "4")
+    # El formulario recupera su altura completa cuando el teclado termina de ocultarse.
+    time.sleep(1.5)
     tap("Iniciar sesión")
     wait_for("Hola, Smoke Android", seconds=110)
     capture("02-home")

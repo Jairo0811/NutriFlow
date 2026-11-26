@@ -1,6 +1,6 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react-native';
-import { Text } from 'react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
+import { Keyboard, Text } from 'react-native';
 
 import { AuthButton } from '../src/features/auth/components/AuthButton';
 import { AuthField } from '../src/features/auth/components/AuthField';
@@ -43,5 +43,28 @@ describe('Identidad visual accesible de NutriFlow', () => {
     view.rerender(<AuthButton featured label="Iniciar sesión" disabled onPress={onPress} />);
     fireEvent.press(view.getByRole('button', { name: 'Iniciar sesión' }));
     expect(onPress).toHaveBeenCalledTimes(1);
+  });
+
+  test('compacta la cabecera con el teclado abierto para no tapar los campos', () => {
+    const listeners: Record<string, () => void> = {};
+    jest.spyOn(Keyboard, 'addListener').mockImplementation(((event: string, callback: () => void) => {
+      listeners[event] = callback;
+      return { remove: jest.fn() };
+    }) as unknown as typeof Keyboard.addListener);
+
+    const view = render(
+      <AuthScaffold featured title="Bienvenido de nuevo" subtitle="Nutrición y bienestar">
+        <Text>Formulario</Text>
+      </AuthScaffold>,
+    );
+    expect(view.getByText('Calorías')).toBeTruthy();
+
+    act(() => { listeners[Object.keys(listeners).find((name) => /Show/.test(name))!](); });
+    expect(view.queryByText('Calorías')).toBeNull();
+    expect(view.getByText('Formulario')).toBeTruthy();
+
+    act(() => { listeners[Object.keys(listeners).find((name) => /Hide/.test(name))!](); });
+    expect(view.getByText('Calorías')).toBeTruthy();
+    jest.restoreAllMocks();
   });
 });

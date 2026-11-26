@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import type { PropsWithChildren, ReactNode } from 'react';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState, type PropsWithChildren, type ReactNode } from 'react';
+import { Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { colors } from '../../../theme';
@@ -19,7 +19,31 @@ const features = [
   { icon: 'pie-chart-outline', label: 'Macros' },
 ] as const;
 
+/**
+ * `true` mientras el teclado está abierto. En Android 15 (borde a borde) la ventana ya no se
+ * redimensiona, así que el teclado tapa la parte baja del formulario.
+ */
+function useKeyboardOpen(): boolean {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const ios = Platform.OS === 'ios';
+    const show = Keyboard.addListener(ios ? 'keyboardWillShow' : 'keyboardDidShow', () => setOpen(true));
+    const hide = Keyboard.addListener(ios ? 'keyboardWillHide' : 'keyboardDidHide', () => setOpen(false));
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
+
+  return open;
+}
+
 export function AuthScaffold({ title, subtitle, children, footer, featured = false }: Props) {
+  const keyboardOpen = useKeyboardOpen();
+  // Con el teclado abierto se compacta la cabecera para que los dos campos queden visibles.
+  const compact = featured && keyboardOpen;
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View pointerEvents="none" style={styles.decoration}>
@@ -31,7 +55,7 @@ export function AuthScaffold({ title, subtitle, children, footer, featured = fal
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={[styles.content, featured && styles.featuredContent]}
+          contentContainerStyle={[styles.content, featured && styles.featuredContent, compact && styles.keyboardContent]}
           showsVerticalScrollIndicator={false}
         >
           <View style={[styles.panel, featured && styles.featuredPanel]}>
@@ -41,15 +65,15 @@ export function AuthScaffold({ title, subtitle, children, footer, featured = fal
                 accessibilityLabel="Isotipo NutriFlow"
                 source={require('../../../../assets/brand/nutriflow-mark.png')}
                 resizeMode="contain"
-                style={[styles.mark, featured ? styles.featuredMark : styles.compactMark]}
+                style={[styles.mark, featured ? styles.featuredMark : styles.compactMark, compact && styles.keyboardMark]}
               />
               <Text style={[styles.wordmark, featured && styles.featuredWordmark]}>
                 <Text style={styles.brandWhite}>Nutri</Text>
                 <Text style={styles.brandGreen}>Flow</Text>
               </Text>
-              {featured ? <Text style={styles.tagline}>{subtitle}</Text> : null}
+              {featured && !compact ? <Text style={styles.tagline}>{subtitle}</Text> : null}
             </View>
-            {featured ? (
+            {featured && !compact ? (
               <View style={styles.features} accessibilityLabel="Calorías, proteínas y macros">
                 {features.map((feature) => (
                   <View key={feature.label} style={styles.chip}>
@@ -92,12 +116,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22, paddingVertical: 28,
   },
   featuredContent: { paddingVertical: 18 },
+  keyboardContent: { justifyContent: 'flex-start', paddingVertical: 12 },
   panel: { maxWidth: 460, width: '100%' },
   featuredPanel: { paddingBottom: 14 },
   brandGroup: { alignItems: 'center' },
   mark: { alignSelf: 'center' },
   compactMark: { height: 112, width: 112 },
   featuredMark: { height: 162, width: 162 },
+  keyboardMark: { height: 84, width: 84 },
   wordmark: { fontSize: 34, fontWeight: '900', letterSpacing: -1.3, marginTop: -2 },
   featuredWordmark: { fontSize: 43, letterSpacing: -1.7, marginTop: -3 },
   brandWhite: { color: '#FFFFFF' },
