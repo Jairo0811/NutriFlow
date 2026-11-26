@@ -115,16 +115,36 @@ def tap(label, seconds=35, exact=True):
     tap_node(wait_for(label, seconds, exact))
 
 
-def type_into(label, value):
-    root = hierarchy()
-    field = next((n for n in nodes(root)
-                  if n.get("class", "").endswith("EditText")
-                  and n.get("content-desc") == label), None)
-    if field is None:
-        raise AssertionError("No se encontró campo editable accesible: " + label)
-    tap_node(field)
-    adb("shell", "input", "text", value, timeout=20)
-    time.sleep(.5)
+def editable(root, label):
+    return next((n for n in nodes(root)
+                 if n.get("class", "").endswith("EditText")
+                 and n.get("content-desc") == label), None)
+
+
+def type_into(label, value, attempts=6):
+    """Escribe en un campo solo cuando Android confirma que tiene el foco.
+
+    Al abrirse el teclado el formulario puede desplazarse entre el volcado de
+    la jerarquía y el toque; tocar coordenadas obsoletas dejaba el foco en el
+    campo anterior y el texto acababa en otro campo (p. ej. la contraseña dentro
+    del correo). Se vuelve a leer la pantalla y se reintenta hasta que el campo
+    destino está enfocado.
+    """
+    for _ in range(attempts):
+        field = editable(hierarchy(), label)
+        if field is None:
+            time.sleep(1)
+            continue
+        if field.get("focused") != "true":
+            tap_node(field)
+            time.sleep(.9)
+            field = editable(hierarchy(), label)
+            if field is None or field.get("focused") != "true":
+                continue
+        adb("shell", "input", "text", value, timeout=20)
+        time.sleep(.5)
+        return
+    raise AssertionError("No se pudo enfocar el campo editable accesible: " + label)
 
 
 def swipe(direction="up"):
