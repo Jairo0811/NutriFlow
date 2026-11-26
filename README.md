@@ -32,7 +32,7 @@
 
 La versión 1.5.0 unifica la interfaz con la identidad neón aprobada (paleta, botones, campos e iconos en `src/theme.ts` y `src/components`), y suma `Screen` reutilizable, accesibilidad, estados de carga y reintento, edición de porciones en el diario, fechas locales y una auditoría automatizada de accesibilidad (roles, etiquetas, contraste WCAG AA y tamaños) que se ejecuta en cada PR. Consulta el detalle en el [CHANGELOG](CHANGELOG.md).
 
-La validación de cámara, navegación, teclado y diseño en un equipo real sigue documentada en [la lista de QA móvil](docs/mobile-qa-checklist.md). El recorrido automatizado en emulador Android contra la API y PostgreSQL reales pasa en CI, pero **no equivale a pruebas en un teléfono físico** (cámara, teclado real, lector de pantalla, iOS), que siguen pendientes. No se incluyen capturas que no se hayan tomado. Una navegación por pestañas inferiores y el tema claro se posponen por decisión de producto.
+La validación de cámara, navegación, teclado y diseño en un equipo real sigue documentada en [la lista de QA móvil](docs/mobile-qa-checklist.md). El recorrido automatizado en emulador Android contra la API y PostgreSQL reales pasa en CI, pero **no equivale a pruebas en un teléfono físico** (cámara, teclado real, lector de pantalla, iOS), que siguen pendientes. Las capturas de abajo son reales, tomadas en el emulador por el recorrido E2E. Una navegación por pestañas inferiores y el tema claro se posponen por decisión de producto.
 
 ---
 
@@ -382,6 +382,18 @@ NutriFlow nació como proyecto de **Bases de Datos 1 (INF-164)** en la **Univers
 | Francis Jairo Matías Rosario | A00115261 |
 
 ---
+
+## Capturas (emulador Android, datos de prueba)
+
+| Acceso | Inicio | Dashboard |
+|---|---|---|
+| <img src="docs/screenshots/android-01-login.png" width="220" alt="Pantalla de acceso de NutriFlow"> | <img src="docs/screenshots/android-02-inicio.png" width="220" alt="Pantalla de inicio con menú agrupado"> | <img src="docs/screenshots/android-03-dashboard.png" width="220" alt="Dashboard nutricional con calorías y macros"> |
+
+| Diario | Progreso | Escáner (permiso) |
+|---|---|---|
+| <img src="docs/screenshots/android-04-diario.png" width="220" alt="Diario de comidas con una comida registrada"> | <img src="docs/screenshots/android-05-progreso.png" width="220" alt="Progreso de peso en libras"> | <img src="docs/screenshots/android-06-escaner.png" width="220" alt="Solicitud de permiso de cámara del escáner"> |
+
+Origen y alcance en [`docs/screenshots/README.md`](docs/screenshots/README.md).
 
 ## Estado del proyecto
 
