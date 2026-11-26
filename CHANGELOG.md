@@ -36,7 +36,7 @@ _Sin cambios pendientes de lanzar._
 
 - Nueva auditoría automatizada de accesibilidad (`__tests__/accessibility-audit-test.tsx`, 223 comprobaciones sobre las 33 pantallas y componentes): rol en todo `Pressable`, etiqueta en todo `TextInput` e `Image`, ausencia de colores sueltos y de emojis, tamaño mínimo de texto, anuncio de errores y contraste WCAG AA de toda la paleta.
 - La API reporta la versión `1.5.0`; Mobile (`app.json` y `package.json`) también.
-- Auditoría de dependencias de producción de Mobile: 0 vulnerabilidades críticas (el CI las bloquea). Quedan 6 altas y 8 moderadas en dependencias transitivas de Expo (`node-forge`, `zod`, `decode-uri-component`, `uuid`…); corregirlas exige `npm audit fix --force`, que implica saltos de versión mayores, y queda fuera del alcance de esta versión.
+- Auditoría de dependencias de producción de Mobile: 0 vulnerabilidades críticas (el CI las bloquea). Quedan 6 altas y 8 moderadas en dependencias transitivas de Expo (`node-forge`, `zod`, `decode-uri-component`, `uuid`…). Se probó `npm audit fix` sin `--force`: reduce los hallazgos a 6, pero el lockfile resultante no se instala con `npm ci` (conflicto de pares ERESOLVE entre Expo 57 y `react-native-reanimated`), por lo que se descartó. Corregirlas exige saltos de versión mayores de Expo y queda documentado como deuda conocida fuera del alcance de 1.5.0.
 
 
 ### QA móvil con backend real
