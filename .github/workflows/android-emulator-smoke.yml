@@ -3,10 +3,10 @@ name: Android emulator smoke
 on:
   pull_request:
     branches: [main]
-    paths: ['apps/mobile/**', 'scripts/smoke-android-emulator.sh', '.github/workflows/android-emulator-smoke.yml']
+    paths: ['apps/mobile/**', 'scripts/smoke-android-emulator.sh', 'scripts/smoke-android-journey.py', '.github/workflows/android-emulator-smoke.yml']
   push:
     branches: [main]
-    paths: ['apps/mobile/**', 'scripts/smoke-android-emulator.sh', '.github/workflows/android-emulator-smoke.yml']
+    paths: ['apps/mobile/**', 'scripts/smoke-android-emulator.sh', 'scripts/smoke-android-journey.py', '.github/workflows/android-emulator-smoke.yml']
   workflow_dispatch:
 
 permissions:
@@ -34,6 +34,8 @@ jobs:
       - name: Install dependencies
         working-directory: apps/mobile
         run: npm ci
+      - name: Validar script Android E2E
+        run: python3 -m py_compile scripts/smoke-android-journey.py
       - name: Expo native prebuild
         working-directory: apps/mobile
         run: npx expo prebuild --platform android --clean --no-install
@@ -46,6 +48,13 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
+      - name: Iniciar API real + PostgreSQL de prueba
+        env:
+          COMPOSE_PROJECT_NAME: nutriflow-android-ci
+          POSTGRES_DB: nutriflow_android_ci
+          POSTGRES_PASSWORD: nutriflow_ci_disposable_only
+        run: docker compose up --detach --build --wait --wait-timeout 180
+
       - name: Boot emulator, launch NutriFlow, capture login
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -57,6 +66,14 @@ jobs:
           emulator-boot-timeout: 420
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: bash scripts/smoke-android-emulator.sh
+      - name: Limpiar base de datos de prueba
+        if: always()
+        env:
+          COMPOSE_PROJECT_NAME: nutriflow-android-ci
+          POSTGRES_DB: nutriflow_android_ci
+          POSTGRES_PASSWORD: nutriflow_ci_disposable_only
+        run: docker compose down --volumes --remove-orphans
+
       - name: Upload emulator evidence
         if: always()
         uses: actions/upload-artifact@v4

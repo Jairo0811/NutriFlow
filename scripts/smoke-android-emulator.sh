@@ -6,9 +6,10 @@ APK=apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk
 test -s "$APK"
 adb install -r "$APK"
 adb reverse tcp:8081 tcp:8081
+adb reverse tcp:5000 tcp:5000
 
 pushd apps/mobile >/dev/null
-CI=1 EXPO_NO_TELEMETRY=1 npx expo start --offline --port 8081 --clear > ../../artifacts/android/metro.log 2>&1 &
+CI=1 EXPO_NO_TELEMETRY=1 EXPO_PUBLIC_API_URL=http://127.0.0.1:5000 npx expo start --offline --port 8081 --clear > ../../artifacts/android/metro.log 2>&1 &
 METRO_PID=$!
 popd >/dev/null
 trap 'kill "$METRO_PID" 2>/dev/null || true' EXIT
@@ -46,3 +47,4 @@ if [[ "$found" -ne 1 ]]; then
   exit 1
 fi
 echo "PASS: APK instalado, Android emulado arrancado y pantalla login visible"
+python3 scripts/smoke-android-journey.py
