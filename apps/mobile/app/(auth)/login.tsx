@@ -124,6 +124,6 @@ const styles = StyleSheet.create({
   forgot: { alignSelf: 'center', color: colors.primary, fontSize: 15, fontWeight: '700', marginVertical: 7 },
   error: { color: colors.danger, fontSize: 14, lineHeight: 20, textAlign: 'center' },
   dividerRow: { alignItems: 'center', flexDirection: 'row', gap: 14, marginVertical: 2 },
-  divider: { backgroundColor: '#415047', flex: 1, height: 1 },
+  divider: { backgroundColor: colors.dividerNeon, flex: 1, height: 1 },
   dividerText: { color: colors.textSoft, fontSize: 16, fontWeight: '700' },
 });

@@ -11,6 +11,7 @@ import { getDailyDashboard, type DailyDashboard, type MacroProgress } from '../.
 import { formatLongDate, useToday } from '../../src/features/shared/dates';
 import { toUserFacingError } from '../../src/features/shared/errors';
 import { colors, spacing, typography } from '../../src/theme';
+import { ErrorText } from '../../src/components/ErrorText';
 
 export default function DashboardScreen() {
   const { session } = useAuth();
@@ -82,7 +83,7 @@ export default function DashboardScreen() {
 
       {error ? (
         <Card style={styles.errorCard}>
-          <Text style={styles.error}>{error}</Text>
+          <ErrorText style={styles.error}>{error}</ErrorText>
           <Button label="Reintentar" onPress={() => void refresh()} variant="secondary" />
         </Card>
       ) : null}

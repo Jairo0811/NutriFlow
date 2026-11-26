@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
   mealTitle: { color: colors.text, fontSize: 18, fontWeight: '800' },
   mealCalories: { color: colors.primary, fontWeight: '800' },
   entryRow: { alignItems: 'center', borderTopColor: colors.dividerSubtle, borderTopWidth: 1, flexDirection: 'row', gap: spacing.md, paddingVertical: spacing.md },
-  removeButton: { alignItems: 'center', borderRadius: radius.sm, height: 40, justifyContent: 'center', width: 40 },
+  removeButton: { alignItems: 'center', borderRadius: radius.sm, height: 44, justifyContent: 'center', width: 44 },
   editRow: { alignItems: 'center', flexDirection: 'row', gap: 8, paddingBottom: spacing.md },
   editInput: { flex: 1, minWidth: 64 },
   editSave: { paddingHorizontal: 8 },

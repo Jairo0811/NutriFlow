@@ -147,7 +147,7 @@ app.MapGet("/", () => Results.Ok(new
 {
     name = "NutriFlow API",
     status = "running",
-    version = "1.4.0-dev"
+    version = "1.5.0"
 }));
 
 app.Run();

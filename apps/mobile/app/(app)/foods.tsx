@@ -9,7 +9,9 @@ import { useAuth } from '../../src/features/auth/AuthProvider';
 import { engagementApi } from '../../src/features/engagement/api';
 import { foodCatalogApi, type Food } from '../../src/features/foods/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
+import { IconLabel } from '../../src/components/IconLabel';
 import { colors } from '../../src/theme';
+import { ErrorText } from '../../src/components/ErrorText';
 
 export default function FoodCatalogScreen() {
   const { session } = useAuth();
@@ -66,7 +68,7 @@ export default function FoodCatalogScreen() {
         <Input label="Buscar" value={query} onChangeText={setQuery} placeholder="Buscar alimento…" autoCapitalize="none" containerStyle={styles.search} />
 
         {loading && <Text style={styles.helper}>Cargando catálogo…</Text>}
-        {error && <Card><Text style={styles.error}>{error}</Text><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
+        {error && <Card><ErrorText style={styles.error}>{error}</ErrorText><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
         {!loading && !error && foods.length === 0 && (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyTitle}>Aún no hay resultados</Text>
@@ -92,8 +94,8 @@ export default function FoodCatalogScreen() {
               </View>
               <View style={styles.footerRow}>
                 <Text style={styles.category}>{food.category}</Text>
-                <Pressable accessibilityRole="button" onPress={() => void toggleFavorite(food.id)} style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}>
-                  <Text style={[styles.favoriteText, isFavorite && styles.favoriteTextActive]}>{isFavorite ? '★ Favorito' : '☆ Guardar'}</Text>
+                <Pressable accessibilityLabel={isFavorite ? `Quitar ${food.name} de favoritos` : `Guardar ${food.name} en favoritos`} accessibilityRole="button" accessibilityState={{ selected: isFavorite }} hitSlop={6} onPress={() => void toggleFavorite(food.id)} style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}>
+                  <IconLabel icon={isFavorite ? 'star' : 'star-outline'} iconColor={isFavorite ? colors.primary : colors.textSoft} label={isFavorite ? 'Favorito' : 'Guardar'} size={16} textStyle={[styles.favoriteText, isFavorite && styles.favoriteTextActive]} />
                 </Pressable>
               </View>
             </View>
@@ -134,9 +136,9 @@ const styles = StyleSheet.create({
   macrosRow: { flexDirection: 'row', gap: 10, marginTop: 18 },
   macro: { flex: 1, backgroundColor: colors.surfaceDeep, borderRadius: 12, padding: 10 },
   macroValue: { color: colors.text, fontSize: 14, fontWeight: '800' },
-  macroLabel: { color: colors.textMuted, fontSize: 11, marginTop: 4 },
+  macroLabel: { color: colors.textMuted, fontSize: 13, marginTop: 4 },
   footerRow: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginTop: 14 },
-  category: { color: colors.primary, fontSize: 11, fontWeight: '800', textTransform: 'uppercase' },
+  category: { color: colors.primary, fontSize: 12, fontWeight: '800', textTransform: 'uppercase' },
   favoriteButton: { borderColor: colors.borderButton, borderRadius: 10, borderWidth: 1, paddingHorizontal: 10, paddingVertical: 7 },
   favoriteButtonActive: { backgroundColor: colors.successSurface, borderColor: colors.primary },
   favoriteText: { color: colors.textSoft, fontSize: 12, fontWeight: '800' },

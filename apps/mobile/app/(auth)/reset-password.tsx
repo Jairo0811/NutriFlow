@@ -7,6 +7,7 @@ import { AuthButton } from '../../src/features/auth/components/AuthButton';
 import { AuthField } from '../../src/features/auth/components/AuthField';
 import { AuthScaffold } from '../../src/features/auth/components/AuthScaffold';
 import { colors } from '../../src/theme';
+import { ErrorText } from '../../src/components/ErrorText';
 
 export default function ResetPasswordScreen() {
   const params = useLocalSearchParams<{ token?: string }>();
@@ -49,7 +50,7 @@ export default function ResetPasswordScreen() {
         value={password}
       />
       <Text style={styles.hint}>Incluye mayúsculas, minúsculas, números y símbolos.</Text>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? <ErrorText style={styles.error}>{error}</ErrorText> : null}
       <AuthButton
         disabled={!token.trim() || password.length < 12}
         label="Actualizar contraseña"
@@ -61,6 +62,6 @@ export default function ResetPasswordScreen() {
 }
 
 const styles = StyleSheet.create({
-  hint: { color: colors.textMuted, fontSize: 12, lineHeight: 18 },
+  hint: { color: colors.textMuted, fontSize: 13, lineHeight: 18 },
   error: { color: colors.danger, fontSize: 14, lineHeight: 20 },
 });

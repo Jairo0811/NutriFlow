@@ -9,6 +9,7 @@ import { useAuth } from '../../src/features/auth/AuthProvider';
 import { getNutritionTargets, type NutritionTargets } from '../../src/features/nutrition/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
 import { colors } from '../../src/theme';
+import { ErrorText } from '../../src/components/ErrorText';
 
 export default function NutritionTargetsScreen() {
   const { session, isLoading } = useAuth();
@@ -41,7 +42,7 @@ export default function NutritionTargetsScreen() {
     <Screen eyebrow="NUTRIFLOW · PLAN NUTRICIONAL" title="Tus objetivos diarios" subtitle="Estimaciones de tu perfil, no sustituyen la evaluación profesional." onRefresh={() => setReload((n) => n + 1)} refreshing={!targets && !error}>
         
 
-        {error && <Card><Text style={styles.error}>{error}</Text><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
+        {error && <Card><ErrorText style={styles.error}>{error}</ErrorText><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
         {!targets && !error && <Text style={styles.loading}>Calculando…</Text>}
 
         {targets && (

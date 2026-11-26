@@ -97,9 +97,9 @@ const styles = StyleSheet.create({
   container: { gap: 7 },
   row: { alignItems: 'center', flexDirection: 'row', gap: spacing.sm },
   input: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderInput,
-    borderRadius: radius.md,
+    backgroundColor: colors.fieldSurface,
+    borderColor: colors.fieldBorder,
+    borderRadius: radius.field,
     borderWidth: 1,
     color: colors.text,
     fontSize: 16,

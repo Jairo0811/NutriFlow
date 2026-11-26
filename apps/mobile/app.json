@@ -3,7 +3,7 @@
     "name": "NutriFlow",
     "slug": "nutriflow",
     "scheme": "nutriflow",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
     "icon": "./icon.png",
@@ -23,7 +23,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#07110B",
+          "backgroundColor": "#040907",
           "image": "./splash-icon.png",
           "imageWidth": 280,
           "resizeMode": "contain"

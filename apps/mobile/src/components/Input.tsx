@@ -48,9 +48,9 @@ export const Input = forwardRef<TextInput, Props>(function Input({ label, error,
 const styles = StyleSheet.create({
   container: { gap: 7 },
   input: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderInput,
-    borderRadius: radius.md,
+    backgroundColor: colors.fieldSurface,
+    borderColor: colors.fieldBorder,
+    borderRadius: radius.field,
     borderWidth: 1,
     color: colors.text,
     fontSize: 16,

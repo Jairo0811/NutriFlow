@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Input } from '../../../components/Input';
-import { colors } from '../../../theme';
+import { colors, radius } from '../../../theme';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 type Props = ComponentProps<typeof Input> & {
@@ -35,7 +35,7 @@ export function AuthField({ autoCapitalize, icon, featured = false, label, style
 const styles = StyleSheet.create({
   wrapper: { position: 'relative' },
   featuredInput: {
-    backgroundColor: '#151D1A', borderColor: '#3D4B41', borderRadius: 22,
+    backgroundColor: colors.fieldSurface, borderColor: colors.fieldBorder, borderRadius: radius.field,
     fontSize: 16, minHeight: 61,
   },
   withIcon: { paddingLeft: 54 },
