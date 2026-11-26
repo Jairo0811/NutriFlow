@@ -2,6 +2,8 @@ import { Screen } from '../../src/components/Screen';
 import { useEffect, useState } from 'react';
 import { Button } from '../../src/components/Button';
 import { Card } from '../../src/components/Card';
+import { ErrorText } from '../../src/components/ErrorText';
+import { IconLabel } from '../../src/components/IconLabel';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
 
@@ -119,9 +121,7 @@ export default function NutriFlowAiScreen() {
           style={styles.textArea}
           maxLength={1200}
         />
-        <Pressable accessibilityRole="button" disabled={busy} onPress={() => void askCoach()} style={styles.primaryButton}>
-          <Text style={styles.primaryText}>{busy ? 'Procesando…' : 'Consultar Coach'}</Text>
-        </Pressable>
+        <Button disabled={busy} label={busy ? 'Procesando…' : 'Consultar Coach'} onPress={() => void askCoach()} style={styles.action} />
 
         {coachReply && (
           <View style={styles.replyCard}>
@@ -133,13 +133,14 @@ export default function NutriFlowAiScreen() {
 
         <Text style={styles.sectionTitle}>Analizar comida por foto</Text>
         <Text style={styles.helper}>Premium · La IA propone alimentos y porciones; tú decides qué se registra.</Text>
-        <Pressable accessibilityRole="button"
+        <Button
           disabled={!status?.mealPhotoEnabled}
+          icon={status?.mealPhotoEnabled ? 'camera-outline' : 'lock-closed-outline'}
+          label={status?.mealPhotoEnabled ? 'Abrir cámara AI' : 'Premium · Meal Photo'}
           onPress={() => router.push('/ai-photo')}
-          style={[styles.secondaryButton, !status?.mealPhotoEnabled && styles.disabled]}
-        >
-          <Text style={styles.secondaryText}>{status?.mealPhotoEnabled ? 'Abrir cámara AI' : '🔒 Premium · Meal Photo'}</Text>
-        </Pressable>
+          style={styles.action}
+          variant="secondary"
+        />
 
         <Text style={styles.sectionTitle}>Registro por voz</Text>
         <Text style={styles.helper}>
@@ -156,22 +157,21 @@ export default function NutriFlowAiScreen() {
           style={[styles.textArea, !status?.voiceLoggingEnabled && styles.disabled]}
           maxLength={2000}
         />
-        <Pressable accessibilityRole="button"
+        <Button
           disabled={busy || !status?.voiceLoggingEnabled}
+          icon={status?.voiceLoggingEnabled ? 'mic-outline' : 'lock-closed-outline'}
+          label={status?.voiceLoggingEnabled ? 'Interpretar dictado' : 'Premium · Voice Logging'}
           onPress={() => void analyzeVoiceTranscript()}
-          style={[styles.secondaryButton, !status?.voiceLoggingEnabled && styles.disabled]}
-        >
-          <Text style={styles.secondaryText}>{status?.voiceLoggingEnabled ? 'Interpretar dictado' : '🔒 Premium · Voice Logging'}</Text>
-        </Pressable>
+          style={styles.action}
+          variant="secondary"
+        />
 
         {proposals.length > 0 && (
           <ProposalList proposals={proposals} mealType={mealType} setMealType={setMealType} />
         )}
 
         {usableProposals.length > 0 && (
-          <Pressable accessibilityRole="button" disabled={busy} onPress={() => void confirmMeal()} style={styles.primaryButton}>
-            <Text style={styles.primaryText}>Confirmar y agregar al diario</Text>
-          </Pressable>
+          <Button disabled={busy} label="Confirmar y agregar al diario" onPress={() => void confirmMeal()} style={styles.action} />
         )}
 
         {message && <Text style={styles.message}>{message}</Text>}
@@ -197,7 +197,7 @@ function ProposalList({
           <Text style={styles.helper}>{item.servings.toFixed(1)} porción(es) · confianza {Math.round(item.confidence * 100)}%</Text>
           {!item.hasCatalogMatch && <Text style={styles.warning}>Sin coincidencia en el catálogo; no se registrará.</Text>}
           {item.hasDietaryConflict && (
-            <Text style={styles.warning}>⚠️ Conflicto: {item.conflictingRestrictionCodes.join(', ')}. NutriFlow bloqueará el registro.</Text>
+            <IconLabel icon="warning-outline" iconColor={colors.warning} label={`Conflicto: ${item.conflictingRestrictionCodes.join(', ')}. NutriFlow bloqueará el registro.`} textStyle={styles.warning} />
           )}
         </View>
       ))}
@@ -238,10 +238,7 @@ const styles = StyleSheet.create({
   statusTitle: { color: colors.primary, fontSize: 16, fontWeight: '900' },
   helper: { color: colors.textSecondary, fontSize: 13, lineHeight: 19, marginTop: 6 },
   textArea: { backgroundColor: colors.surface, borderColor: colors.borderInput, borderRadius: 14, borderWidth: 1, color: colors.text, fontSize: 15, minHeight: 100, marginTop: 12, padding: 14, textAlignVertical: 'top' },
-  primaryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, marginTop: 14, padding: 16 },
-  primaryText: { color: colors.background, fontWeight: '900' },
-  secondaryButton: { alignItems: 'center', backgroundColor: colors.surfaceRaised, borderColor: colors.borderButton, borderRadius: 14, borderWidth: 1, marginTop: 12, padding: 15 },
-  secondaryText: { color: colors.textSoft, fontWeight: '800' },
+  action: { marginTop: 14 },
   disabled: { opacity: 0.48 },
   replyCard: { backgroundColor: colors.surface, borderColor: colors.borderAccent, borderRadius: 18, borderWidth: 1, marginTop: 14, padding: 18 },
   replyLabel: { color: colors.primary, fontSize: 12, fontWeight: '900', textTransform: 'uppercase' },

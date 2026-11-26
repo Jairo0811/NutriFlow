@@ -50,7 +50,7 @@ export function AuthScaffold({ title, subtitle, children, footer, featured = fal
         <View style={styles.glowTop} />
         <View style={styles.orbitTop} />
         <View style={styles.glowBottom} />
-        <Ionicons name="leaf-outline" size={124} color="#214927" style={styles.leaf} />
+        <Ionicons name="leaf-outline" size={124} color={colors.leaf} style={styles.leaf} />
       </View>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
         <ScrollView
@@ -96,18 +96,18 @@ export function AuthScaffold({ title, subtitle, children, footer, featured = fal
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  safeArea: { flex: 1, backgroundColor: '#040907' },
+  safeArea: { flex: 1, backgroundColor: colors.background },
   decoration: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, overflow: 'hidden' },
   glowTop: {
-    backgroundColor: '#0E3015', borderRadius: 180, height: 340, left: -244,
+    backgroundColor: colors.glowPrimary, borderRadius: 180, height: 340, left: -244,
     opacity: 0.75, position: 'absolute', top: -220, transform: [{ rotate: '-22deg' }], width: 440,
   },
   orbitTop: {
-    borderColor: '#193A20', borderRadius: 140, borderWidth: 16,
+    borderColor: colors.orbit, borderRadius: 140, borderWidth: 16,
     height: 250, opacity: 0.4, position: 'absolute', right: -162, top: 54, width: 250,
   },
   glowBottom: {
-    backgroundColor: '#0B2D14', borderRadius: 220, bottom: -245,
+    backgroundColor: colors.glowSecondary, borderRadius: 220, bottom: -245,
     height: 355, left: -180, opacity: 0.75, position: 'absolute', width: 415,
   },
   leaf: { bottom: -24, opacity: 0.55, position: 'absolute', right: -18, transform: [{ rotate: '-34deg' }] },
@@ -126,17 +126,17 @@ const styles = StyleSheet.create({
   keyboardMark: { height: 84, width: 84 },
   wordmark: { fontSize: 34, fontWeight: '900', letterSpacing: -1.3, marginTop: -2 },
   featuredWordmark: { fontSize: 43, letterSpacing: -1.7, marginTop: -3 },
-  brandWhite: { color: '#FFFFFF' },
-  brandGreen: { color: '#89F62A' },
+  brandWhite: { color: colors.white },
+  brandGreen: { color: colors.primary },
   tagline: {
     color: colors.textSoft, fontSize: 15, lineHeight: 22, marginTop: 12,
     maxWidth: 310, textAlign: 'center',
   },
   features: { flexDirection: 'row', gap: 7, marginTop: 24 },
   chip: {
-    alignItems: 'center', backgroundColor: '#142119', borderColor: '#1D3924',
+    alignItems: 'center', backgroundColor: colors.chipSurface, borderColor: colors.chipBorder,
     borderRadius: 22, borderWidth: 1, flex: 1, flexDirection: 'row', gap: 5,
-    justifyContent: 'center', minHeight: 39, paddingHorizontal: 4,
+    justifyContent: 'center', minHeight: 40, paddingHorizontal: 4,
   },
   chipText: { color: colors.text, fontSize: 12, fontWeight: '700' },
   title: { color: colors.text, fontSize: 28, fontWeight: '800', marginTop: 22 },

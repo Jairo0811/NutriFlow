@@ -11,6 +11,7 @@ import { progressApi, type ProgressSummary } from '../../src/features/progress/a
 import { toUserFacingError } from '../../src/features/shared/errors';
 import { useToday } from '../../src/features/shared/dates';
 import { colors } from '../../src/theme';
+import { ErrorText } from '../../src/components/ErrorText';
 
 export default function ProgressScreen() {
   const { session } = useAuth();
@@ -90,7 +91,7 @@ export default function ProgressScreen() {
           <Text style={styles.buttonText}>{saving ? 'Guardando…' : 'Guardar peso'}</Text>
         </Pressable>
         {loading && !summary && <Text style={styles.helper}>Cargando progreso…</Text>}
-        {error && <Card><Text style={styles.error}>{error}</Text><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
+        {error && <Card><ErrorText style={styles.error}>{error}</ErrorText><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
 
         <Text style={styles.sectionTitle}>Historial</Text>
         {summary?.entries.map((entry) => {
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
   error: { color: colors.danger, marginTop: 12 },
   entry: { alignItems: 'center', borderBottomColor: colors.dividerSubtle, borderBottomWidth: 1, flexDirection: 'row', gap: 12, paddingVertical: 14 },
   flex: { flex: 1 },
-  entryDate: { color: colors.textSecondary, fontSize: 12 },
+  entryDate: { color: colors.textSecondary, fontSize: 13 },
   entryWeight: { color: colors.text, fontSize: 17, fontWeight: '900', marginTop: 3 },
   entryNote: { color: colors.textSecondary, marginTop: 3 },
   bar: { backgroundColor: colors.primary, borderRadius: 999, height: 4, marginTop: 8 },

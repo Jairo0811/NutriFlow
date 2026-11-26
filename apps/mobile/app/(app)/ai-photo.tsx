@@ -8,6 +8,7 @@ import { router } from 'expo-router';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { AiApiError, aiApi, type AiFoodProposal, type MealType } from '../../src/features/ai/api';
 import { useToday } from '../../src/features/shared/dates';
+import { IconLabel } from '../../src/components/IconLabel';
 import { colors } from '../../src/theme';
 
 const mealTypes: MealType[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
@@ -116,7 +117,7 @@ export default function AiMealPhotoScreen() {
             <Text style={styles.foodName}>{item.catalogName ?? item.detectedName}</Text>
             <Text style={styles.meta}>{item.servings.toFixed(1)} porción(es) · confianza {Math.round(item.confidence * 100)}%</Text>
             {!item.hasCatalogMatch && <Text style={styles.warning}>Sin coincidencia en el catálogo; no se registrará.</Text>}
-            {item.hasDietaryConflict && <Text style={styles.warning}>⚠️ Bloqueado por: {item.conflictingRestrictionCodes.join(', ')}</Text>}
+            {item.hasDietaryConflict && <IconLabel icon="warning-outline" iconColor={colors.warning} label={`Bloqueado por: ${item.conflictingRestrictionCodes.join(', ')}`} textStyle={styles.warning} />}
           </View>
         ))}
 

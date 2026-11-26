@@ -6,6 +6,38 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 
 ## [Unreleased]
 
+_Sin cambios pendientes de lanzar._
+
+## [1.5.0] — 2026-11-26 — candidata a lanzamiento
+
+> **Estado:** preparada pero **no congelada**. El congelamiento del proyecto queda pendiente de la validación en dispositivo físico descrita en [`docs/mobile-qa-checklist.md`](docs/mobile-qa-checklist.md). Todas las comprobaciones automatizadas descritas abajo se ejecutan en CI.
+
+### Interfaz neón coherente
+
+- Inicio de sesión con la identidad aprobada: fondo `#040907`, verde neón `#89F62A`, isotipo PNG transparente, destellos decorativos y accesos reales a registro y recuperación de contraseña.
+- La paleta neón pasa a `src/theme.ts` y se aplica a toda la app: color primario, fondo, campos, botones en forma de píldora con brillo y bordes verdes en acciones secundarias. No quedan colores hexadecimales fuera del tema.
+- Botones y campos compartidos (`Button`, `Input`, `DateField`) con el mismo lenguaje visual que el login.
+- Los botones hechos a mano de las pantallas de IA y hábitos se sustituyen por el componente compartido `Button`.
+- Los emojis usados como iconos (💧 ⭐ 🥗 📚 🔒 ⚠️ ✓ ★) se reemplazan por iconos Ionicons mediante el nuevo `IconLabel`, para que se vean igual en Android e iOS.
+- El color de fondo del splash nativo coincide con el fondo de la app.
+- No se añaden funcionalidades ni se reconstruyen módulos terminados.
+
+### Accesibilidad
+
+- Los mensajes de error se anuncian a lectores de pantalla (`ErrorText`, rol `alert` y región en vivo) en todas las pantallas que los muestran.
+- El borde de los campos pasa de 2.2:1 a más de 3:1 de contraste (WCAG 1.4.11).
+- Ningún texto queda por debajo de 12 px; los textos secundarios de 11–12 px suben a 13 px.
+- El botón de eliminar del diario alcanza 44 px táctiles.
+- Favoritos del catálogo y selección de ingredientes anuncian su estado (`selected`/`checked`) y usan etiquetas descriptivas.
+- Los iconos decorativos se ocultan del árbol de accesibilidad.
+
+### Calidad y pruebas
+
+- Nueva auditoría automatizada de accesibilidad (`__tests__/accessibility-audit-test.tsx`, 223 comprobaciones sobre las 33 pantallas y componentes): rol en todo `Pressable`, etiqueta en todo `TextInput` e `Image`, ausencia de colores sueltos y de emojis, tamaño mínimo de texto, anuncio de errores y contraste WCAG AA de toda la paleta.
+- La API reporta la versión `1.5.0`; Mobile (`app.json` y `package.json`) también.
+- Auditoría de dependencias de producción de Mobile: 0 vulnerabilidades críticas (el CI las bloquea). Quedan 6 altas y 8 moderadas en dependencias transitivas de Expo (`node-forge`, `zod`, `decode-uri-component`, `uuid`…); corregirlas exige `npm audit fix --force`, que implica saltos de versión mayores, y queda fuera del alcance de esta versión.
+
+
 ### QA móvil con backend real
 
 - Nuevo recorrido de Android emulado con servidor API y PostgreSQL de prueba: login, Home, dashboard, diario de comidas, progreso y acceso al escáner.
@@ -18,7 +50,7 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 - Smoke HTTP automatizado de 21 verificaciones contra API ASP.NET Core y PostgreSQL 17 con contenedores efímeros, incluyendo autenticación, onboarding, alérgenos, comidas, peso, agua, recetas y permisos Premium.
 - Corregido el registro de las migraciones `AddWeightProgress`, `AddFoodAllergens`, `AddEngagement` y `AddMicronutrients` en Entity Framework Core: sin los atributos `Migration` y `DbContext` no se aplicaban al iniciar una base limpia.
 - Prueba xUnit para impedir que las migraciones dejen de ser descubiertas en futuras refactorizaciones.
-- Se conserva el pendiente de QA visual y de cámara en un dispositivo o emulador real antes de liberar v1.5.0.
+- Se conserva el pendiente de QA visual y de cámara en un dispositivo real antes de congelar v1.5.0.
 
 
 ### Mejoras del frontend móvil (2026-11-17)
@@ -30,7 +62,7 @@ El proyecto utiliza versionado semántico (`MAJOR.MINOR.PATCH`).
 - Tests sin dependencias adicionales para calendario, validación y composición de fechas; CI también exporta Expo web.
 - Pruebas de componentes con `jest-expo` y React Native Testing Library 13, fijadas al SDK 57; validación añadida a CI.
 - Centralización de colores y refuerzo del contraste de placeholders.
-- QA presencial y decisión de versión aún pendientes; se conserva v1.4.0 como snapshot histórico.
+- QA presencial en dispositivo físico pendiente antes de congelar la versión 1.5.0.
 
 ### Added
 

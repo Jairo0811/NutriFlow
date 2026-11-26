@@ -12,7 +12,9 @@ import {
   type AdvancedAnalytics,
   type MicronutrientAnalytics,
 } from '../../src/features/analytics/api';
+import { IconLabel } from '../../src/components/IconLabel';
 import { colors } from '../../src/theme';
+import { ErrorText } from '../../src/components/ErrorText';
 
 type Period = 7 | 30 | 90;
 
@@ -74,7 +76,7 @@ export default function PremiumAnalyticsScreen() {
         </View>
 
         {loading && <Text style={styles.helper}>Calculando tendencias…</Text>}
-        {error && <Card><Text style={styles.error}>{error}</Text><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
+        {error && <Card><ErrorText style={styles.error}>{error}</ErrorText><Button label="Reintentar" variant="secondary" onPress={() => setReload((n) => n + 1)} /></Card>}
 
         {locked && (
           <View style={styles.premiumCard}>
@@ -84,10 +86,10 @@ export default function PremiumAnalyticsScreen() {
               Esta vista requiere NutriFlow Premium. El backend protege los datos mediante los entitlements analytics.advanced y nutrition.micronutrients.
             </Text>
             <View style={styles.featureList}>
-              <Text style={styles.feature}>✓ Tendencias de 7, 30 y 90 días</Text>
-              <Text style={styles.feature}>✓ Adherencia calórica y objetivo de proteína</Text>
-              <Text style={styles.feature}>✓ Fibra, sodio, potasio, calcio y hierro</Text>
-              <Text style={styles.feature}>✓ Vitaminas C y D</Text>
+              <IconLabel icon="checkmark-circle-outline" label="Tendencias de 7, 30 y 90 días" size={18} textStyle={styles.feature} />
+              <IconLabel icon="checkmark-circle-outline" label="Adherencia calórica y objetivo de proteína" size={18} textStyle={styles.feature} />
+              <IconLabel icon="checkmark-circle-outline" label="Fibra, sodio, potasio, calcio y hierro" size={18} textStyle={styles.feature} />
+              <IconLabel icon="checkmark-circle-outline" label="Vitaminas C y D" size={18} textStyle={styles.feature} />
             </View>
             <Text style={styles.note}>Las compras reales se habilitarán cuando el proveedor de billing sea conectado.</Text>
           </View>
@@ -168,15 +170,15 @@ const styles = StyleSheet.create({
   helper: { color: colors.textSecondary, fontSize: 14, lineHeight: 21, marginTop: 12 },
   error: { color: colors.danger, marginTop: 18 },
   premiumCard: { backgroundColor: colors.surface, borderColor: colors.primary, borderRadius: 20, borderWidth: 1, marginTop: 24, padding: 20 },
-  premiumBadge: { alignSelf: 'flex-start', backgroundColor: colors.primary, borderRadius: 999, color: colors.background, fontSize: 11, fontWeight: '900', overflow: 'hidden', paddingHorizontal: 10, paddingVertical: 5 },
+  premiumBadge: { alignSelf: 'flex-start', backgroundColor: colors.primary, borderRadius: 999, color: colors.background, fontSize: 12, fontWeight: '900', overflow: 'hidden', paddingHorizontal: 10, paddingVertical: 5 },
   premiumTitle: { color: colors.text, fontSize: 22, fontWeight: '900', marginTop: 14 },
   featureList: { gap: 8, marginTop: 18 },
   feature: { color: colors.textSoft, fontSize: 14, fontWeight: '700' },
-  note: { color: colors.textMuted, fontSize: 12, lineHeight: 18, marginTop: 16 },
+  note: { color: colors.textMuted, fontSize: 13, lineHeight: 18, marginTop: 16 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 24 },
   metric: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 16, borderWidth: 1, minWidth: '47%', padding: 16 },
   metricValue: { color: colors.primary, fontSize: 23, fontWeight: '900' },
-  metricLabel: { color: colors.textSecondary, fontSize: 12, marginTop: 5 },
+  metricLabel: { color: colors.textSecondary, fontSize: 13, marginTop: 5 },
   sectionTitle: { color: colors.text, fontSize: 19, fontWeight: '900', marginTop: 28 },
   card: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 18, borderWidth: 1, marginTop: 12, padding: 16 },
   row: { borderBottomColor: colors.border, borderBottomWidth: 1, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },

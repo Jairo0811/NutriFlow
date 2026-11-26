@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Estado-Congelado%20para%20portafolio-64748B?style=for-the-badge" alt="Congelado para portafolio">
-  <img src="https://img.shields.io/badge/Versión-1.4.0-22C55E?style=for-the-badge" alt="Versión 1.4.0">
+  <img src="https://img.shields.io/badge/Estado-Candidata%20a%20lanzamiento-F59E0B?style=for-the-badge" alt="Candidata a lanzamiento, pendiente de QA en dispositivo">
+  <img src="https://img.shields.io/badge/Versión-1.5.0-22C55E?style=for-the-badge" alt="Versión 1.5.0">
   <img src="https://img.shields.io/badge/UNAPEC-INF--164-003B70?style=for-the-badge" alt="UNAPEC INF-164">
 </p>
 
@@ -24,15 +24,15 @@
   <strong>React Native · Expo · TypeScript · ASP.NET Core · EF Core · PostgreSQL · Docker · GitHub Actions</strong>
 </p>
 
-> **Snapshot de portafolio:** NutriFlow v1.4.0 permanece como hito histórico. Las mejoras móviles posteriores todavía necesitan validación visual en dispositivo antes de publicar una versión nueva. No representa un lanzamiento comercial en App Store/Google Play ni implica que billing o credenciales externas estén conectados.
+> **Versión 1.5.0 — candidata a lanzamiento (no congelada):** incorpora la interfaz neón y las mejoras de accesibilidad posteriores a v1.4.0. Todas las comprobaciones automatizadas pasan en CI; el proyecto **no se congela** hasta completar la validación en dispositivo físico descrita en la [lista de QA móvil](docs/mobile-qa-checklist.md). No representa un lanzamiento comercial en App Store/Google Play ni implica que billing o credenciales externas estén conectados.
 
 ---
 
 ## Seguimiento de la interfaz móvil
 
-Las mejoras posteriores al snapshot v1.4.0 abarcan `Screen` y componentes reutilizables, accesibilidad, estados de carga y reintento, edición de porciones en el diario, control de fechas locales y pruebas de calendario en CI.
+La versión 1.5.0 unifica la interfaz con la identidad neón aprobada (paleta, botones, campos e iconos en `src/theme.ts` y `src/components`), y suma `Screen` reutilizable, accesibilidad, estados de carga y reintento, edición de porciones en el diario, fechas locales y una auditoría automatizada de accesibilidad (roles, etiquetas, contraste WCAG AA y tamaños) que se ejecuta en cada PR. Consulta el detalle en el [CHANGELOG](CHANGELOG.md).
 
-La validación de cámara, navegación, teclado y diseño en un equipo real sigue documentada en [la lista de QA móvil](docs/mobile-qa-checklist.md). **No se ha verificado aún el funcionamiento en dispositivo real ni se incluyen capturas no realizadas**. La decisión de versión 1.5.0 y una navegación por pestañas se posponen hasta esa validación.
+La validación de cámara, navegación, teclado y diseño en un equipo real sigue documentada en [la lista de QA móvil](docs/mobile-qa-checklist.md). El recorrido automatizado en emulador Android contra la API y PostgreSQL reales pasa en CI, pero **no equivale a pruebas en un teléfono físico** (cámara, teclado real, lector de pantalla, iOS), que siguen pendientes. No se incluyen capturas que no se hayan tomado. Una navegación por pestañas inferiores y el tema claro se posponen por decisión de producto.
 
 ---
 
@@ -44,7 +44,7 @@ La aplicación actual fue desarrollada como implementación full-stack real a pa
 
 ---
 
-## Alcance congelado — v1.4.0
+## Alcance — v1.5.0
 
 | Área | Estado |
 |---|:---:|
@@ -96,7 +96,7 @@ La aplicación actual fue desarrollada como implementación full-stack real a pa
 
 La IA se integra **del lado del servidor**. La aplicación móvil nunca recibe una API key de OpenAI.
 
-Capacidades de la versión congelada:
+Capacidades de la versión 1.5.0:
 
 - **AI Coach** para consultas nutricionales contextuales;
 - **Meal Photo AI** para extraer alimentos desde una imagen;
@@ -385,17 +385,18 @@ NutriFlow nació como proyecto de **Bases de Datos 1 (INF-164)** en la **Univers
 
 ## Estado del proyecto
 
-**NutriFlow v1.4.0 está congelado como snapshot de portafolio.**
+**NutriFlow v1.5.0 es una candidata a lanzamiento y todavía no está congelada.**
 
-Esto significa que el alcance actual se considera cerrado y estable para demostración, documentación académica y portafolio técnico. Las siguientes ideas quedan fuera de este snapshot y podrían retomarse únicamente como una evolución futura:
+El alcance funcional está cerrado: la versión 1.5.0 no añade funcionalidades nuevas respecto a v1.4.0, solo coherencia visual, accesibilidad y calidad. El proyecto se congelará como snapshot de portafolio cuando se complete y apruebe la validación en dispositivo físico de [`docs/mobile-qa-checklist.md`](docs/mobile-qa-checklist.md).
+
+Las siguientes ideas quedan fuera de esta versión y podrían retomarse únicamente como una evolución futura:
 
 - Meal Planner + Shopping List;
 - RevenueCat / billing real;
 - publicación en App Store / Google Play;
 - Apple Health / Health Connect;
-- módulos para profesionales de nutrición.
-
-No forman parte del cierre de v1.4.0.
+- módulos para profesionales de nutrición;
+- navegación por pestañas inferiores y tema claro.
 
 ---
 

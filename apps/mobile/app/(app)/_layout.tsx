@@ -6,6 +6,7 @@ import { useAuth } from '../../src/features/auth/AuthProvider';
 import { onboardingApi } from '../../src/features/onboarding/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
 import { colors } from '../../src/theme';
+import { ErrorText } from '../../src/components/ErrorText';
 
 export default function AuthenticatedLayout() {
   const { session, isLoading, logout } = useAuth();
@@ -64,7 +65,7 @@ export default function AuthenticatedLayout() {
   if (error) {
     return (
       <View style={styles.loading}>
-        <Text style={styles.error}>{error}</Text>
+        <ErrorText style={styles.error}>{error}</ErrorText>
         <Pressable accessibilityRole="button" onPress={() => void refreshProfile()} style={styles.retryButton}>
           <Text style={styles.retryText}>Reintentar</Text>
         </Pressable>

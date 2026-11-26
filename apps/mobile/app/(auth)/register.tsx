@@ -8,6 +8,7 @@ import { AuthField } from '../../src/features/auth/components/AuthField';
 import { AuthScaffold } from '../../src/features/auth/components/AuthScaffold';
 import { toUserFacingError } from '../../src/features/shared/errors';
 import { colors } from '../../src/theme';
+import { ErrorText } from '../../src/components/ErrorText';
 
 export default function RegisterScreen() {
   const { register } = useAuth();
@@ -66,7 +67,7 @@ export default function RegisterScreen() {
         value={password}
       />
       <Text style={styles.hint}>Incluye mayúsculas, minúsculas, números y símbolos.</Text>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? <ErrorText style={styles.error}>{error}</ErrorText> : null}
       <AuthButton
         disabled={!displayName.trim() || !email.trim() || password.length < 12}
         label="Crear cuenta"
@@ -78,7 +79,7 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  hint: { color: colors.textMuted, fontSize: 12, lineHeight: 18 },
+  hint: { color: colors.textMuted, fontSize: 13, lineHeight: 18 },
   error: { color: colors.danger, fontSize: 14, lineHeight: 20 },
   footerText: { color: colors.textSecondary, textAlign: 'center' },
   link: { color: colors.primary, fontWeight: '700' },

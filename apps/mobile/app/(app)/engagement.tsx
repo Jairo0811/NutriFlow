@@ -2,6 +2,7 @@ import { Screen } from '../../src/components/Screen';
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../../src/components/Button';
 import { Card } from '../../src/components/Card';
+import { IconLabel } from '../../src/components/IconLabel';
 import { confirmAction } from '../../src/features/shared/confirm';
 import { toUserFacingError } from '../../src/features/shared/errors';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
@@ -10,6 +11,7 @@ import { router } from 'expo-router';
 import { useAuth } from '../../src/features/auth/AuthProvider';
 import { engagementApi, type EngagementOverview, type FavoriteFood, type Recipe } from '../../src/features/engagement/api';
 import { colors } from '../../src/theme';
+import { ErrorText } from '../../src/components/ErrorText';
 
 export default function EngagementScreen() {
   const { session } = useAuth();
@@ -107,7 +109,7 @@ export default function EngagementScreen() {
         
 
         {loading && <Text style={styles.helper}>Cargando tus hábitos…</Text>}
-        {error && <Card><Text style={styles.error}>{error}</Text><Button label="Reintentar" variant="secondary" onPress={() => void load()} /></Card>}
+        {error && <Card><ErrorText style={styles.error}>{error}</ErrorText><Button label="Reintentar" variant="secondary" onPress={() => void load()} /></Card>}
 
         {overview && (
           <View style={styles.statsRow}>
@@ -118,7 +120,7 @@ export default function EngagementScreen() {
         )}
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>💧 Hidratación diaria</Text>
+          <IconLabel header icon="water-outline" label="Hidratación diaria" textStyle={styles.cardTitle} />
           <Text style={styles.cardText}>
             {water ? `${water.consumedOunces.toFixed(0)} / ${water.targetOunces.toFixed(0)} oz · ${water.percentComplete}%` : 'Cargando…'}
           </Text>
@@ -141,7 +143,7 @@ export default function EngagementScreen() {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>⭐ Alimentos favoritos</Text>
+          <IconLabel header icon="star-outline" label="Alimentos favoritos" textStyle={styles.cardTitle} />
           {favorites.length === 0 ? (
             <Text style={styles.helper}>Guarda alimentos desde el catálogo para reutilizarlos aquí.</Text>
           ) : favorites.map((food) => (
@@ -152,13 +154,11 @@ export default function EngagementScreen() {
               </View>
             </View>
           ))}
-          <Pressable accessibilityRole="button" onPress={() => router.push('/foods')} style={styles.secondaryButton}>
-            <Text style={styles.secondaryText}>Abrir catálogo</Text>
-          </Pressable>
+          <Button label="Abrir catálogo" onPress={() => router.push('/foods')} style={styles.action} variant="secondary" />
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>🥗 Crear receta rápida</Text>
+          <IconLabel header icon="restaurant-outline" label="Crear receta rápida" textStyle={styles.cardTitle} />
           <TextInput
             accessibilityLabel="Nombre de la receta"
             value={recipeName}
@@ -171,18 +171,16 @@ export default function EngagementScreen() {
           {favorites.map((food) => {
             const selected = selectedFoodIds.includes(food.foodId);
             return (
-              <Pressable accessibilityRole="button" key={food.foodId} onPress={() => toggleIngredient(food.foodId)} style={[styles.selectRow, selected && styles.selectRowActive]}>
-                <Text style={styles.itemText}>{selected ? '✓ ' : ''}{food.name}</Text>
+              <Pressable accessibilityLabel={food.name} accessibilityRole="checkbox" accessibilityState={{ checked: selected }} key={food.foodId} onPress={() => toggleIngredient(food.foodId)} style={[styles.selectRow, selected && styles.selectRowActive]}>
+                <IconLabel icon={selected ? 'checkmark-circle' : 'ellipse-outline'} label={food.name} textStyle={styles.itemText} />
               </Pressable>
             );
           })}
-          <Pressable accessibilityRole="button" onPress={() => void createRecipe()} style={styles.primaryButton}>
-            <Text style={styles.primaryText}>Guardar receta</Text>
-          </Pressable>
+          <Button label="Guardar receta" onPress={() => void createRecipe()} style={styles.action} />
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>📚 Mis recetas</Text>
+          <IconLabel header icon="book-outline" label="Mis recetas" textStyle={styles.cardTitle} />
           {recipes.length === 0 ? <Text style={styles.helper}>Todavía no has creado recetas.</Text> : recipes.map((recipe) => (
             <View key={recipe.id} style={styles.recipeCard}>
               <Text style={styles.itemText}>{recipe.name}</Text>
@@ -217,7 +215,7 @@ const styles = StyleSheet.create({
   statsRow: { flexDirection: 'row', gap: 8, marginTop: 20 },
   stat: { flex: 1, backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 14, padding: 12 },
   statValue: { color: colors.text, fontWeight: '900', fontSize: 16 },
-  statLabel: { color: colors.textMuted, fontSize: 11, marginTop: 4 },
+  statLabel: { color: colors.textMuted, fontSize: 13, marginTop: 4 },
   card: { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 18, marginTop: 16, padding: 18 },
   cardTitle: { color: colors.text, fontSize: 18, fontWeight: '900' },
   cardText: { color: colors.textSoft, marginTop: 10 },
@@ -231,12 +229,9 @@ const styles = StyleSheet.create({
   itemText: { color: colors.text, fontWeight: '800' },
   meta: { color: colors.textSecondary, fontSize: 12, marginTop: 4 },
   removeText: { color: colors.dangerText, fontSize: 12, fontWeight: '800', marginTop: 8 },
-  secondaryButton: { alignItems: 'center', borderColor: colors.borderButton, borderRadius: 12, borderWidth: 1, marginTop: 14, padding: 13 },
-  secondaryText: { color: colors.textSoft, fontWeight: '800' },
+  action: { marginTop: 14 },
   input: { backgroundColor: colors.surfaceDeep, borderColor: colors.borderInput, borderWidth: 1, borderRadius: 12, color: colors.text, fontSize: 15, marginTop: 14, padding: 13 },
   selectRow: { borderColor: colors.borderSoft, borderRadius: 10, borderWidth: 1, marginTop: 8, padding: 11 },
   selectRowActive: { backgroundColor: colors.successSurface, borderColor: colors.primary },
-  primaryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 12, marginTop: 14, padding: 14 },
-  primaryText: { color: colors.background, fontWeight: '900' },
   recipeCard: { borderTopColor: colors.border, borderTopWidth: 1, marginTop: 14, paddingTop: 14 },
 });

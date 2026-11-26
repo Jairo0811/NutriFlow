@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
 
 import { Button } from '../../../components/Button';
-import { colors } from '../../../theme';
+import { colors, neonGlow } from '../../../theme';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 type Props = {
@@ -52,11 +52,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center', minHeight: 62, paddingHorizontal: 16,
   },
   primary: {
-    backgroundColor: '#8CF52B', borderColor: '#B7FF6C', borderWidth: 1,
-    elevation: 3, shadowColor: '#62E62C', shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15, shadowRadius: 12,
+    backgroundColor: colors.primary, borderColor: colors.primaryBorder, borderWidth: 1,
+    ...neonGlow,
   },
-  secondary: { backgroundColor: '#09130C', borderColor: colors.primary, borderWidth: 1.5 },
+  secondary: { backgroundColor: colors.buttonDeep, borderColor: colors.primary, borderWidth: 1.5 },
   label: { color: colors.onPrimary, fontSize: 18, fontWeight: '800' },
   secondaryLabel: { color: colors.text, fontSize: 17 },
   disabled: { opacity: 0.5 },

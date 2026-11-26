@@ -9,6 +9,7 @@ import { useAuth } from '../../src/features/auth/AuthProvider';
 import { FoodCatalogApiError, foodCatalogApi, type Food } from '../../src/features/foods/api';
 import { checkFoodCompatibility, type FoodCompatibility } from '../../src/features/preferences/api';
 import { toUserFacingError } from '../../src/features/shared/errors';
+import { IconLabel } from '../../src/components/IconLabel';
 import { colors } from '../../src/theme';
 
 export default function BarcodeScannerScreen() {
@@ -82,7 +83,7 @@ export default function BarcodeScannerScreen() {
             <Text style={styles.meta}>P {Math.round(food.proteinGrams)} g · C {Math.round(food.carbohydrateGrams)} g · G {Math.round(food.fatGrams)} g</Text>
             {compatibility?.hasConflict && (
               <View style={styles.warning}>
-                <Text style={styles.warningTitle}>⚠️ Conflicto con tus restricciones</Text>
+                <IconLabel header icon="warning-outline" iconColor={colors.warning} label="Conflicto con tus restricciones" textStyle={styles.warningTitle} />
                 <Text style={styles.warningText}>{compatibility.conflictingRestrictionCodes.join(', ')}</Text>
               </View>
             )}

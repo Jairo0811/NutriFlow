@@ -7,6 +7,7 @@ import { AuthButton } from '../../src/features/auth/components/AuthButton';
 import { AuthField } from '../../src/features/auth/components/AuthField';
 import { AuthScaffold } from '../../src/features/auth/components/AuthScaffold';
 import { colors } from '../../src/theme';
+import { ErrorText } from '../../src/components/ErrorText';
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState('');
@@ -48,7 +49,7 @@ export default function ForgotPasswordScreen() {
         value={email}
       />
       {message ? <Text style={styles.success}>{message}</Text> : null}
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? <ErrorText style={styles.error}>{error}</ErrorText> : null}
       <AuthButton
         disabled={!email.trim()}
         label="Solicitar recuperación"
