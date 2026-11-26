@@ -20,6 +20,7 @@ _Sin cambios pendientes de lanzar._
 - Los botones hechos a mano de las pantallas de IA y hábitos se sustituyen por el componente compartido `Button`.
 - Los emojis usados como iconos (💧 ⭐ 🥗 📚 🔒 ⚠️ ✓ ★) se reemplazan por iconos Ionicons mediante el nuevo `IconLabel`, para que se vean igual en Android e iOS.
 - El color de fondo del splash nativo coincide con el fondo de la app.
+- Corrección en el login: en Android 15 (borde a borde) el teclado tapaba el campo de contraseña. Con el teclado abierto, la cabecera se compacta (sin lema ni chips, logo reducido) y los dos campos quedan visibles. Lo detectó el recorrido E2E en emulador, cuyo helper `type_into` ahora también confirma el foco antes de escribir.
 - No se añaden funcionalidades ni se reconstruyen módulos terminados.
 
 ### Accesibilidad
