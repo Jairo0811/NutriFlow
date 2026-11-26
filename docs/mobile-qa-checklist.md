@@ -26,11 +26,11 @@
 
 ## Verificación UI Android con API real
 
-- [ ] Inicio de sesión en emulador con usuario de prueba aislado.
-- [ ] Comprobación visual automatizada de Home, Dashboard, Diario, Progreso y acceso al escáner.
-- [ ] Capturas Android reales de esos recorridos disponibles como artefacto temporal de GitHub Actions.
+- [x] Inicio de sesión en emulador con usuario de prueba aislado.
+- [x] Comprobación visual automatizada de Home, Dashboard, Diario, Progreso y acceso al escáner.
+- [x] Capturas Android reales de esos recorridos disponibles como artefacto temporal de GitHub Actions.
 
-**Solo marcar los tres puntos después de que finalice el workflow Android E2E con éxito.** No equivalen a un QA visual humano de accesibilidad, teclado, permisos o cámara física.
+Marcados tras el workflow Android E2E exitoso del PR #30 (commit `45ed631`, emulador API 35; capturas revisadas: coherencia neón en Home, Dashboard, Diario, Progreso y escáner). No equivalen a un QA visual humano de accesibilidad, teclado, permisos o cámara física.
 
 ## Pruebas manuales por funcionalidad
 
